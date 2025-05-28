@@ -86,19 +86,92 @@ def preprocess_file_with_fields(file_path, known_skills):
         "cleaned_text": cleaned_text,
         "fields": fields
     }
+def score_match(cv_fields, jd_fields):
+    score = 0
+    total_weight = 0
+
+    weights = {
+        'skills': 0.5,
+        'experience': 0.2,
+        'education': 0.2,
+        'certifications': 0.1
+    }
+
+    # 1. Skills
+    jd_skills = set(jd_fields.get('skills', []))
+    cv_skills = set(cv_fields.get('skills', []))
+    if jd_skills:
+        match_ratio = len(cv_skills & jd_skills) / len(jd_skills)
+        score += match_ratio * weights['skills'] * 100
+        total_weight += weights['skills']
+
+    # 2. Experience
+    jd_exp = jd_fields.get('experience_years', 0)
+    cv_exp = cv_fields.get('experience_years', 0)
+    if jd_exp > 0:
+        exp_ratio = min(cv_exp / jd_exp, 1.0)
+        score += exp_ratio * weights['experience'] * 100
+        total_weight += weights['experience']
+
+    # 3. Education
+    jd_edu = set(jd_fields.get('education', []))
+    cv_edu = set(cv_fields.get('education', []))
+    if jd_edu:
+        edu_match = bool(cv_edu & jd_edu)
+        score += (1.0 if edu_match else 0.0) * weights['education'] * 100
+        total_weight += weights['education']
+
+    # 4. Certifications
+    jd_cert = set(jd_fields.get('certifications', []))
+    cv_cert = set(cv_fields.get('certifications', []))
+    if jd_cert:
+        cert_ratio = len(cv_cert & jd_cert) / len(jd_cert)
+        score += cert_ratio * weights['certifications'] * 100
+        total_weight += weights['certifications']
+
+    if total_weight == 0:
+        return 100.0  # Nếu JD không có yêu cầu gì -> mặc định 100 điểm
+    return round(score / total_weight, 2)
+
 
 # -------------------------------------------------
 # 5. Dùng thử
 # -------------------------------------------------
 if __name__ == "__main__":
     known_skills = [
-        'python', 'java', 'c++', 'sql', 'javascript', 'html', 'css', 'scss', 'php',
-        'react', 'reactjs', 'reacjs', 'oop', 'docker', 'github',
-        'mysql', 'postgresql', 'restful api', ' RESTful API'
-    ]
+    # Lập trình cơ bản
+    'python', 'java', 'c++', 'sql', 'javascript', 'html', 'css', 'scss', 'php',
+    'react', 'reactjs', 'reacjs', 'oop', 'docker', 'github',
+    'mysql', 'postgresql', 'restful api',
+
+    # Hệ điều hành
+    'linux', 'bash', 'shell scripting', 'systemd', 'crontab', 'ubuntu',
+    'centos', 'red hat', 'debian', 'windows server', 'lvm', 'selinux',
+
+    # Cloud & DevOps
+    'aws', 'azure', 'gcp', 'terraform', 'ansible', 'jenkins', 'kubernetes',
+    'helm', 'docker-compose', 'ci/cd', 'gitlab ci', 'github actions',
+    'grafana', 'prometheus',
+
+    # Security
+    'ssh', 'iptables', 'ssl', 'tls', 'firewall', 'vpn', 'fail2ban',
+
+    # Backend & API
+    'flask', 'django', 'nodejs', 'express', 'fastapi', 'spring boot', 'laravel', 'mvc', 'grpc',
+
+    # Data
+    'mongodb', 'redis', 'elasticsearch', 'kafka', 'hadoop', 'spark', 'etl', 'data warehouse',
+
+    # Tools
+    'git', 'svn', 'jira', 'agile', 'scrum', 'postman', 'swagger', 'unit test', 'integration test',
+
+    # Khác
+    'regex', 'vim', 'emacs', 'vs code'
+]
+
 
     jd_path = r"D:\code\JobMatch\data\sample.docx"
-    cv_path = r"D:\code\JobMatch\data\CV_Phan-Tuan-Anh_SE_Intern (1).pdf"
+    cv_path = r"D:\code\JobMatch\data\resume.pdf"
 
     # Lấy raw_text từ file
     cv_raw_text = extract_text_from_file(cv_path)
@@ -124,8 +197,11 @@ if __name__ == "__main__":
     for field, value in jd_result['fields'].items():
         print(f"{field.capitalize()}: {value}")
 
-    # # Gợi ý kỹ năng còn thiếu
-    # cv_skills = set(cv_result['fields']['skills'])
-    # jd_skills = set(jd_result['fields']['skills'])
-    # missing = jd_skills - cv_skills
-    # print(f"\n❗ Missing skills in CV: {missing}")
+    # Gợi ý kỹ năng còn thiếu
+    cv_skills = set(cv_result['fields']['skills'])
+    jd_skills = set(jd_result['fields']['skills'])
+    missing = jd_skills - cv_skills
+    print(f"\n❗ Missing skills in CV: {missing}")
+    final_score = score_match(cv_result['fields'], jd_result['fields'])
+    print(f"\n📊 Matching Score: {final_score}/100")
+
