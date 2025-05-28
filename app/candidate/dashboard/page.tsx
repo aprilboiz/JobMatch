@@ -106,7 +106,7 @@ export default function CandidateDashboard() {
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span>Tiến độ hoàn thiện</span>
-                  <span>75%</span>
+                  <span>Hehe%</span>
                 </div>
                 <Progress value={75} className="h-2" />
               </div>

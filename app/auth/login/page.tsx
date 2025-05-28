@@ -67,7 +67,7 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <Label htmlFor="role">Vai trò</Label>
               <Select value={role} onValueChange={setRole} required>
                 <SelectTrigger>
@@ -78,7 +78,7 @@ export default function LoginPage() {
                   <SelectItem value="recruiter">Nhà tuyển dụng</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
+            </div> */}
 
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? "Đang đăng nhập..." : "Đăng nhập"}
