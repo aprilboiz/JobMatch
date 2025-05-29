@@ -61,7 +61,7 @@ export default function HomePage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <Card>
               <CardHeader>
-                <Search className="h-10 w-10 text-blue-600 mb-2" />
+                <Search className="h-10 w-10 text-red-600 mb-2" />
                 <CardTitle>Tìm kiếm thông minh</CardTitle>
                 <CardDescription>AI phân tích và gợi ý công việc phù hợp với kỹ năng của bạn</CardDescription>
               </CardHeader>
@@ -69,7 +69,7 @@ export default function HomePage() {
 
             <Card>
               <CardHeader>
-                <Star className="h-10 w-10 text-blue-600 mb-2" />
+                <Star className="h-10 w-10 text-orange-600 mb-2" />
                 <CardTitle>Đánh giá độ phù hợp</CardTitle>
                 <CardDescription>Hệ thống tính toán điểm matching giữa CV và JD một cách chính xác</CardDescription>
               </CardHeader>
@@ -77,7 +77,7 @@ export default function HomePage() {
 
             <Card>
               <CardHeader>
-                <FileText className="h-10 w-10 text-blue-600 mb-2" />
+                <FileText className="h-10 w-10 text-yellow-600 mb-2" />
                 <CardTitle>Quản lý CV dễ dàng</CardTitle>
                 <CardDescription>Upload CV dạng PDF, DOCX hoặc tạo CV trực tuyến</CardDescription>
               </CardHeader>
@@ -85,7 +85,7 @@ export default function HomePage() {
 
             <Card>
               <CardHeader>
-                <TrendingUp className="h-10 w-10 text-blue-600 mb-2" />
+                <TrendingUp className="h-10 w-10 text-green-600 mb-2" />
                 <CardTitle>Thống kê chi tiết</CardTitle>
                 <CardDescription>Theo dõi hiệu quả tuyển dụng và ứng tuyển</CardDescription>
               </CardHeader>
@@ -101,7 +101,7 @@ export default function HomePage() {
 
             <Card>
               <CardHeader>
-                <Building2 className="h-10 w-10 text-blue-600 mb-2" />
+                <Building2 className="h-10 w-10 text-pink-600 mb-2" />
                 <CardTitle>Quản lý công ty</CardTitle>
                 <CardDescription>Công cụ quản lý thông tin công ty và JD hiệu quả</CardDescription>
               </CardHeader>
