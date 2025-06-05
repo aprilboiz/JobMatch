@@ -19,10 +19,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.aprilboiz.jobmatch.controller.AuthController;
@@ -48,13 +48,13 @@ class AuthControllerWebTests {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @MockBean
+    @MockitoBean
     private AuthService authService;
     
-    @MockBean
+    @MockitoBean
     private com.aprilboiz.jobmatch.service.JwtService jwtService;
     
-    @MockBean
+    @MockitoBean
     private com.aprilboiz.jobmatch.service.TokenBlacklistService tokenBlacklistService;
 
     @Nested
@@ -249,7 +249,7 @@ class AuthControllerWebTests {
             request.setPassword("password123");
             request.setFullName("Test User");
             request.setPhoneNumber("1234567890");
-            request.setRole("ROLE_CANDIDATE");
+            request.setRole("CANDIDATE");
             return request;
         }
     }

@@ -99,17 +99,17 @@ class AuthIntegrationTests {
         tokenBlacklistService.clearAllBlacklistedTokens();
 
         // Set up roles
-        candidateRole = roleRepository.findByName(RoleName.ROLE_CANDIDATE)
+        candidateRole = roleRepository.findByName(RoleName.CANDIDATE)
                 .orElseGet(() -> {
                     Role role = new Role();
-                    role.setName(RoleName.ROLE_CANDIDATE);
+                    role.setName(RoleName.CANDIDATE);
                     return roleRepository.save(role);
                 });
 
-        recruiterRole = roleRepository.findByName(RoleName.ROLE_RECRUITER)
+        recruiterRole = roleRepository.findByName(RoleName.RECRUITER)
                 .orElseGet(() -> {
                     Role role = new Role();
-                    role.setName(RoleName.ROLE_RECRUITER);
+                    role.setName(RoleName.RECRUITER);
                     return roleRepository.save(role);
                 });
     }
@@ -134,7 +134,7 @@ class AuthIntegrationTests {
             registerRequest.setPassword(password);
             registerRequest.setFullName(fullName);
             registerRequest.setPhoneNumber(phoneNumber);
-            registerRequest.setRole("ROLE_CANDIDATE");
+            registerRequest.setRole("CANDIDATE");
 
             mockMvc.perform(post("/api/auth/register")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -147,7 +147,7 @@ class AuthIntegrationTests {
             User createdUser = users.get(0);
             assertThat(createdUser.getEmail()).isEqualTo(email);
             assertThat(passwordEncoder.matches(password, createdUser.getPassword())).isTrue();
-            assertThat(createdUser.getRole().getName()).isEqualTo(RoleName.ROLE_CANDIDATE);
+            assertThat(createdUser.getRole().getName()).isEqualTo(RoleName.CANDIDATE);
 
             var candidates = candidateRepository.findAll();
             assertThat(candidates).hasSize(1);
@@ -247,7 +247,7 @@ class AuthIntegrationTests {
             registerRequest.setPassword(password);
             registerRequest.setFullName(fullName);
             registerRequest.setPhoneNumber(phoneNumber);
-            registerRequest.setRole("ROLE_RECRUITER");
+            registerRequest.setRole("RECRUITER");
 
             mockMvc.perform(post("/api/auth/register")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -257,7 +257,7 @@ class AuthIntegrationTests {
             // Verify recruiter-specific persistence
             var users = userRepository.findAll();
             assertThat(users).hasSize(1);
-            assertThat(users.get(0).getRole().getName()).isEqualTo(RoleName.ROLE_RECRUITER);
+            assertThat(users.get(0).getRole().getName()).isEqualTo(RoleName.RECRUITER);
 
             var recruiters = recruiterRepository.findAll();
             assertThat(recruiters).hasSize(1);
@@ -407,7 +407,7 @@ class AuthIntegrationTests {
             firstRequest.setPassword("password123");
             firstRequest.setFullName("First User");
             firstRequest.setPhoneNumber("1111111111");
-            firstRequest.setRole("ROLE_CANDIDATE");
+            firstRequest.setRole("CANDIDATE");
 
             mockMvc.perform(post("/api/auth/register")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -423,7 +423,7 @@ class AuthIntegrationTests {
             duplicateRequest.setPassword("differentpassword");
             duplicateRequest.setFullName("Second User");
             duplicateRequest.setPhoneNumber("2222222222");
-            duplicateRequest.setRole("ROLE_RECRUITER");
+            duplicateRequest.setRole("RECRUITER");
 
             mockMvc.perform(post("/api/auth/register")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -446,7 +446,7 @@ class AuthIntegrationTests {
             candidateRequest.setPassword("password123");
             candidateRequest.setFullName("Test Candidate");
             candidateRequest.setPhoneNumber("1111111111");
-            candidateRequest.setRole("ROLE_CANDIDATE");
+            candidateRequest.setRole("CANDIDATE");
 
             mockMvc.perform(post("/api/auth/register")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -459,7 +459,7 @@ class AuthIntegrationTests {
             recruiterRequest.setPassword("password123");
             recruiterRequest.setFullName("Test Recruiter");
             recruiterRequest.setPhoneNumber("2222222222");
-            recruiterRequest.setRole("ROLE_RECRUITER");
+            recruiterRequest.setRole("RECRUITER");
 
             mockMvc.perform(post("/api/auth/register")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -475,8 +475,8 @@ class AuthIntegrationTests {
             var candidateUser = userRepository.getUserByEmail("candidate@roles.com").orElseThrow();
             var recruiterUser = userRepository.getUserByEmail("recruiter@roles.com").orElseThrow();
 
-            assertThat(candidateUser.getRole().getName()).isEqualTo(RoleName.ROLE_CANDIDATE);
-            assertThat(recruiterUser.getRole().getName()).isEqualTo(RoleName.ROLE_RECRUITER);
+            assertThat(candidateUser.getRole().getName()).isEqualTo(RoleName.CANDIDATE);
+            assertThat(recruiterUser.getRole().getName()).isEqualTo(RoleName.RECRUITER);
         }
 
         @Test
@@ -492,7 +492,7 @@ class AuthIntegrationTests {
             registerRequest.setPassword(plainPassword);
             registerRequest.setFullName("Password Test User");
             registerRequest.setPhoneNumber("1234567890");
-            registerRequest.setRole("ROLE_CANDIDATE");
+            registerRequest.setRole("CANDIDATE");
 
             mockMvc.perform(post("/api/auth/register")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -529,10 +529,10 @@ class AuthIntegrationTests {
     // Helper methods
     private void createTestCandidate(String email, String password, String fullName) {
         // Fetch fresh role from database to avoid TransientObjectException
-        Role freshCandidateRole = roleRepository.findByName(RoleName.ROLE_CANDIDATE)
+        Role freshCandidateRole = roleRepository.findByName(RoleName.CANDIDATE)
                 .orElseGet(() -> {
                     Role role = new Role();
-                    role.setName(RoleName.ROLE_CANDIDATE);
+                    role.setName(RoleName.CANDIDATE);
                     return roleRepository.save(role);
                 });
 
@@ -551,10 +551,10 @@ class AuthIntegrationTests {
 
     private void createTestRecruiter(String email, String password, String fullName) {
         // Fetch fresh role from database to avoid TransientObjectException
-        Role freshRecruiterRole = roleRepository.findByName(RoleName.ROLE_RECRUITER)
+        Role freshRecruiterRole = roleRepository.findByName(RoleName.RECRUITER)
                 .orElseGet(() -> {
                     Role role = new Role();
-                    role.setName(RoleName.ROLE_RECRUITER);
+                    role.setName(RoleName.RECRUITER);
                     return roleRepository.save(role);
                 });
 

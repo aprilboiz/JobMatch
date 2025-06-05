@@ -89,11 +89,11 @@ class AuthServiceUnitTests {
             registerRequest.setPassword("password123");
             registerRequest.setFullName("John Doe");
             registerRequest.setPhoneNumber("1234567890");
-            registerRequest.setRole("ROLE_CANDIDATE");
+            registerRequest.setRole("CANDIDATE");
 
             role = new Role();
             role.setId(1L);
-            role.setName(RoleName.ROLE_CANDIDATE);
+            role.setName(RoleName.CANDIDATE);
 
             user = User.builder()
                     .id(1L)
@@ -225,7 +225,7 @@ class AuthServiceUnitTests {
             ReflectionTestUtils.setField(jwtService, "refreshTokenExpiration", 7200L);
             
             Role role = new Role();
-            role.setName(RoleName.ROLE_CANDIDATE);
+            role.setName(RoleName.CANDIDATE);
             
             User user = User.builder()
                     .email("test@example.com")
