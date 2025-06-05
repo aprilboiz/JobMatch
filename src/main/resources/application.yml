@@ -1,0 +1,36 @@
+logging:
+  level:
+    org:
+      springframework:
+        security: TRACE
+
+spring:
+  application:
+    name: JobMatch
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: jobmatch_redis_pass
+      timeout: 2000ms
+      
+  datasource:
+    url: jdbc:postgresql://localhost:5432/job-match
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    # defer-datasource-initialization: true
+  # sql:
+  #   init:
+  #     data-locations: classpath:/data.sql
+  #     mode: always
+
+jwt:
+  secret-key: ${JWT_SECRET_KEY:7e28991c10c1f5294a74dbcab40b23d77a291c612692b97eb8f8c3d67c6d0e0507059122d8cb52b9ca009b214b83977cf4d4d7472d924c745102f1e18497df05}
+  access-token-expiration: ${JWT_ACCESS_EXPIRATION:3600}
+  refresh-token-expiration: ${JWT_REFRESH_EXPIRATION:7200}
