@@ -55,15 +55,13 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
-//                .exceptionHandling(exceptions -> exceptions
-//                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-//                        .accessDeniedHandler(jwtAccessDeniedHandler))
                 .authorizeHttpRequests(authz -> authz
+                        // Swagger UI paths
+                        .requestMatchers("/api/swagger-ui.html", "/api/swagger-ui/**", "/api/v3/api-docs/**").permitAll()
+                        // Application endpoints
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/test/**").permitAll()
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/actuator/health").permitAll()
-
+                        .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers("/api/candidate/**").hasRole("CANDIDATE")
                         .requestMatchers("/api/recruiter/**").hasRole("RECRUITER")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")

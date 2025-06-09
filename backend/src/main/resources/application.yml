@@ -34,3 +34,26 @@ jwt:
   secret-key: ${JWT_SECRET_KEY:7e28991c10c1f5294a74dbcab40b23d77a291c612692b97eb8f8c3d67c6d0e0507059122d8cb52b9ca009b214b83977cf4d4d7472d924c745102f1e18497df05}
   access-token-expiration: ${JWT_ACCESS_EXPIRATION:3600}
   refresh-token-expiration: ${JWT_REFRESH_EXPIRATION:7200}
+
+# SpringDoc OpenAPI Configuration
+springdoc:
+  api-docs:
+    path: /api/v3/api-docs
+    enabled: true
+  swagger-ui:
+    path: /api/swagger-ui.html
+    enabled: true
+    operationsSorter: method
+    tagsSorter: alpha
+    try-it-out-enabled: true
+    filter: true
+    doc-expansion: none
+    default-models-expand-depth: 1
+    default-model-expand-depth: 1
+  show-actuator: true
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  # Enable automatic generation of examples from validation annotations
+  use-fqn: false
+  # Automatically generate operation IDs
+  auto-tag-classes: true
