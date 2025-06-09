@@ -51,26 +51,6 @@ public class TestConfig {
             }
 
             @Override
-            public User userResponseToUser(UserResponse userResponse) {
-                if (userResponse == null) {
-                    return null;
-                }
-                
-                Role role = null;
-                if (userResponse.getRole() != null) {
-                    role = new Role();
-                    role.setName(com.aprilboiz.jobmatch.enumerate.RoleName.valueOf(
-                        userResponse.getRole().getRoleName()));
-                }
-                
-                return User.builder()
-                        .id(userResponse.getId())
-                        .email(userResponse.getEmail())
-                        .role(role)
-                        .build();
-            }
-
-            @Override
             public RoleDTO roleToRoleDTO(Role role) {
                 if (role == null) {
                     return null;

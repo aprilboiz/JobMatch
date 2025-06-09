@@ -15,9 +15,7 @@ public interface UserMapper {
 
     @Mapping(source = "role", target = "role")
     UserResponse userToUserResponse(User user);
-    
-    User userResponseToUser(UserResponse userResponse);
-    
+
     @Mapping(source = "name", target = "roleName")
     RoleDTO roleToRoleDTO(Role role);
 }
