@@ -19,4 +19,8 @@ public class CV extends AuditableEntity{
 
     @OneToMany(mappedBy = "cv")
     private List<Application> applications;
+
+    @ManyToOne
+    @JoinColumn(name = "candidate_id")
+    private Candidate candidate;
 }

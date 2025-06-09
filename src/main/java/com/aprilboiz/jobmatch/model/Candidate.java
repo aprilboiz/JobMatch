@@ -32,4 +32,7 @@ public class Candidate extends AuditableEntity{
 
     @OneToMany(mappedBy = "candidate")
     private List<Application> applications;
+
+    @OneToMany(mappedBy = "candidate")
+    private List<CV> cvs;
 }
