@@ -1,20 +1,21 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+
+import { login } from '@/lib/api'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Building2, Eye, EyeOff } from "lucide-react"
 
 export default function LoginPage() {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
-  const [role, setRole] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
@@ -22,15 +23,22 @@ export default function LoginPage() {
     e.preventDefault()
     setIsLoading(true)
 
-    // Simulate login
-    setTimeout(() => {
-      if (role === "candidate") {
-        router.push("/candidate/dashboard")
-      } else if (role === "recruiter") {
+    try {
+      const res = await login(email, password)
+
+      const role = res.role || "candidate"
+      localStorage.setItem("token", res.token)
+
+      if (role === "recruiter") {
         router.push("/recruiter/dashboard")
+      } else {
+        router.push("/candidate/dashboard")
       }
+    } catch (err: any) {
+      alert(err.message || "Đăng nhập thất bại")
+    } finally {
       setIsLoading(false)
-    }, 1000)
+    }
   }
 
   return (
@@ -48,13 +56,27 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="your@email.com" required />
+              <Input
+                id="email"
+                type="email"
+                placeholder="your@email.com"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="password">Mật khẩu</Label>
               <div className="relative">
-                <Input id="password" type={showPassword ? "text" : "password"} placeholder="Nhập mật khẩu" required />
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Nhập mật khẩu"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
                 <Button
                   type="button"
                   variant="ghost"
@@ -66,19 +88,6 @@ export default function LoginPage() {
                 </Button>
               </div>
             </div>
-
-            {/* <div className="space-y-2">
-              <Label htmlFor="role">Vai trò</Label>
-              <Select value={role} onValueChange={setRole} required>
-                <SelectTrigger>
-                  <SelectValue placeholder="Chọn vai trò của bạn" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="candidate">Ứng viên</SelectItem>
-                  <SelectItem value="recruiter">Nhà tuyển dụng</SelectItem>
-                </SelectContent>
-              </Select>
-            </div> */}
 
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? "Đang đăng nhập..." : "Đăng nhập"}
