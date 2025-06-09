@@ -1,0 +1,45 @@
+# --- Node.js / Next.js ---
+node_modules/
+.next/
+dist/
+out/
+npm-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.cache/
+.env*
+*.local
+
+# --- Java / Spring Boot ---
+target/
+build/
+*.war
+*.jar
+*.ear
+*.class
+logs/
+*.log
+*.tmp
+
+
+# --- IDEs / Editors ---
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# VS Code
+.vscode/
+
+# --- OS-specific ---
+.DS_Store
+Thumbs.db
+
+# --- Miscellaneous ---
+# Ignore test coverage, temp, and backup files
+coverage/
+*.swp
+*.bak
+*.backup.*
+*.back.*
