@@ -1,0 +1,37 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+  
+  # Disable SQL script execution for tests
+  sql:
+    init:
+      mode: never
+  
+  # Redis configuration for testing
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: 
+      timeout: 2000ms
+  
+  # Disable security for some tests if needed
+  security:
+    user:
+      name: admin
+      password: admin
+
+logging:
+  level:
+    com.aprilboiz.jobmatch: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+# Test-specific JWT configuration
+jwt:
+  secret-key: 7e28991c10c1f5294a74dbcab40b23d77a291c612692b97eb8f8c3d67c6d0e0507059122d8cb52b9ca009b214b83977cf4d4d7472d924c745102f1e18497df05
+  access-token-expiration: 3600
+  refresh-token-expiration: 7200 
