@@ -5,7 +5,7 @@ import com.aprilboiz.jobmatch.dto.request.LogoutRequest;
 import com.aprilboiz.jobmatch.dto.request.RefreshTokenRequest;
 import com.aprilboiz.jobmatch.dto.request.RegisterRequest;
 import com.aprilboiz.jobmatch.dto.response.AuthResponse;
-import com.aprilboiz.jobmatch.mapper.UserMapper;
+import com.aprilboiz.jobmatch.mapper.ApplicationMapper;
 import com.aprilboiz.jobmatch.model.User;
 import com.aprilboiz.jobmatch.model.UserPrincipal;
 import com.aprilboiz.jobmatch.service.AuthService;
@@ -30,16 +30,16 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authManager;
     private final UserService userService;
     private final TokenBlacklistService tokenBlacklistService;
-    private final UserMapper userMapper;
+    private final ApplicationMapper appMapper;
 
     public AuthServiceImpl(JwtService jwtService, AuthenticationManager authManager, 
                           UserService userService, TokenBlacklistService tokenBlacklistService,
-                          UserMapper userMapper) {
+                          ApplicationMapper userMapper) {
         this.jwtService = jwtService;
         this.authManager = authManager;
         this.userService = userService;
         this.tokenBlacklistService = tokenBlacklistService;
-        this.userMapper = userMapper;
+        this.appMapper = userMapper;
     }
 
     @Override
@@ -61,7 +61,7 @@ public class AuthServiceImpl implements AuthService {
             return AuthResponse.builder()
                     .token(accessToken)
                     .refreshToken(refreshToken)
-                    .user(userMapper.userToUserResponse(user))
+                    .user(appMapper.userToUserResponse(user))
                     .expiresIn(jwtService.getExpirationTime())
                     .build();
         } catch (AuthenticationException ex) {
@@ -108,7 +108,7 @@ public class AuthServiceImpl implements AuthService {
             return AuthResponse.builder()
                     .token(newAccessToken)
                     .refreshToken(newRefreshToken)
-                    .user(userMapper.userToUserResponse(user))
+                    .user(appMapper.userToUserResponse(user))
                     .expiresIn(jwtService.getExpirationTime())
                     .build();
                     

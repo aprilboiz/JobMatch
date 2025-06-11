@@ -114,7 +114,7 @@ public class JwtServiceImpl implements JwtService {
             return extractExpiration(token).before(new Date());
         } catch (Exception ex) {
             log.error("Failed to check token expiration: {}", ex.getMessage());
-            return true; // Consider expired if we can't determine
+            return true;
         }
     }
 

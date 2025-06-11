@@ -11,8 +11,6 @@ public interface JwtService {
     String extractUsername(String token);
     Long getExpirationTime();
     Long getRefreshTokenExpirationTime();
-    
-    // New methods for enhanced JWT functionality
     Date extractExpiration(String token);
     Boolean isTokenExpired(String token);
     String generateRefreshTokenWithJti(UserDetails userDetails, String jti);

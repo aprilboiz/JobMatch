@@ -7,7 +7,7 @@ import com.aprilboiz.jobmatch.dto.request.RegisterRequest;
 import com.aprilboiz.jobmatch.dto.response.AuthResponse;
 import com.aprilboiz.jobmatch.enumerate.RoleName;
 import com.aprilboiz.jobmatch.exception.AuthException;
-import com.aprilboiz.jobmatch.mapper.UserMapper;
+import com.aprilboiz.jobmatch.mapper.ApplicationMapper;
 import com.aprilboiz.jobmatch.model.Role;
 import com.aprilboiz.jobmatch.model.User;
 import com.aprilboiz.jobmatch.model.UserPrincipal;
@@ -64,7 +64,7 @@ class AuthServiceUnitTests {
         private TokenBlacklistService tokenBlacklistService;
 
         @Mock
-        private UserMapper userMapper;
+        private ApplicationMapper appMapper;
 
         @Mock
         private Authentication authentication;
