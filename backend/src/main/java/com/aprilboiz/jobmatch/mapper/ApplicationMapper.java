@@ -1,7 +1,9 @@
 package com.aprilboiz.jobmatch.mapper;
 
 import com.aprilboiz.jobmatch.dto.RoleDTO;
+import com.aprilboiz.jobmatch.dto.response.CvResponse;
 import com.aprilboiz.jobmatch.dto.response.UserResponse;
+import com.aprilboiz.jobmatch.model.CV;
 import com.aprilboiz.jobmatch.model.Role;
 import com.aprilboiz.jobmatch.model.User;
 import org.mapstruct.Mapper;
@@ -9,13 +11,16 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
-public interface UserMapper {
+public interface ApplicationMapper {
 
-    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
+    ApplicationMapper INSTANCE = Mappers.getMapper(ApplicationMapper.class);
 
     @Mapping(source = "role", target = "role")
     UserResponse userToUserResponse(User user);
 
     @Mapping(source = "name", target = "roleName")
     RoleDTO roleToRoleDTO(Role role);
+
+    @Mapping(source = "id", target = "id")
+    CvResponse cvToCvResponse(CV cv);
 }

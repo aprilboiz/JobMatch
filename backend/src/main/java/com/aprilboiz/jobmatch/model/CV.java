@@ -1,21 +1,26 @@
 package com.aprilboiz.jobmatch.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @NoArgsConstructor
-public class CV extends AuditableEntity{
+@AllArgsConstructor
+@Data
+public class CV extends AuditableEntity {
     @Id
     @GeneratedValue
     private Long id;
-    @Lob
-    private String content;
     private String filePath;
-
+    private String fileType;
+    private String fileName;
+    private String fileSize;
 
     @OneToMany(mappedBy = "cv")
     private List<Application> applications;
