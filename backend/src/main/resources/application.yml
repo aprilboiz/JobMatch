@@ -8,6 +8,11 @@ spring:
   application:
     name: JobMatch
 
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      enabled: true
+
   data:
     redis:
       host: localhost
@@ -57,3 +62,8 @@ springdoc:
   use-fqn: false
   # Automatically generate operation IDs
   auto-tag-classes: true
+
+cloudinary:
+  key-name: ${CLOUDINARY_KEY_NAME:key_name}
+  api-key: ${CLOUDINARY_API_KEY:api_key}
+  api-secret: ${CLOUDINARY_API_SECRET:api_secret}

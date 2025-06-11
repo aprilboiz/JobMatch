@@ -9,14 +9,27 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import com.aprilboiz.jobmatch.storage.StorageService;
+
+import java.net.URI;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/test")
 @Tag(name = "Testing", description = "Endpoints for testing")
 public class TestController {
-    
+
+    private final StorageService storageService;
+
+    public TestController(StorageService storageService) {
+        this.storageService = storageService;
+    }
+
     @Operation(summary = "Hello World", description = "Simple hello world")
     @GetMapping("/hello")
     public ResponseEntity<String> hello() {
@@ -70,5 +83,18 @@ public class TestController {
     @PreAuthorize("hasAnyRole('ADMIN', 'RECRUITER', 'CANDIDATE')")
     public ResponseEntity<String> all() {
         return ResponseEntity.ok("All access granted");
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<Void> upload(@RequestParam("file") MultipartFile file) {
+        // return ResponseEntity.ok(storageService.store(file));
+        String filePath = storageService.store(file);
+        URI uri = UriComponentsBuilder.fromPath("/api/files/").path("/{id}").buildAndExpand(filePath).toUri();
+        System.out.println(file.getOriginalFilename());
+        System.out.println(uri);
+        System.out.println(file.getContentType());
+        System.out.println(filePath);
+        System.out.println(file.getSize());
+        return ResponseEntity.ok().build();
     }
 } 
