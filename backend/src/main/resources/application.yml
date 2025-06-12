@@ -3,10 +3,18 @@ logging:
     org:
       springframework:
         security: TRACE
+  file:
+    path: /logs/
+
 
 spring:
   application:
     name: JobMatch
+
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      enabled: true
 
   data:
     redis:
@@ -57,3 +65,8 @@ springdoc:
   use-fqn: false
   # Automatically generate operation IDs
   auto-tag-classes: true
+
+cloudinary:
+  cloud-name: ${CLOUDINARY_CLOUD_NAME:cloud_name}
+  api-key: ${CLOUDINARY_API_KEY:api_key}
+  api-secret: ${CLOUDINARY_API_SECRET:api_secret}

@@ -168,7 +168,8 @@ class AuthIntegrationTests {
                     .andExpect(jsonPath("$.success").value(true))
                     .andExpect(jsonPath("$.data.token").exists())
                     .andExpect(jsonPath("$.data.refreshToken").exists())
-                    .andExpect(jsonPath("$.data.user.email").value(email))
+                    .andExpect(jsonPath("$.data.expiresIn").exists())
+                    .andExpect(jsonPath("$.data.tokenType").exists())
                     .andReturn();
 
             JsonNode loginResponse = objectMapper.readTree(loginResult.getResponse().getContentAsString());

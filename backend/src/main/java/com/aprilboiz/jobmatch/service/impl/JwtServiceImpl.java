@@ -1,12 +1,14 @@
 package com.aprilboiz.jobmatch.service.impl;
 
-import com.aprilboiz.jobmatch.exception.AuthException;
 import com.aprilboiz.jobmatch.service.JwtService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.CredentialsExpiredException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -54,19 +56,19 @@ public class JwtServiceImpl implements JwtService {
             return true;
         } catch (MalformedJwtException ex) {
             log.error("Invalid JWT token: {}", ex.getMessage());
-            throw new AuthException("Invalid JWT token");
+            throw new BadCredentialsException("Invalid JWT token", ex);
         } catch (ExpiredJwtException ex) {
             log.error("JWT token is expired: {}", ex.getMessage());
-            throw new AuthException("JWT token is expired");
+            throw new CredentialsExpiredException("JWT token is expired", ex);
         } catch (UnsupportedJwtException ex) {
             log.error("JWT token is unsupported: {}", ex.getMessage());
-            throw new AuthException("JWT token is unsupported");
+            throw new BadCredentialsException("JWT token is unsupported", ex);
         } catch (IllegalArgumentException ex) {
             log.error("JWT claims string is empty: {}", ex.getMessage());
-            throw new AuthException("JWT claims string is empty");
+            throw new BadCredentialsException("JWT claims string is empty", ex);
         } catch (Exception ex) {
             log.error("JWT token validation failed: {}", ex.getMessage());
-            throw new AuthException("JWT token validation failed");
+            throw new AuthenticationException("JWT token validation failed", ex) {};
         }
     }
 
@@ -76,7 +78,7 @@ public class JwtServiceImpl implements JwtService {
             return extractAllClaims(token).getSubject();
         } catch (Exception ex) {
             log.error("Failed to extract username from token: {}", ex.getMessage());
-            throw new AuthException("Failed to extract username from token");
+            throw new BadCredentialsException("Failed to extract username from token", ex);
         }
     }
 
@@ -104,7 +106,7 @@ public class JwtServiceImpl implements JwtService {
             return extractAllClaims(token).getExpiration();
         } catch (Exception ex) {
             log.error("Failed to extract expiration from token: {}", ex.getMessage());
-            throw new AuthException("Failed to extract expiration from token");
+            throw new BadCredentialsException("Failed to extract expiration from token", ex);
         }
     }
 
@@ -114,7 +116,7 @@ public class JwtServiceImpl implements JwtService {
             return extractExpiration(token).before(new Date());
         } catch (Exception ex) {
             log.error("Failed to check token expiration: {}", ex.getMessage());
-            return true; // Consider expired if we can't determine
+            return true;
         }
     }
 
@@ -138,7 +140,7 @@ public class JwtServiceImpl implements JwtService {
             return extractAllClaims(token).getId();
         } catch (Exception ex) {
             log.error("Failed to extract JTI from token: {}", ex.getMessage());
-            throw new AuthException("Failed to extract JTI from token");
+            throw new BadCredentialsException("Failed to extract JTI from token", ex);
         }
     }
 
@@ -161,7 +163,7 @@ public class JwtServiceImpl implements JwtService {
             return Keys.hmacShaKeyFor(keyBytes);
         } catch (Exception ex) {
             log.error("Failed to create signing key: {}", ex.getMessage());
-            throw new AuthException("Failed to create JWT signing key");
+            throw new BadCredentialsException("Failed to create JWT signing key", ex);
         }
     }
 }

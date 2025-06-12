@@ -1,8 +1,10 @@
 package com.aprilboiz.jobmatch.config;
 
 import com.aprilboiz.jobmatch.dto.RoleDTO;
+import com.aprilboiz.jobmatch.dto.response.CvResponse;
 import com.aprilboiz.jobmatch.dto.response.UserResponse;
-import com.aprilboiz.jobmatch.mapper.UserMapper;
+import com.aprilboiz.jobmatch.mapper.ApplicationMapper;
+import com.aprilboiz.jobmatch.model.CV;
 import com.aprilboiz.jobmatch.model.Role;
 import com.aprilboiz.jobmatch.model.User;
 import com.aprilboiz.jobmatch.security.JwtAuthenticationFilter;
@@ -28,8 +30,8 @@ public class TestConfig {
 
     @Bean
     @Primary
-    public UserMapper userMapper() {
-        return new UserMapper() {
+    public ApplicationMapper userMapper() {
+        return new ApplicationMapper() {
             @Override
             public UserResponse userToUserResponse(User user) {
                 if (user == null) {
@@ -57,6 +59,17 @@ public class TestConfig {
                 }
                 return RoleDTO.builder()
                         .roleName(role.getName().toString())
+                        .build();
+            }
+
+            @Override
+            public CvResponse cvToCvResponse(CV cv) {
+                return CvResponse.builder()
+                        .id(cv.getId())
+                        .fileUri("http://localhost:8080/api/me/cvs/" + cv.getId())
+                        .fileName(cv.getFileName())
+                        .fileType(cv.getFileType())
+                        .updatedAt(cv.getUpdatedAt().toString())
                         .build();
             }
         };

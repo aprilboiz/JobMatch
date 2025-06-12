@@ -1,11 +1,11 @@
 package com.aprilboiz.jobmatch.exception;
 
-import java.util.stream.Collectors;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,19 +21,20 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ApiResponse<Void>> handleAccessDeniedException(AccessDeniedException ex) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.error(ex.getMessage()));
-    }
-
-    @ExceptionHandler(AuthorizationDeniedException.class)
-    public ResponseEntity<ApiResponse<Void>> handleAuthorizationDeniedException(AuthorizationDeniedException ex) {
+    @ExceptionHandler({AuthorizationDeniedException.class, AccessDeniedException.class})
+    public ResponseEntity<ApiResponse<Void>> handleAccessDeniedException(Exception ex) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.error(ex.getMessage()));
     }
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ApiResponse<Void>> handleBadCredentialsException(BadCredentialsException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error(ex.getMessage()));
+    }
+
+    @ExceptionHandler(CredentialsExpiredException.class)
+    public ResponseEntity<ApiResponse<Void>> handleCredentialsExpiredException(CredentialsExpiredException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(ApiResponse.error("Your session has expired. Please login again."));
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
@@ -43,13 +44,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ApiResponse<Void>> handleAuthenticationException(AuthenticationException ex) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error("Authentication failed: " + ex.getMessage()));
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(ApiResponse.error("Authentication failed: " + ex.getMessage()));
     }
 
-    @ExceptionHandler(AuthException.class)
-    public ResponseEntity<ApiResponse<Void>> handleAuthException(AuthException ex) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error(ex.getMessage()));
-    }
+
 
     @ExceptionHandler(DuplicateException.class)
     public ResponseEntity<ApiResponse<Void>> handleDuplicateException(DuplicateException ex) {
@@ -69,12 +68,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<Void>> handleValidationException(MethodArgumentNotValidException ex) {
         ValidationErrorResponse errorResponse = new ValidationErrorResponse();
-        ex.getBindingResult().getFieldErrors().forEach(err -> errorResponse.addError(err.getField(), err.getDefaultMessage()));
-//        String errorMessage = ex.getBindingResult()
-//                .getFieldErrors()
-//                .stream()
-//                .map(err -> err.getField() + ": " + err.getDefaultMessage())
-//                .collect(Collectors.joining(", "));
+        ex.getBindingResult().getFieldErrors()
+                .forEach(err -> errorResponse.addError(err.getField(), err.getDefaultMessage()));
+        // String errorMessage = ex.getBindingResult()
+        // .getFieldErrors()
+        // .stream()
+        // .map(err -> err.getField() + ": " + err.getDefaultMessage())
+        // .collect(Collectors.joining(", "));
         return ResponseEntity.badRequest().body(errorResponse.create("Validation failed"));
     }
 
@@ -84,19 +84,22 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-    public ResponseEntity<ApiResponse<Void>> handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException ex) {
+    public ResponseEntity<ApiResponse<Void>> handleHttpMediaTypeNotSupportedException(
+            HttpMediaTypeNotSupportedException ex) {
         return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
                 .body(ApiResponse.error("Unsupported media type: " + ex.getContentType()));
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<ApiResponse<Void>> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
+    public ResponseEntity<ApiResponse<Void>> handleHttpRequestMethodNotSupportedException(
+            HttpRequestMethodNotSupportedException ex) {
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
                 .body(ApiResponse.error("Method not allowed: " + ex.getMethod()));
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ResponseEntity<ApiResponse<Void>> handleMissingServletRequestParameterException(MissingServletRequestParameterException ex) {
+    public ResponseEntity<ApiResponse<Void>> handleMissingServletRequestParameterException(
+            MissingServletRequestParameterException ex) {
         return ResponseEntity.badRequest()
                 .body(ApiResponse.error("Missing required parameter: " + ex.getParameterName()));
     }
@@ -109,7 +112,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleGeneralException(Exception ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.error("Internal server error: " + ex.getMessage()));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiResponse.error("Internal server error: " + ex.getMessage()));
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
@@ -117,24 +121,37 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error(ex.getMessage()));
     }
 
-//    @ExceptionHandler(DisabledException.class)
-//    public ResponseEntity<ApiResponse<Void>> handleDisabledException(DisabledException ex) {
-//        ApiResponse<Void> response = ApiResponse.<Void>builder()
-//                .success(false)
-//                .message("Account is disabled")
-//                .timestamp(LocalDateTime.now())
-//                .build();
-//        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
-//    }
+    @ExceptionHandler(StorageException.class)
+    public ResponseEntity<ApiResponse<Void>> handleStorageException(StorageException ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiResponse.error("Storage error: " + ex.getMessage()));
+    }
 
-//    @ExceptionHandler(LockedException.class)
-//    public ResponseEntity<ApiResponse<Void>> handleLockedException(LockedException ex) {
-//        ApiResponse<Void> response = ApiResponse.<Void>builder()
-//                .success(false)
-//                .message("Account is locked")
-//                .timestamp(LocalDateTime.now())
-//                .build();
-//        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
-//    }
+    @ExceptionHandler(StorageFileNotFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> handleStorageFileNotFoundException(StorageFileNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error(ex.getMessage()));
+    }
+
+    // @ExceptionHandler(DisabledException.class)
+    // public ResponseEntity<ApiResponse<Void>>
+    // handleDisabledException(DisabledException ex) {
+    // ApiResponse<Void> response = ApiResponse.<Void>builder()
+    // .success(false)
+    // .message("Account is disabled")
+    // .timestamp(LocalDateTime.now())
+    // .build();
+    // return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+    // }
+
+    // @ExceptionHandler(LockedException.class)
+    // public ResponseEntity<ApiResponse<Void>>
+    // handleLockedException(LockedException ex) {
+    // ApiResponse<Void> response = ApiResponse.<Void>builder()
+    // .success(false)
+    // .message("Account is locked")
+    // .timestamp(LocalDateTime.now())
+    // .build();
+    // return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+    // }
 
 }

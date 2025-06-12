@@ -21,9 +21,6 @@ public class AuthResponse {
     @Schema(description = "Refresh token for obtaining new access tokens", example = "refresh_token_string")
     private String refreshToken;
     
-    @Schema(description = "User information")
-    private UserResponse user;
-    
     @Schema(description = "Token expiration time in seconds", example = "3600")
     private long expiresIn;
 }

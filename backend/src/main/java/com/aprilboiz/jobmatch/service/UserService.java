@@ -1,5 +1,7 @@
 package com.aprilboiz.jobmatch.service;
 
+import com.aprilboiz.jobmatch.dto.request.CandidateProfileUpdateRequest;
+import com.aprilboiz.jobmatch.dto.request.RecruiterProfileUpdateRequest;
 import com.aprilboiz.jobmatch.dto.request.RegisterRequest;
 import com.aprilboiz.jobmatch.dto.response.UserResponse;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,4 +13,6 @@ public interface UserService extends UserDetailsService {
     List<UserResponse> getAllUsers();
     UserResponse getUserById(Long id);
     UserResponse getUserByEmail(String email);
+    UserResponse updateProfile(String email, CandidateProfileUpdateRequest profileRequest);
+    UserResponse updateProfile(String email, RecruiterProfileUpdateRequest profileRequest);
 }
