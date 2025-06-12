@@ -66,7 +66,7 @@ public class TestConfig {
             public CvResponse cvToCvResponse(CV cv) {
                 return CvResponse.builder()
                         .id(cv.getId())
-                        .fileUri(cv.getFileUri())
+                        .fileUri("http://localhost:8080/api/me/cvs/" + cv.getId())
                         .fileName(cv.getFileName())
                         .fileType(cv.getFileType())
                         .updatedAt(cv.getUpdatedAt().toString())

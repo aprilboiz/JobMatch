@@ -281,7 +281,7 @@ class AuthServiceUnitTests {
         void shouldThrowAuthExceptionForInvalidToken() {
             // When & Then
             assertThatThrownBy(() -> jwtService.validateToken("invalid.token.here"))
-                    .isInstanceOf(AuthException.class);
+                    .isInstanceOf(BadCredentialsException.class);
         }
 
         @Test

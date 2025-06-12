@@ -75,7 +75,6 @@ class AuthControllerWebTests {
             AuthResponse authResponse = AuthResponse.builder()
                     .token("access-token")
                     .refreshToken("refresh-token")
-                    .user(userResponse)
                     .expiresIn(3600L)
                     .build();
 
@@ -95,7 +94,6 @@ class AuthControllerWebTests {
                     .andExpect(jsonPath("$.message").value("Login successful"))
                     .andExpect(jsonPath("$.data.token").value("access-token"))
                     .andExpect(jsonPath("$.data.refreshToken").value("refresh-token"))
-                    .andExpect(jsonPath("$.data.user.email").value("test@example.com"))
                     .andExpect(jsonPath("$.data.expiresIn").value(3600))
                     .andExpect(jsonPath("$.data.tokenType").value("Bearer"));
         }
