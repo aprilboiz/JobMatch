@@ -1,10 +1,9 @@
 "use client";
 
 import type React from "react";
-
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,36 +14,56 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Building2, Eye, EyeOff } from "lucide-react";
+import { register } from "@/lib/api"; // Hàm gọi API đăng ký
 import {
   Select,
-  SelectContent,
-  SelectItem,
   SelectTrigger,
   SelectValue,
+  SelectContent,
+  SelectItem,
 } from "@/components/ui/select";
-import { Building2, Eye, EyeOff } from "lucide-react";
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [role, setRole] = useState("candidate"); // Default là ứng viên
+
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const [role, setRole] = useState(searchParams.get("role") || "");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (password !== confirmPassword) {
+      alert("Mật khẩu xác nhận không khớp.");
+      return;
+    }
+
     setIsLoading(true);
 
-    // Simulate registration
-    setTimeout(() => {
-      if (role === "candidate") {
-        router.push("/candidate/dashboard");
-      } else if (role === "recruiter") {
-        router.push("/recruiter/dashboard");
-      }
+    try {
+      const res = await register({
+        fullName,
+        email,
+        phoneNumber,
+        password,
+        role,
+      });
+
+      alert("Đăng ký thành công!");
+      router.push("/auth/login");
+    } catch (error: any) {
+      alert(error.message || "Đăng ký thất bại");
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -67,7 +86,8 @@ export default function RegisterPage() {
               <Input
                 id="fullName"
                 type="text"
-                placeholder="Nguyễn Quốc Huy"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
                 required
               />
             </div>
@@ -77,14 +97,34 @@ export default function RegisterPage() {
               <Input
                 id="email"
                 type="email"
-                placeholder="nqhuy@sgu.edu.vn"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="phone">Số điện thoại</Label>
-              <Input id="phone" type="tel" placeholder="0444444444" required />
+              <Input
+                id="phone"
+                type="tel"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="role">Vai trò</Label>
+              <Select value={role} onValueChange={setRole}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Chọn vai trò của bạn" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="candidate">Ứng viên</SelectItem>
+                  <SelectItem value="recruiter">Nhà tuyển dụng</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="space-y-2">
@@ -93,14 +133,15 @@ export default function RegisterPage() {
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="Nhập mật khẩu"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                 />
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                  className="absolute right-0 top-0 h-full px-3 py-2"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
@@ -118,14 +159,15 @@ export default function RegisterPage() {
                 <Input
                   id="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}
-                  placeholder="Nhập lại mật khẩu"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                   required
                 />
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                  className="absolute right-0 top-0 h-full px-3 py-2"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 >
                   {showConfirmPassword ? (
@@ -136,19 +178,6 @@ export default function RegisterPage() {
                 </Button>
               </div>
             </div>
-
-            {/* <div className="space-y-2">
-              <Label htmlFor="role">Vai trò</Label>
-              <Select value={role} onValueChange={setRole} required>
-                <SelectTrigger>
-                  <SelectValue placeholder="Chọn vai trò của bạn" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="candidate">Ứng viên</SelectItem>
-                  <SelectItem value="recruiter">Nhà tuyển dụng</SelectItem>
-                </SelectContent>
-              </Select>
-            </div> */}
 
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? "Đang đăng ký..." : "Đăng ký"}
