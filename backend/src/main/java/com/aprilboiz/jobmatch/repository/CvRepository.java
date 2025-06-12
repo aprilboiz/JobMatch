@@ -8,11 +8,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
-
-
-
-public interface CvRepository extends JpaRepository<CV, Long>{
-    Optional<CV> findById(Long id);
+public interface CvRepository extends JpaRepository<CV, Long> {
     List<CV> findByCandidate(Candidate candidate);
-    
+    Optional<CV> findByFileNameAndCandidate(String fileName, Candidate candidate);
 }

@@ -2,6 +2,7 @@ package com.aprilboiz.jobmatch.service.impl;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.core.io.Resource;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.aprilboiz.jobmatch.dto.response.ApplicationResponse;
 import com.aprilboiz.jobmatch.dto.response.CvResponse;
+import com.aprilboiz.jobmatch.exception.DuplicateException;
 import com.aprilboiz.jobmatch.exception.NotFoundException;
 import com.aprilboiz.jobmatch.mapper.ApplicationMapper;
 import com.aprilboiz.jobmatch.model.CV;
@@ -67,6 +69,14 @@ public class CandidateServiceImpl implements CandidateService {
 
     @Override
     public CvResponse createCandidateCv(MultipartFile file) {
+        UserPrincipal userDetails = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Candidate candidate = userDetails.getUser().getCandidate();
+
+        Optional<CV> existingCv = cvRepository.findByFileNameAndCandidate(file.getOriginalFilename(), candidate);
+        if (existingCv.isPresent()) {
+            throw new DuplicateException("CV already exists");
+        }
+        
         String filePath = storageService.store(file);
         
         CV cv = new CV();
@@ -75,8 +85,6 @@ public class CandidateServiceImpl implements CandidateService {
         cv.setFileName(file.getOriginalFilename());
         cv.setFileSize(String.valueOf(file.getSize()));
 
-        UserPrincipal userDetails = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Candidate candidate = userDetails.getUser().getCandidate();
         cv.setCandidate(candidate);
 
         CV savedCv = cvRepository.save(cv);
