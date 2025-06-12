@@ -8,4 +8,4 @@ public interface TokenBlacklistService {
     void removeTokenFromBlacklist(String token);
     void clearAllBlacklistedTokens();
     void blacklistAllUserTokens(String username, Duration timeToLive);
-} 
+}

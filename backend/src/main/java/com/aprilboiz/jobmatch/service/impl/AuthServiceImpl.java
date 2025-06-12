@@ -5,8 +5,6 @@ import com.aprilboiz.jobmatch.dto.request.LogoutRequest;
 import com.aprilboiz.jobmatch.dto.request.RefreshTokenRequest;
 import com.aprilboiz.jobmatch.dto.request.RegisterRequest;
 import com.aprilboiz.jobmatch.dto.response.AuthResponse;
-import com.aprilboiz.jobmatch.mapper.ApplicationMapper;
-import com.aprilboiz.jobmatch.model.User;
 import com.aprilboiz.jobmatch.model.UserPrincipal;
 import com.aprilboiz.jobmatch.service.AuthService;
 import com.aprilboiz.jobmatch.service.JwtService;
@@ -30,16 +28,13 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authManager;
     private final UserService userService;
     private final TokenBlacklistService tokenBlacklistService;
-    private final ApplicationMapper appMapper;
 
     public AuthServiceImpl(JwtService jwtService, AuthenticationManager authManager, 
-                          UserService userService, TokenBlacklistService tokenBlacklistService,
-                          ApplicationMapper userMapper) {
+                          UserService userService, TokenBlacklistService tokenBlacklistService) {
         this.jwtService = jwtService;
         this.authManager = authManager;
         this.userService = userService;
         this.tokenBlacklistService = tokenBlacklistService;
-        this.appMapper = userMapper;
     }
 
     @Override
@@ -53,7 +48,6 @@ public class AuthServiceImpl implements AuthService {
             );
 
             UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-            User user = userPrincipal.getUser();
 
             String accessToken = jwtService.generateAccessToken(userPrincipal);
             String refreshToken = jwtService.generateRefreshToken(userPrincipal);
@@ -61,7 +55,6 @@ public class AuthServiceImpl implements AuthService {
             return AuthResponse.builder()
                     .token(accessToken)
                     .refreshToken(refreshToken)
-                    .user(appMapper.userToUserResponse(user))
                     .expiresIn(jwtService.getExpirationTime())
                     .build();
         } catch (AuthenticationException ex) {
@@ -101,14 +94,11 @@ public class AuthServiceImpl implements AuthService {
             Duration timeToLive = Duration.ofSeconds(jwtService.getRefreshTokenExpirationTime());
             tokenBlacklistService.blacklistToken(refreshToken, timeToLive);
             
-            User user = ((UserPrincipal) userDetails).getUser();
-            
             log.info("Refresh token successful for user: {}", username);
             
             return AuthResponse.builder()
                     .token(newAccessToken)
                     .refreshToken(newRefreshToken)
-                    .user(appMapper.userToUserResponse(user))
                     .expiresIn(jwtService.getExpirationTime())
                     .build();
                     
