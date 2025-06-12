@@ -68,6 +68,8 @@ public class SecurityConfig {
                         .authenticationEntryPoint(authenticationEntryPoint)
                         .accessDeniedHandler(accessDeniedHandler))
                 .authorizeHttpRequests(authz -> authz
+                        // Actuator endpoints
+                        .requestMatchers("/actuator/**").permitAll()
                         // Swagger UI paths
                         .requestMatchers("/api/swagger-ui.html", "/api/swagger-ui/**", "/api/v3/api-docs/**").permitAll()
                         // Application endpoints

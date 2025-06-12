@@ -3,6 +3,9 @@ logging:
     org:
       springframework:
         security: TRACE
+  file:
+    path: /logs/
+
 
 spring:
   application:
@@ -64,6 +67,6 @@ springdoc:
   auto-tag-classes: true
 
 cloudinary:
-  key-name: ${CLOUDINARY_KEY_NAME:key_name}
+  cloud-name: ${CLOUDINARY_CLOUD_NAME:cloud_name}
   api-key: ${CLOUDINARY_API_KEY:api_key}
   api-secret: ${CLOUDINARY_API_SECRET:api_secret}

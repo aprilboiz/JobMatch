@@ -9,14 +9,14 @@ import com.cloudinary.utils.ObjectUtils;
 
 @Configuration
 public class CloudinaryConfig {
-    @Value("${cloudinary.cloud_name}")
-    private static String cloudName;
+    @Value("${cloudinary.cloud-name}")
+    private String cloudName;
 
-    @Value("${cloudinary.api_key}")
-    private static String apiKey;
+    @Value("${cloudinary.api-key}")
+    private String apiKey;
 
-    @Value("${cloudinary.api_secret}")
-    private static String apiSecret;
+    @Value("${cloudinary.api-secret}")
+    private String apiSecret;
 
     @Bean
     public Cloudinary cloudinary() {
