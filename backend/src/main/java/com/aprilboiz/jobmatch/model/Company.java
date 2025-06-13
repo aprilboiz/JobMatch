@@ -1,17 +1,25 @@
 package com.aprilboiz.jobmatch.model;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 
-
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Data
 public class Company extends AuditableEntity{
     @Id
     @GeneratedValue
@@ -28,6 +36,7 @@ public class Company extends AuditableEntity{
     private String companySize;
     @NotNull
     private String industry;
+    private String description;
 
     @OneToMany(mappedBy = "company")
     private List<Recruiter> recruiters;
