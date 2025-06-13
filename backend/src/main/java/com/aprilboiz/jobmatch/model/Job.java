@@ -8,6 +8,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 
@@ -25,17 +27,21 @@ public class Job extends AuditableEntity{
     @NotNull
     private String title;
     @NotNull
-    private String position;
+    private String jobType;
     @NotNull
     private Double salary;
     @NotNull
     private Integer numberOfOpenings;
+    @NotNull
+    private LocalDate applicationDeadline;
 
     @Builder.Default
     private Boolean isActive = Boolean.TRUE;
     
     @Lob
     private String description;
+
+    private String location;
 
     @ManyToOne
     @JoinColumn(name = "company_id")

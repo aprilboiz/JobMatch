@@ -2,8 +2,10 @@ package com.aprilboiz.jobmatch.mapper;
 
 import com.aprilboiz.jobmatch.dto.RoleDTO;
 import com.aprilboiz.jobmatch.dto.response.CvResponse;
+import com.aprilboiz.jobmatch.dto.response.JobResponse;
 import com.aprilboiz.jobmatch.dto.response.UserResponse;
 import com.aprilboiz.jobmatch.model.CV;
+import com.aprilboiz.jobmatch.model.Job;
 import com.aprilboiz.jobmatch.model.Role;
 import com.aprilboiz.jobmatch.model.User;
 import org.mapstruct.Mapper;
@@ -26,6 +28,10 @@ public interface ApplicationMapper {
     @Mapping(source = "id", target = "id")
     @Mapping(target = "fileUri", expression = "java(getFileUri(cv))")
     CvResponse cvToCvResponse(CV cv);
+
+    @Mapping(source = "company.id", target = "companyId")
+    @Mapping(source = "recruiter.id", target = "recruiterId")
+    JobResponse jobToJobResponse(Job job);
 
     default String getPhoneNumber(User user) {
         if (user.getCandidate() != null) {
