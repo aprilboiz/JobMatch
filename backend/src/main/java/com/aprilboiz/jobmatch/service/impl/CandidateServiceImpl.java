@@ -9,6 +9,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.aprilboiz.jobmatch.dto.response.ApplicationResponse;
@@ -36,6 +37,7 @@ public class CandidateServiceImpl implements CandidateService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CvResponse> getAllCandidateCv() {
         UserPrincipal userDetails = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Candidate candidate = userDetails.getUser().getCandidate();
@@ -44,30 +46,35 @@ public class CandidateServiceImpl implements CandidateService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public CvResponse getCandidateCv(Long id) {
         CV cv = cvRepository.findById(id).orElseThrow(() -> new NotFoundException("CV not found"));
         return appMapper.cvToCvResponse(cv);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void deleteCandidateCv(Long id) {
         CV cv = cvRepository.findById(id).orElseThrow(() -> new NotFoundException("CV not found"));
         cvRepository.delete(cv);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Resource downloadCandidateCv(Long id) {
         CV cv = cvRepository.findById(id).orElseThrow(() -> new NotFoundException("CV not found"));
         return storageService.loadAsResource(cv.getFilePath());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ApplicationResponse> getAllCandidateApplications() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getAllCandidateApplications'");
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public CvResponse createCandidateCv(MultipartFile file) {
         UserPrincipal userDetails = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Candidate candidate = userDetails.getUser().getCandidate();
@@ -84,10 +91,8 @@ public class CandidateServiceImpl implements CandidateService {
         cv.setFileType(file.getContentType());
         cv.setFileName(file.getOriginalFilename());
         cv.setFileSize(String.valueOf(file.getSize()));
-
         cv.setCandidate(candidate);
 
-        CV savedCv = cvRepository.save(cv);
-        return appMapper.cvToCvResponse(savedCv);
+        return appMapper.cvToCvResponse(cvRepository.save(cv));
     }
 }

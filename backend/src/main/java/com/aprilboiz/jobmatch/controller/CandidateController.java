@@ -37,7 +37,8 @@ public class CandidateController {
     @PostMapping("/cvs")
     public ResponseEntity<ApiResponse<CvResponse>> createCandidateCv(@RequestParam("file") MultipartFile file) {
         CvResponse cvResponse = candidateService.createCandidateCv(file);
-        return ResponseEntity.created(URI.create(cvResponse.getFileUri())).body(ApiResponse.success("CV created successfully", cvResponse));
+        return ResponseEntity.created(URI.create(cvResponse.getFileUri()))
+                .body(ApiResponse.success("CV created successfully", cvResponse));
     }
 
     @GetMapping("/cvs")
