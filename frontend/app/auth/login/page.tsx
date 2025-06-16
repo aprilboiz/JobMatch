@@ -5,7 +5,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 
-import { login } from '@/lib/api'
+import { getCurrentUser, login } from '@/lib/api'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -61,7 +61,10 @@ export default function LoginPage() {
         const { data } = apiResponse;
         
         localStorage.setItem("token", data.token)
-        const userRole = data.user?.role?.roleName.toLowerCase();
+        localStorage.setItem("refreshToken", data.refreshToken)
+        
+        const {role} = await getCurrentUser();
+        const userRole = role?.roleName.toLowerCase();
 
         if (userRole === "recruiter") {
           router.push("/recruiter/dashboard")

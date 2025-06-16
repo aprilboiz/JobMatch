@@ -14,6 +14,24 @@ export async function login(email: string, password: string) {
 
   return res.json();
 }
+
+export async function getCurrentUser() {
+  const res = await fetch("http://localhost:8080/api/me/profile", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.message || "Lấy thông tin người dùng thất bại");
+  }
+
+  return res.json();
+}
+
 export async function register(data: {
   fullName: string;
   email: string;
