@@ -1,6 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import type React from "react"
+
+import { useState, useEffect } from "react"
 import CandidateLayout from "@/components/candidate-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -9,12 +11,156 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Upload, FileText, Plus, X, Edit, Save, User, Briefcase, GraduationCap, Award } from "lucide-react"
+import { Upload, FileText, Plus, X, Edit, Save, User, Briefcase, GraduationCap, Download, Trash2 } from "lucide-react"
+import { candidateApi } from "@/lib/api/candidate"
+import { useAuth } from "@/hooks/use-auth"
+import { LoadingSpinner } from "@/components/ui/loading-spinner"
+import { ErrorMessage } from "@/components/ui/error-message"
+import { useToast } from "@/hooks/use-toast"
+import type { CvResponse } from "@/types/api"
 
 export default function CandidateProfile() {
   const [isEditing, setIsEditing] = useState(false)
   const [skills, setSkills] = useState(["React", "JavaScript", "TypeScript", "Node.js", "Python"])
   const [newSkill, setNewSkill] = useState("")
+  const [cvFiles, setCvFiles] = useState<CvResponse[]>([])
+  const [loading, setLoading] = useState(false)
+  const [uploading, setUploading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const { user, refreshUser } = useAuth()
+  const { toast } = useToast()
+
+  useEffect(() => {
+    loadCVFiles()
+  }, [])
+
+  const loadCVFiles = async () => {
+    try {
+      setLoading(true)
+      const files = await candidateApi.getAllCVs()
+      setCvFiles(files)
+    } catch (error) {
+      setError("Không thể tải danh sách CV")
+      console.error("Failed to load CV files:", error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    // Validate file type
+    const allowedTypes = [
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ]
+    if (!allowedTypes.includes(file.type)) {
+      toast({
+        title: "Lỗi",
+        description: "Chỉ hỗ trợ file PDF, DOC, DOCX",
+        variant: "destructive",
+      })
+      return
+    }
+
+    // Validate file size (10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      toast({
+        title: "Lỗi",
+        description: "File không được vượt quá 10MB",
+        variant: "destructive",
+      })
+      return
+    }
+
+    try {
+      setUploading(true)
+      const response = await candidateApi.uploadCV(file)
+      setCvFiles((prev) => [...prev, response])
+      toast({
+        title: "Thành công",
+        description: "Upload CV thành công",
+      })
+      // Reset input
+      event.target.value = ""
+    } catch (error) {
+      toast({
+        title: "Lỗi",
+        description: "Không thể upload CV. Vui lòng thử lại.",
+        variant: "destructive",
+      })
+      console.error("Failed to upload CV:", error)
+    } finally {
+      setUploading(false)
+    }
+  }
+
+  const handleDeleteCV = async (id: number) => {
+    if (!confirm("Bạn có chắc chắn muốn xóa CV này?")) return
+
+    try {
+      await candidateApi.deleteCV(id)
+      setCvFiles((prev) => prev.filter((cv) => cv.id !== id))
+      toast({
+        title: "Thành công",
+        description: "Xóa CV thành công",
+      })
+    } catch (error) {
+      toast({
+        title: "Lỗi",
+        description: "Không thể xóa CV. Vui lòng thử lại.",
+        variant: "destructive",
+      })
+      console.error("Failed to delete CV:", error)
+    }
+  }
+
+  const handleDownloadCV = async (id: number, fileName: string) => {
+    try {
+      const blob = await candidateApi.downloadCV(id)
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement("a")
+      a.href = url
+      a.download = fileName
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(a)
+    } catch (error) {
+      toast({
+        title: "Lỗi",
+        description: "Không thể tải CV. Vui lòng thử lại.",
+        variant: "destructive",
+      })
+      console.error("Failed to download CV:", error)
+    }
+  }
+
+  const handleSaveProfile = async () => {
+    try {
+      setLoading(true)
+      // Update user profile logic here
+      await refreshUser()
+      setIsEditing(false)
+      toast({
+        title: "Thành công",
+        description: "Cập nhật hồ sơ thành công",
+      })
+    } catch (error) {
+      toast({
+        title: "Lỗi",
+        description: "Không thể cập nhật hồ sơ. Vui lòng thử lại.",
+        variant: "destructive",
+      })
+      console.error("Failed to update profile:", error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const addSkill = () => {
     if (newSkill.trim() && !skills.includes(newSkill.trim())) {
@@ -27,6 +173,26 @@ export default function CandidateProfile() {
     setSkills(skills.filter((skill) => skill !== skillToRemove))
   }
 
+  const formatFileSize = (bytes: number) => {
+    if (bytes === 0) return "0 Bytes"
+    const k = 1024
+    const sizes = ["Bytes", "KB", "MB", "GB"]
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
+    return Number.parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i]
+  }
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("vi-VN")
+  }
+
+  if (error) {
+    return (
+      <CandidateLayout>
+        <ErrorMessage message={error} onRetry={loadCVFiles} />
+      </CandidateLayout>
+    )
+  }
+
   return (
     <CandidateLayout>
       <div className="space-y-6">
@@ -36,18 +202,19 @@ export default function CandidateProfile() {
             <h1 className="text-2xl font-bold text-gray-900">Hồ sơ cá nhân</h1>
             <p className="text-gray-600">Quản lý thông tin cá nhân và CV của bạn</p>
           </div>
-          <Button onClick={() => setIsEditing(!isEditing)} variant={isEditing ? "default" : "outline"}>
-            {isEditing ? (
-              <>
-                <Save className="mr-2 h-4 w-4" />
-                Lưu thay đổi
-              </>
+          <Button
+            onClick={isEditing ? handleSaveProfile : () => setIsEditing(true)}
+            variant={isEditing ? "default" : "outline"}
+            disabled={loading}
+          >
+            {loading ? (
+              <LoadingSpinner size="sm" className="mr-2" />
+            ) : isEditing ? (
+              <Save className="mr-2 h-4 w-4" />
             ) : (
-              <>
-                <Edit className="mr-2 h-4 w-4" />
-                Chỉnh sửa
-              </>
+              <Edit className="mr-2 h-4 w-4" />
             )}
+            {isEditing ? "Lưu thay đổi" : "Chỉnh sửa"}
           </Button>
         </div>
 
@@ -82,15 +249,15 @@ export default function CandidateProfile() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="fullName">Họ và tên</Label>
-                    <Input id="fullName" defaultValue="Nguyễn Văn A" disabled={!isEditing} />
+                    <Input id="fullName" defaultValue={user?.fullName || ""} disabled={!isEditing} />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" defaultValue="nguyenvana@email.com" disabled={!isEditing} />
+                    <Input id="email" type="email" defaultValue={user?.email || ""} disabled={!isEditing} />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="phone">Số điện thoại</Label>
-                    <Input id="phone" defaultValue="0123456789" disabled={!isEditing} />
+                    <Label htmlFor="phoneNumber">Số điện thoại</Label>
+                    <Input id="phoneNumber" defaultValue={user?.phoneNumber || ""} disabled={!isEditing} />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="location">Địa chỉ</Label>
@@ -225,40 +392,17 @@ export default function CandidateProfile() {
                   </div>
                 </div>
 
-                <div className="space-y-4">
-                  <h4 className="font-medium text-gray-900 flex items-center">
-                    <Award className="mr-2 h-4 w-4" />
-                    Chứng chỉ
-                  </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="border rounded-lg p-3">
-                      <h5 className="font-medium">React Developer Certificate</h5>
-                      <p className="text-sm text-gray-600">Meta - 2022</p>
-                    </div>
-                    <div className="border rounded-lg p-3">
-                      <h5 className="font-medium">AWS Cloud Practitioner</h5>
-                      <p className="text-sm text-gray-600">Amazon - 2023</p>
-                    </div>
-                  </div>
-                </div>
-
                 {isEditing && (
-                  <div className="space-y-2">
-                    <Button variant="outline" className="w-full">
-                      <Plus className="mr-2 h-4 w-4" />
-                      Thêm học vấn
-                    </Button>
-                    <Button variant="outline" className="w-full">
-                      <Plus className="mr-2 h-4 w-4" />
-                      Thêm chứng chỉ
-                    </Button>
-                  </div>
+                  <Button variant="outline" className="w-full">
+                    <Plus className="mr-2 h-4 w-4" />
+                    Thêm học vấn
+                  </Button>
                 )}
               </CardContent>
             </Card>
           </TabsContent>
 
-          {/* CV */}
+          {/* CV Management */}
           <TabsContent value="cv">
             <Card>
               <CardHeader>
@@ -273,64 +417,79 @@ export default function CandidateProfile() {
                     <p className="text-lg font-medium text-gray-900">Upload CV mới</p>
                     <p className="text-sm text-gray-600 mt-1">Hỗ trợ định dạng PDF, DOCX (tối đa 10MB)</p>
                   </div>
-                  <Button className="mt-4">Chọn file</Button>
+                  <div className="mt-4">
+                    <input
+                      type="file"
+                      accept=".pdf,.doc,.docx"
+                      onChange={handleFileUpload}
+                      className="hidden"
+                      id="cv-upload"
+                      disabled={uploading}
+                    />
+                    <label htmlFor="cv-upload">
+                      <Button asChild disabled={uploading}>
+                        <span>
+                          {uploading ? (
+                            <>
+                              <LoadingSpinner size="sm" className="mr-2" />
+                              Đang upload...
+                            </>
+                          ) : (
+                            "Chọn file"
+                          )}
+                        </span>
+                      </Button>
+                    </label>
+                  </div>
                 </div>
 
                 {/* Existing CVs */}
                 <div className="space-y-4">
                   <h4 className="font-medium text-gray-900">CV đã upload</h4>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between p-4 border rounded-lg">
-                      <div className="flex items-center space-x-3">
-                        <FileText className="h-8 w-8 text-blue-600" />
-                        <div>
-                          <p className="font-medium text-gray-900">CV_NguyenVanA_Frontend.pdf</p>
-                          <p className="text-sm text-gray-600">Uploaded 2 ngày trước • 1.2 MB</p>
-                        </div>
-                      </div>
-                      <div className="flex space-x-2">
-                        <Button variant="outline" size="sm">
-                          Xem
-                        </Button>
-                        <Button variant="outline" size="sm">
-                          Tải xuống
-                        </Button>
-                        <Button variant="ghost" size="sm" className="text-red-600">
-                          Xóa
-                        </Button>
-                      </div>
+                  {loading ? (
+                    <div className="flex justify-center py-8">
+                      <LoadingSpinner />
                     </div>
-
-                    <div className="flex items-center justify-between p-4 border rounded-lg">
-                      <div className="flex items-center space-x-3">
-                        <FileText className="h-8 w-8 text-blue-600" />
-                        <div>
-                          <p className="font-medium text-gray-900">CV_NguyenVanA_Fullstack.pdf</p>
-                          <p className="text-sm text-gray-600">Uploaded 1 tuần trước • 1.5 MB</p>
+                  ) : cvFiles.length > 0 ? (
+                    <div className="space-y-3">
+                      {cvFiles.map((cv) => (
+                        <div key={cv.id} className="flex items-center justify-between p-4 border rounded-lg">
+                          <div className="flex items-center space-x-3">
+                            <FileText className="h-8 w-8 text-blue-600" />
+                            <div>
+                              <p className="font-medium text-gray-900">{cv.originalFileName}</p>
+                              <p className="text-sm text-gray-600">
+                                Uploaded {formatDate(cv.uploadedAt)} • {formatFileSize(cv.fileSize)}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex space-x-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleDownloadCV(cv.id, cv.originalFileName)}
+                            >
+                              <Download className="mr-2 h-4 w-4" />
+                              Tải xuống
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="text-red-600 hover:text-red-700"
+                              onClick={() => handleDeleteCV(cv.id)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
                         </div>
-                      </div>
-                      <div className="flex space-x-2">
-                        <Button variant="outline" size="sm">
-                          Xem
-                        </Button>
-                        <Button variant="outline" size="sm">
-                          Tải xuống
-                        </Button>
-                        <Button variant="ghost" size="sm" className="text-red-600">
-                          Xóa
-                        </Button>
-                      </div>
+                      ))}
                     </div>
-                  </div>
-                </div>
-
-                {/* Online CV Builder */}
-                <div className="border rounded-lg p-6 bg-blue-50">
-                  <h4 className="font-medium text-gray-900 mb-2">Tạo CV trực tuyến</h4>
-                  <p className="text-sm text-gray-600 mb-4">
-                    Sử dụng công cụ tạo CV trực tuyến của chúng tôi để tạo CV chuyên nghiệp
-                  </p>
-                  <Button variant="outline">Tạo CV mới</Button>
+                  ) : (
+                    <div className="text-center py-8 text-gray-500">
+                      <FileText className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                      <p>Chưa có CV nào được upload</p>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>

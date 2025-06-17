@@ -1,121 +1,106 @@
+"use client"
+
+import { useState, useEffect } from "react"
 import CandidateLayout from "@/components/candidate-layout"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Building, Calendar, Clock, Eye, FileText, MapPin, Star } from "lucide-react"
+import { candidateApi } from "@/lib/api/candidate"
+import { LoadingSpinner } from "@/components/ui/loading-spinner"
+import { ErrorMessage } from "@/components/ui/error-message"
+import type { ApplicationResponse } from "@/types/api"
 
 export default function CandidateApplications() {
-  const applications = [
-    {
-      id: 1,
-      jobTitle: "Senior Frontend Developer",
-      company: "TechCorp Vietnam",
-      location: "Hà Nội",
-      appliedAt: "2024-01-15",
-      status: "Đang xem xét",
-      matchScore: 95,
-      salary: "25-35 triệu",
-      interviewDate: null,
-      feedback: null,
-    },
-    {
-      id: 2,
-      jobTitle: "React Developer",
-      company: "StartupXYZ",
-      location: "TP.HCM",
-      appliedAt: "2024-01-12",
-      status: "Phỏng vấn",
-      matchScore: 92,
-      salary: "20-30 triệu",
-      interviewDate: "2024-01-20 14:00",
-      feedback: null,
-    },
-    {
-      id: 3,
-      jobTitle: "Full Stack Developer",
-      company: "BigTech Solutions",
-      location: "Đà Nẵng",
-      appliedAt: "2024-01-10",
-      status: "Chờ phản hồi",
-      matchScore: 88,
-      salary: "30-40 triệu",
-      interviewDate: null,
-      feedback: null,
-    },
-    {
-      id: 4,
-      jobTitle: "UI/UX Developer",
-      company: "DesignHub",
-      location: "Remote",
-      appliedAt: "2024-01-08",
-      status: "Từ chối",
-      matchScore: 1,
-      salary: "18-25 triệu",
-      interviewDate: null,
-      feedback: "Quá Gà",
-    },
-    {
-      id: 5,
-      jobTitle: "Frontend Developer",
-      company: "WebCorp",
-      location: "Hà Nội",
-      appliedAt: "2024-01-05",
-      status: "Đã nhận việc",
-      matchScore: 90,
-      salary: "22-28 triệu",
-      interviewDate: "2024-01-12 10:00",
-      feedback: "Ứng viên có kỹ năng tốt và phù hợp với vị trí",
-    },
-  ]
+  const [applications, setApplications] = useState<ApplicationResponse[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  const getStatusColor = (status: string) => {
+  useEffect(() => {
+    loadApplications()
+  }, [])
+
+  const loadApplications = async () => {
+    try {
+      setLoading(true)
+      setError(null)
+      const data = await candidateApi.getApplications()
+      setApplications(data)
+    } catch (error) {
+      setError("Không thể tải danh sách ứng tuyển")
+      console.error("Failed to load applications:", error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const getStatusColor = (status: ApplicationResponse["status"]) => {
     switch (status) {
-      case "Đang xxem xét":
+      case "PENDING":
         return "secondary"
-      case "Phỏng vấn":
+      case "REVIEWING":
         return "default"
-      case "Chờ phản hồi":
-        return "outline"
-      case "Từ chối":
+      case "INTERVIEW":
+        return "default"
+      case "REJECTED":
         return "destructive"
-      case "Đã nhận việc":
+      case "ACCEPTED":
         return "default"
       default:
         return "secondary"
     }
   }
 
-  const getStatusBgColor = (status: string) => {
+  const getStatusText = (status: ApplicationResponse["status"]) => {
     switch (status) {
-      case "Đang xem xét":
+      case "PENDING":
+        return "Chờ xử lý"
+      case "REVIEWING":
+        return "Đang xem xét"
+      case "INTERVIEW":
+        return "Phỏng vấn"
+      case "REJECTED":
+        return "Từ chối"
+      case "ACCEPTED":
+        return "Đã nhận"
+      default:
+        return status
+    }
+  }
+
+  const getStatusBgColor = (status: ApplicationResponse["status"]) => {
+    switch (status) {
+      case "PENDING":
         return "bg-yellow-50"
-      case "Phỏng vấn":
+      case "REVIEWING":
         return "bg-blue-50"
-      case "Chờ phản hồi":
-        return "bg-gray-50"
-      case "Từ chối":
+      case "INTERVIEW":
+        return "bg-green-50"
+      case "REJECTED":
         return "bg-red-50"
-      case "Đã nhận việc":
+      case "ACCEPTED":
         return "bg-green-50"
       default:
         return "bg-gray-50"
     }
   }
 
-  const pendingApplications = applications.filter((app) =>
-    ["Đang xem xét", "Phỏng vấn", "Chờ phản hồi"].includes(app.status),
-  )
-  const completedApplications = applications.filter((app) => ["Từ chối", "Đã nhận việc"].includes(app.status))
+  const pendingApplications = applications.filter((app) => ["PENDING", "REVIEWING", "INTERVIEW"].includes(app.status))
+  const completedApplications = applications.filter((app) => ["REJECTED", "ACCEPTED"].includes(app.status))
 
-  const ApplicationCard = ({ application }: { application: (typeof applications)[0] }) => (
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("vi-VN")
+  }
+
+  const ApplicationCard = ({ application }: { application: ApplicationResponse }) => (
     <Card
       className={`${getStatusBgColor(application.status)} border-l-4 ${
-        application.status === "Đã nhận việc"
+        application.status === "ACCEPTED"
           ? "border-l-green-500"
-          : application.status === "Phỏng vấn"
+          : application.status === "INTERVIEW"
             ? "border-l-blue-500"
-            : application.status === "Từ chối"
+            : application.status === "REJECTED"
               ? "border-l-red-500"
               : "border-l-yellow-500"
       }`}
@@ -123,52 +108,54 @@ export default function CandidateApplications() {
       <CardContent className="p-6">
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1">
-            <h3 className="text-lg font-semibold text-gray-900 mb-1">{application.jobTitle}</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-1">{application.job.title}</h3>
             <div className="flex items-center text-gray-600 mb-2">
               <Building className="h-4 w-4 mr-1" />
-              <span className="font-medium">{application.company}</span>
+              <span className="font-medium">{application.job.company}</span>
             </div>
             <div className="flex items-center space-x-4 text-sm text-gray-600">
               <div className="flex items-center">
                 <MapPin className="h-4 w-4 mr-1" />
-                {application.location}
+                {application.job.location}
               </div>
               <div className="flex items-center">
                 <Calendar className="h-4 w-4 mr-1" />
-                Ứng tuyển: {application.appliedAt}
+                Ứng tuyển: {formatDate(application.appliedAt)}
               </div>
             </div>
           </div>
           <div className="flex items-center space-x-2">
-            <div className="flex items-center">
-              <Star className="h-4 w-4 mr-1 text-yellow-400" />
-              <span className="text-sm font-medium">{application.matchScore}%</span>
-            </div>
-            <Badge variant={getStatusColor(application.status)}>{application.status}</Badge>
+            {application.matchScore && (
+              <div className="flex items-center">
+                <Star className="h-4 w-4 mr-1 text-yellow-400" />
+                <span className="text-sm font-medium">{application.matchScore}%</span>
+              </div>
+            )}
+            <Badge variant={getStatusColor(application.status)}>{getStatusText(application.status)}</Badge>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
           <div>
             <div className="text-sm text-gray-600">Mức lương</div>
-            <div className="font-semibold text-green-600">{application.salary}</div>
+            <div className="font-semibold text-green-600">{application.job.salary}</div>
           </div>
           {application.interviewDate && (
             <div>
               <div className="text-sm text-gray-600">Lịch phỏng vấn</div>
-              <div className="font-medium text-blue-600">{application.interviewDate}</div>
+              <div className="font-medium text-blue-600">{formatDate(application.interviewDate)}</div>
             </div>
           )}
           <div>
             <div className="text-sm text-gray-600">Trạng thái</div>
-            <div className="font-medium">{application.status}</div>
+            <div className="font-medium">{getStatusText(application.status)}</div>
           </div>
         </div>
 
-        {application.feedback && (
+        {application.notes && (
           <div className="mb-4 p-3 bg-white rounded-lg border">
-            <div className="text-sm text-gray-600 mb-1">Phản hồi từ nhà tuyển dụng:</div>
-            <div className="text-sm text-gray-800">{application.feedback}</div>
+            <div className="text-sm text-gray-600 mb-1">Ghi chú từ nhà tuyển dụng:</div>
+            <div className="text-sm text-gray-800">{application.notes}</div>
           </div>
         )}
 
@@ -181,7 +168,7 @@ export default function CandidateApplications() {
             <FileText className="mr-2 h-4 w-4" />
             Xem JD
           </Button>
-          {application.status === "Phỏng vấn" && (
+          {application.status === "INTERVIEW" && (
             <Button size="sm">
               <Calendar className="mr-2 h-4 w-4" />
               Xác nhận phỏng vấn
@@ -191,6 +178,24 @@ export default function CandidateApplications() {
       </CardContent>
     </Card>
   )
+
+  if (loading) {
+    return (
+      <CandidateLayout>
+        <div className="flex justify-center items-center min-h-[400px]">
+          <LoadingSpinner size="lg" />
+        </div>
+      </CandidateLayout>
+    )
+  }
+
+  if (error) {
+    return (
+      <CandidateLayout>
+        <ErrorMessage message={error} onRetry={loadApplications} />
+      </CandidateLayout>
+    )
+  }
 
   return (
     <CandidateLayout>
@@ -218,7 +223,7 @@ export default function CandidateApplications() {
           <Card>
             <CardContent className="p-4 text-center">
               <div className="text-2xl font-bold text-blue-600">
-                {applications.filter((app) => app.status === "Phỏng vấn").length}
+                {applications.filter((app) => app.status === "INTERVIEW").length}
               </div>
               <div className="text-sm text-gray-600">Phỏng vấn</div>
             </CardContent>
@@ -226,7 +231,7 @@ export default function CandidateApplications() {
           <Card>
             <CardContent className="p-4 text-center">
               <div className="text-2xl font-bold text-green-600">
-                {applications.filter((app) => app.status === "Đã nhận việc").length}
+                {applications.filter((app) => app.status === "ACCEPTED").length}
               </div>
               <div className="text-sm text-gray-600">Thành công</div>
             </CardContent>
