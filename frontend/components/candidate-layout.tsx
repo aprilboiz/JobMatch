@@ -1,143 +1,82 @@
-"use client"
+'use client';
 
-import type React from "react"
+import React from 'react';
+import { useRouter } from 'next/navigation';
+import { authUtils } from '../lib/services/auth';
 
-import { useState } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { Building2, Menu, Home, User, Briefcase, FileText, LogOut, Bell } from "lucide-react"
-import { cn } from "@/lib/utils"
+interface CandidateLayoutProps {
+  children: React.ReactNode;
+}
 
-const navigation = [
-  { name: "Dashboard", href: "/candidate/dashboard", icon: Home },
-  { name: "Hồ sơ", href: "/candidate/profile", icon: User },
-  { name: "Việc làm", href: "/candidate/jobs", icon: Briefcase },
-  { name: "Ứng tuyển", href: "/candidate/applications", icon: FileText },
-]
+const CandidateLayout: React.FC<CandidateLayoutProps> = ({ children }) => {
+  const router = useRouter();
 
-export default function CandidateLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  const pathname = usePathname()
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const handleLogout = async () => {
+    try {
+      const success = await authUtils.logout();
+      if (success) {
+        router.push('/auth/login');
+      }
+    } catch (error) {
+      console.error('Logout failed:', error);
+      router.push('/auth/login');
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Desktop Sidebar */}
-      <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
-        <div className="flex min-h-0 flex-1 flex-col bg-white shadow-lg">
-          <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
-            <div className="flex flex-shrink-0 items-center px-4">
-              <Building2 className="h-8 w-8 text-blue-600" />
-              <span className="ml-2 text-xl font-bold text-gray-900">JobMatch</span>
-            </div>
-            <nav className="mt-8 flex-1 space-y-1 px-2">
-              {navigation.map((item) => {
-                const isActive = pathname === item.href
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className={cn(
-                      "group flex items-center px-2 py-2 text-sm font-medium rounded-md",
-                      isActive ? "bg-blue-100 text-blue-900" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
-                    )}
-                  >
-                    <item.icon
-                      className={cn(
-                        "mr-3 h-5 w-5 flex-shrink-0",
-                        isActive ? "text-blue-500" : "text-gray-400 group-hover:text-gray-500",
-                      )}
-                    />
-                    {item.name}
-                  </Link>
-                )
-              })}
-            </nav>
+      {/* Sidebar */}
+      <div className="fixed inset-y-0 left-0 w-64 bg-white shadow-lg">
+        <div className="flex flex-col h-full">
+          {/* Logo */}
+          <div className="flex items-center px-6 py-4 border-b">
+            <h1 className="text-xl font-bold text-blue-600">JobMatch</h1>
           </div>
-          <div className="flex flex-shrink-0 border-t border-gray-200 p-4">
-            <Button variant="ghost" className="w-full justify-start">
-              <LogOut className="mr-3 h-5 w-5" />
-              Đăng xuất
-            </Button>
+
+          {/* Navigation */}
+          <nav className="flex-1 px-4 py-6 space-y-2">
+            <a href="/candidate/dashboard" className="flex items-center px-4 py-2 text-gray-700 bg-blue-50 rounded-lg">
+              Dashboard
+            </a>
+            <a href="/candidate/profile" className="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+              Hồ sơ
+            </a>
+            <a href="/candidate/jobs" className="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+              Việc làm
+            </a>
+            <a href="/candidate/applications" className="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+              Ứng tuyển
+            </a>
+          </nav>
+
+          {/* User info và Logout button */}
+          <div className="px-4 py-4 border-t">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                  <span className="text-white text-sm font-medium">U</span>
+                </div>
+                <span className="text-sm text-gray-600">Ứng viên</span>
+              </div>
+              <button
+                onClick={handleLogout}
+                className="px-3 py-1 text-sm text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+              >
+                Đăng xuất
+              </button>
+            </div>
           </div>
         </div>
       </div>
-
-      {/* Mobile menu */}
-      <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-        <SheetTrigger asChild>
-          <Button variant="ghost" className="lg:hidden fixed top-4 left-4 z-40" size="sm">
-            <Menu className="h-6 w-6" />
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="left" className="w-64 p-0">
-          <div className="flex min-h-0 flex-1 flex-col bg-white">
-            <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
-              <div className="flex flex-shrink-0 items-center px-4">
-                <Building2 className="h-8 w-8 text-blue-600" />
-                <span className="ml-2 text-xl font-bold text-gray-900">JobMatch</span>
-              </div>
-              <nav className="mt-8 flex-1 space-y-1 px-2">
-                {navigation.map((item) => {
-                  const isActive = pathname === item.href
-                  return (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className={cn(
-                        "group flex items-center px-2 py-2 text-sm font-medium rounded-md",
-                        isActive ? "bg-blue-100 text-blue-900" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
-                      )}
-                    >
-                      <item.icon
-                        className={cn(
-                          "mr-3 h-5 w-5 flex-shrink-0",
-                          isActive ? "text-blue-500" : "text-gray-400 group-hover:text-gray-500",
-                        )}
-                      />
-                      {item.name}
-                    </Link>
-                  )
-                })}
-              </nav>
-            </div>
-            <div className="flex flex-shrink-0 border-t border-gray-200 p-4">
-              <Button variant="ghost" className="w-full justify-start">
-                <LogOut className="mr-3 h-5 w-5" />
-                Đăng xuất
-              </Button>
-            </div>
-          </div>
-        </SheetContent>
-      </Sheet>
 
       {/* Main content */}
-      <div className="lg:pl-64 flex flex-col flex-1">
-        <div className="sticky top-0 z-10 bg-white shadow-sm border-b border-gray-200">
-          <div className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
-            <div className="lg:hidden">{/* Mobile menu button space */}</div>
-            <div className="flex items-center space-x-4 ml-auto">
-              <Button variant="ghost" size="sm">
-                <Bell className="h-5 w-5" />
-              </Button>
-              <div className="flex items-center space-x-2">
-                <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center">
-                  <span className="text-sm font-medium text-white">UV</span>
-                </div>
-                <span className="text-sm font-medium text-gray-700">Ứng viên</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
+      <div className="ml-64">
+        <main className="p-8">
+          {children}
+        </main>
       </div>
     </div>
-  )
-}
+  );
+};
+
+export default CandidateLayout;

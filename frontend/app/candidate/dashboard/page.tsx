@@ -1,9 +1,11 @@
 import CandidateLayout from "@/components/candidate-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
-import { Briefcase, FileText, TrendingUp, Clock, MapPin, Building, Star } from "lucide-react"
+import { Briefcase, FileText, TrendingUp, Clock, User } from "lucide-react"
+import React from 'react';
+import CvManager from '../../../components/candidate/CvManager';
+import ApplicationsList from '../../../components/candidate/ApplicationsList';
 
 export default function CandidateDashboard() {
   const stats = [
@@ -11,60 +13,6 @@ export default function CandidateDashboard() {
     { name: "Việc làm phù hợp", value: "24", icon: Briefcase, color: "text-green-600" },
     { name: "Lượt xem hồ sơ", value: "156", icon: TrendingUp, color: "text-purple-600" },
     { name: "Phản hồi chờ xử lý", value: "3", icon: Clock, color: "text-orange-600" },
-  ]
-
-  const recentJobs = [
-    {
-      id: 1,
-      title: "Frontend Developer",
-      company: "TechCorp",
-      location: "Hà Nội",
-      salary: "15-25 triệu",
-      matchScore: 92,
-      postedAt: "2 ngày trước",
-    },
-    {
-      id: 2,
-      title: "React Developer",
-      company: "StartupXYZ",
-      location: "TP.HCM",
-      salary: "20-30 triệu",
-      matchScore: 88,
-      postedAt: "1 tuần trước",
-    },
-    {
-      id: 3,
-      title: "Full Stack Developer",
-      company: "BigTech",
-      location: "Đà Nẵng",
-      salary: "25-35 triệu",
-      matchScore: 85,
-      postedAt: "3 ngày trước",
-    },
-  ]
-
-  const recentApplications = [
-    {
-      id: 1,
-      title: "Senior Frontend Developer",
-      company: "TechViet",
-      appliedAt: "2024-01-15",
-      status: "Đang xem xét",
-    },
-    {
-      id: 2,
-      title: "React Native Developer",
-      company: "MobileFirst",
-      appliedAt: "2024-01-12",
-      status: "Phỏng vấn",
-    },
-    {
-      id: 3,
-      title: "UI/UX Developer",
-      company: "DesignHub",
-      appliedAt: "2024-01-10",
-      status: "Từ chối",
-    },
   ]
 
   return (
@@ -106,7 +54,7 @@ export default function CandidateDashboard() {
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span>Tiến độ hoàn thiện</span>
-                  <span>Hehe%</span>
+                  <span>75%</span>
                 </div>
                 <Progress value={75} className="h-2" />
               </div>
@@ -122,86 +70,38 @@ export default function CandidateDashboard() {
             </CardContent>
           </Card>
 
-          {/* Recent Applications */}
+          {/* Quick Actions */}
           <Card>
             <CardHeader>
-              <CardTitle>Ứng tuyển gần đây</CardTitle>
-              <CardDescription>Theo dõi trạng thái các đơn ứng tuyển của bạn</CardDescription>
+              <CardTitle>Hành động nhanh</CardTitle>
+              <CardDescription>Các tính năng thường dùng</CardDescription>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {recentApplications.map((application) => (
-                  <div key={application.id} className="flex items-center justify-between p-3 border rounded-lg">
-                    <div className="flex-1">
-                      <h4 className="font-medium text-gray-900">{application.title}</h4>
-                      <p className="text-sm text-gray-600">{application.company}</p>
-                      <p className="text-xs text-gray-500">{application.appliedAt}</p>
-                    </div>
-                    <Badge
-                      variant={
-                        application.status === "Phỏng vấn"
-                          ? "default"
-                          : application.status === "Từ chối"
-                            ? "destructive"
-                            : "secondary"
-                      }
-                    >
-                      {application.status}
-                    </Badge>
-                  </div>
-                ))}
-              </div>
-              <Button variant="outline" className="w-full mt-4">
-                Xem tất cả ứng tuyển
+            <CardContent className="space-y-3">
+              <Button variant="outline" className="w-full justify-start">
+                <FileText className="h-4 w-4 mr-2" />
+                Tìm việc làm mới
+              </Button>
+              <Button variant="outline" className="w-full justify-start">
+                <User className="h-4 w-4 mr-2" />
+                Cập nhật hồ sơ
+              </Button>
+              <Button variant="outline" className="w-full justify-start">
+                <TrendingUp className="h-4 w-4 mr-2" />
+                Xem thống kê
+              </Button>
+              <Button variant="outline" className="w-full justify-start">
+                <Briefcase className="h-4 w-4 mr-2" />
+                Quản lý ứng tuyển
               </Button>
             </CardContent>
           </Card>
         </div>
 
-        {/* Recommended Jobs */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Việc làm phù hợp</CardTitle>
-            <CardDescription>Các công việc được AI gợi ý dựa trên hồ sơ của bạn</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {recentJobs.map((job) => (
-                <div key={job.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-gray-900">{job.title}</h3>
-                      <div className="flex items-center text-sm text-gray-600 mt-1">
-                        <Building className="h-4 w-4 mr-1" />
-                        {job.company}
-                      </div>
-                    </div>
-                    <div className="flex items-center">
-                      <Star className="h-4 w-4 text-yellow-400 mr-1" />
-                      <span className="text-sm font-medium">{job.matchScore}%</span>
-                    </div>
-                  </div>
+        {/* CV Manager */}
+        <CvManager />
 
-                  <div className="space-y-2 text-sm text-gray-600">
-                    <div className="flex items-center">
-                      <MapPin className="h-4 w-4 mr-1" />
-                      {job.location}
-                    </div>
-                    <div className="font-medium text-green-600">{job.salary}</div>
-                    <div className="text-xs text-gray-500">{job.postedAt}</div>
-                  </div>
-
-                  <Button className="w-full mt-3" size="sm">
-                    Ứng tuyển ngay
-                  </Button>
-                </div>
-              ))}
-            </div>
-            <Button variant="outline" className="w-full mt-4">
-              Xem thêm việc làm
-            </Button>
-          </CardContent>
-        </Card>
+        {/* Applications List */}
+        <ApplicationsList />
       </div>
     </CandidateLayout>
   )

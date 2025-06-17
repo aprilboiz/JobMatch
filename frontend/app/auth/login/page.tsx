@@ -1,18 +1,25 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState } from "react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
+import type React from "react";
+import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+// import { login } from '@/lib/services/auth';
 
-import { getCurrentUser, login } from '@/lib/api'
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Building2, Eye, EyeOff, XCircle } from "lucide-react"
+import { getCurrentUser, login } from "@/lib/api";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Building2, Eye, EyeOff, XCircle } from "lucide-react";
 
-// --- BƯỚC 1: TẠO COMPONENT THÔNG BÁO LỖI ---
+// --- BƯỚC 1: TẠO COMPONENT THÔNG BÁO LỖI ---a
 interface NotificationProps {
   message: string;
   onClose: () => void;
@@ -25,9 +32,11 @@ function ErrorNotification({ message, onClose }: NotificationProps) {
     <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-lg p-6 w-full max-w-sm text-center shadow-xl">
         <div className="flex justify-center mb-4">
-            <XCircle className="h-12 w-12 text-red-500" />
+          <XCircle className="h-12 w-12 text-red-500" />
         </div>
-        <h3 className="text-lg font-semibold text-gray-800 mb-2">Đăng nhập không thành công</h3>
+        <h3 className="text-lg font-semibold text-gray-800 mb-2">
+          Đăng nhập không thành công
+        </h3>
         <p className="text-sm text-gray-600 mb-6">{message}</p>
         <Button onClick={onClose} className="w-full">
           Đã hiểu
@@ -37,63 +46,60 @@ function ErrorNotification({ message, onClose }: NotificationProps) {
   );
 }
 
-
 export default function LoginPage() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [showPassword, setShowPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  
-  // --- BƯỚC 2: TẠO STATE ĐỂ QUẢN LÝ THÔNG BÁO ---
-  const [notificationMessage, setNotificationMessage] = useState("")
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const router = useRouter()
+  const [notificationMessage, setNotificationMessage] = useState("");
+
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setNotificationMessage("") // Xóa thông báo cũ khi submit lại
+    e.preventDefault();
+    setIsLoading(true);
+    setNotificationMessage("");
 
     try {
-      const apiResponse = await login(email, password)
+      const result = await login(email, password);
 
-      if (apiResponse && apiResponse.data) {
-        const { data } = apiResponse;
-        
-        localStorage.setItem("token", data.token)
-        localStorage.setItem("refreshToken", data.refreshToken)
-        
-        const {role} = await getCurrentUser();
+      if (result.success) {
+        // Đảm bảo cookies được set
+        const { authUtils } = await import("@/lib/services/auth");
+        authUtils.setTokens(result.data.token, result.data.refreshToken);
+
+        // Thêm delay để cookies được set hoàn toàn
+        await new Promise((resolve) => setTimeout(resolve, 500));
+
+        const { role } = await getCurrentUser();
         const userRole = role?.roleName.toLowerCase();
+        // viết cconsole.log để kiểm tra userRole
+        console.log("User role:", userRole);
 
+        // Force reload thay vì redirect
         if (userRole === "recruiter") {
-          router.push("/recruiter/dashboard")
+          // chuyển hướng tới đường dẫn /recruiter/dashboard như dùng href
+          router.push("/recruiter/dashboard");
         } else if (userRole === "candidate") {
-          router.push("/candidate/dashboard")
-        } else {
-          // --- BƯỚC 3: HIỂN THỊ LỖI THAY VÌ ALERT ---
-          setNotificationMessage("Vai trò người dùng không xác định. Vui lòng liên hệ hỗ trợ.")
+          // chuyển hướng tới đường dẫn /candidate/dashboard như dùng href
+          router.push("/candidate/dashboard");
         }
-      } else {
-         throw new Error("Dữ liệu trả về không hợp lệ.");
       }
     } catch (err: any) {
-      // --- BƯỚC 3: HIỂN THỊ LỖI THAY VÌ ALERT ---
-      // Lấy message cụ thể hơn từ response nếu có
-      const errorMessage = err.response?.data?.message || err.message || "Email hoặc mật khẩu không chính xác."
-      setNotificationMessage(errorMessage)
+      setNotificationMessage(err.message || "Đăng nhập thất bại.");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     // Thêm position-relative để overlay hoạt động tốt
     <div className="relative">
       {/* --- BƯỚC 4: RENDER COMPONENT THÔNG BÁO --- */}
-      <ErrorNotification 
-        message={notificationMessage} 
-        onClose={() => setNotificationMessage("")} 
+      <ErrorNotification
+        message={notificationMessage}
+        onClose={() => setNotificationMessage("")}
       />
 
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
@@ -101,10 +107,14 @@ export default function LoginPage() {
           <CardHeader className="text-center">
             <div className="flex items-center justify-center mb-4">
               <Building2 className="h-8 w-8 text-blue-600" />
-              <span className="ml-2 text-2xl font-bold text-gray-900">JobMatch</span>
+              <span className="ml-2 text-2xl font-bold text-gray-900">
+                JobMatch
+              </span>
             </div>
             <CardTitle className="text-2xl">Đăng nhập</CardTitle>
-            <CardDescription>Nhập thông tin để truy cập tài khoản của bạn</CardDescription>
+            <CardDescription>
+              Nhập thông tin để truy cập tài khoản của bạn
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -131,18 +141,22 @@ export default function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
-                  <Button 
+                  <Button
                     type="button"
                     variant="ghost"
                     size="sm"
                     className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                     onClick={() => setShowPassword(!showPassword)}
                   >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
                   </Button>
                 </div>
               </div>
-              
+
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? "Đang đăng nhập..." : "Đăng nhập"}
               </Button>
@@ -151,7 +165,10 @@ export default function LoginPage() {
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600">
                 Chưa có tài khoản?{" "}
-                <Link href="/auth/register" className="text-blue-600 hover:underline">
+                <Link
+                  href="/auth/register"
+                  className="text-blue-600 hover:underline"
+                >
                   Đăng ký ngay
                 </Link>
               </p>
@@ -160,5 +177,5 @@ export default function LoginPage() {
         </Card>
       </div>
     </div>
-  )
+  );
 }
