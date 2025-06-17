@@ -1,13 +1,8 @@
 package com.aprilboiz.jobmatch.mapper;
 
 import com.aprilboiz.jobmatch.dto.RoleDTO;
-import com.aprilboiz.jobmatch.dto.response.CvResponse;
-import com.aprilboiz.jobmatch.dto.response.JobResponse;
-import com.aprilboiz.jobmatch.dto.response.UserResponse;
-import com.aprilboiz.jobmatch.model.CV;
-import com.aprilboiz.jobmatch.model.Job;
-import com.aprilboiz.jobmatch.model.Role;
-import com.aprilboiz.jobmatch.model.User;
+import com.aprilboiz.jobmatch.dto.response.*;
+import com.aprilboiz.jobmatch.model.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -32,6 +27,22 @@ public interface ApplicationMapper {
     @Mapping(source = "company.id", target = "companyId")
     @Mapping(source = "recruiter.id", target = "recruiterId")
     JobResponse jobToJobResponse(Job job);
+
+    @Mapping(source = "job.company.name", target = "companyName")
+    @Mapping(source = "job.id", target = "jobId")
+    @Mapping(source = "job.title", target = "jobTitle")
+    @Mapping(source = "createdAt", target = "appliedOn")
+    ApplicationResponse applicationToApplicationResponse(Application application);
+
+    @Mapping(source = "candidate.fullName", target = "candidateName")
+    @Mapping(source = "candidate.user.email", target = "candidateEmail")
+    @Mapping(source = "candidate.phoneNumber", target = "candidatePhoneNumber")
+    @Mapping(source = "job.company.name", target = "companyName")
+    @Mapping(source = "job.id", target = "jobId")
+    @Mapping(source = "job.title", target = "jobTitle")
+    @Mapping(source = "createdAt", target = "appliedOn")
+    @Mapping(source = "cv.fileName", target = "cvFileName")
+    ApplicationDetailResponse applicationToApplicationDetailResponse(Application application);
 
     default String getPhoneNumber(User user) {
         if (user.getCandidate() != null) {

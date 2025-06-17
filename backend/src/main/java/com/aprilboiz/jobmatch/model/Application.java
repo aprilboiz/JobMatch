@@ -1,21 +1,23 @@
 package com.aprilboiz.jobmatch.model;
 
+import com.aprilboiz.jobmatch.enumerate.ApplicationStatus;
 import jakarta.persistence.*;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @NoArgsConstructor
-public class Application {
+@Data
+@AllArgsConstructor
+@Builder
+public class Application extends AuditableEntity{
     @Id
     @GeneratedValue
     private Long id;
-
-    @CreatedDate
-    private LocalDateTime createdAt;
 
     @ManyToOne
     @JoinColumn(name = "job_id")
@@ -33,4 +35,5 @@ public class Application {
     @JoinColumn(name = "analysis_id")
     private Analysis analysis;
 
+    private ApplicationStatus status;
 }

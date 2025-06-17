@@ -1,8 +1,9 @@
 package com.aprilboiz.jobmatch.enumerate;
 
 public enum ApplicationStatus {
-    NEW,
+    APPLIED,
     IN_REVIEW,
     INTERVIEW,
-    OFFERED
+    OFFERED,
+    REJECTED
 }
