@@ -12,6 +12,7 @@ import com.aprilboiz.jobmatch.model.Role;
 import com.aprilboiz.jobmatch.model.User;
 import com.aprilboiz.jobmatch.model.UserPrincipal;
 import com.aprilboiz.jobmatch.service.JwtService;
+import com.aprilboiz.jobmatch.service.MessageService;
 import com.aprilboiz.jobmatch.service.TokenBlacklistService;
 import com.aprilboiz.jobmatch.service.UserService;
 import com.aprilboiz.jobmatch.service.impl.AuthServiceImpl;
@@ -211,18 +212,32 @@ class AuthServiceUnitTests {
     @Order(2)
     class JwtServiceTests {
 
+        @Mock
+        private MessageService messageService;
+        
         private JwtServiceImpl jwtService;
         private UserDetails userDetails;
 
         @BeforeEach
         void setUp() {
-            jwtService = new JwtServiceImpl();
+            jwtService = new JwtServiceImpl(messageService);
             
             // Initialize required fields using reflection
             ReflectionTestUtils.setField(jwtService, "secretKey", 
                 "7e28991c10c1f5294a74dbcab40b23d77a291c612692b97eb8f8c3d67c6d0e0507059122d8cb52b9ca009b214b83977cf4d4d7472d924c745102f1e18497df05");
             ReflectionTestUtils.setField(jwtService, "accessTokenExpiration", 3600L);
             ReflectionTestUtils.setField(jwtService, "refreshTokenExpiration", 7200L);
+            
+            // Mock the message service calls
+            lenient().when(messageService.getMessage("auth.token.invalid")).thenReturn("Invalid JWT token");
+            lenient().when(messageService.getMessage("auth.token.expired")).thenReturn("JWT token is expired");
+            lenient().when(messageService.getMessage("auth.token.unsupported")).thenReturn("JWT token is unsupported");
+            lenient().when(messageService.getMessage("auth.token.claims.empty")).thenReturn("JWT claims string is empty");
+            lenient().when(messageService.getMessage("auth.token.validation.failed")).thenReturn("JWT token validation failed");
+            lenient().when(messageService.getMessage("auth.username.extraction.failed")).thenReturn("Failed to extract username from token");
+            lenient().when(messageService.getMessage("auth.expiration.extraction.failed")).thenReturn("Failed to extract expiration from token");
+            lenient().when(messageService.getMessage("auth.jti.extraction.failed")).thenReturn("Failed to extract JTI from token");
+            lenient().when(messageService.getMessage("auth.signing.key.failed")).thenReturn("Failed to create JWT signing key");
             
             Role role = new Role();
             role.setName(RoleName.CANDIDATE);

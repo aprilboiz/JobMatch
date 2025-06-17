@@ -8,6 +8,7 @@ import com.aprilboiz.jobmatch.dto.response.AuthResponse;
 import com.aprilboiz.jobmatch.model.UserPrincipal;
 import com.aprilboiz.jobmatch.service.AuthService;
 import com.aprilboiz.jobmatch.service.JwtService;
+import com.aprilboiz.jobmatch.service.MessageService;
 import com.aprilboiz.jobmatch.service.TokenBlacklistService;
 import com.aprilboiz.jobmatch.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,13 +29,16 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authManager;
     private final UserService userService;
     private final TokenBlacklistService tokenBlacklistService;
+    private final MessageService messageService;
 
     public AuthServiceImpl(JwtService jwtService, AuthenticationManager authManager, 
-                          UserService userService, TokenBlacklistService tokenBlacklistService) {
+                          UserService userService, TokenBlacklistService tokenBlacklistService,
+                          MessageService messageService) {
         this.jwtService = jwtService;
         this.authManager = authManager;
         this.userService = userService;
         this.tokenBlacklistService = tokenBlacklistService;
+        this.messageService = messageService;
     }
 
     @Override
@@ -58,7 +62,7 @@ public class AuthServiceImpl implements AuthService {
                     .expiresIn(jwtService.getExpirationTime())
                     .build();
         } catch (AuthenticationException ex) {
-            throw new BadCredentialsException("Invalid email or password.");
+            throw new BadCredentialsException(messageService.getMessage("api.error.invalid.credentials"));
         }
     }
 
@@ -74,18 +78,18 @@ public class AuthServiceImpl implements AuthService {
             String refreshToken = refreshTokenRequest.getRefreshToken();
             
             if (tokenBlacklistService.isTokenBlacklisted(refreshToken)) {
-                throw new BadCredentialsException("Refresh token has been invalidated");
+                throw new BadCredentialsException(messageService.getMessage("auth.refresh.invalidated"));
             }
             
             if (!jwtService.validateToken(refreshToken)) {
-                throw new BadCredentialsException("Invalid refresh token");
+                throw new BadCredentialsException(messageService.getMessage("auth.refresh.invalid"));
             }
             
             String username = jwtService.extractUsername(refreshToken);
             UserDetails userDetails = userService.loadUserByUsername(username);
             
             if (!jwtService.validateRefreshToken(refreshToken, userDetails)) {
-                throw new BadCredentialsException("Invalid refresh token");
+                throw new BadCredentialsException(messageService.getMessage("auth.refresh.invalid"));
             }
             
             String newAccessToken = jwtService.generateAccessToken(userDetails);
@@ -104,7 +108,7 @@ public class AuthServiceImpl implements AuthService {
                     
         } catch (Exception ex) {
             log.error("Refresh token failed", ex);
-            throw new BadCredentialsException("Invalid refresh token");
+            throw new BadCredentialsException(messageService.getMessage("auth.refresh.invalid"));
         }
     }
 
@@ -124,7 +128,7 @@ public class AuthServiceImpl implements AuthService {
             
         } catch (Exception ex) {
             log.error("Logout failed", ex);
-            throw new RuntimeException("Logout failed", ex);
+            throw new RuntimeException(messageService.getMessage("auth.logout.failed"), ex);
         }
     }
 }

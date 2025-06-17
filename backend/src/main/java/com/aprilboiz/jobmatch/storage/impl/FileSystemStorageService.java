@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.aprilboiz.jobmatch.exception.StorageException;
+import com.aprilboiz.jobmatch.service.MessageService;
 import com.aprilboiz.jobmatch.storage.StorageProperties;
 import com.aprilboiz.jobmatch.storage.StorageService;
 
@@ -23,17 +24,19 @@ import com.aprilboiz.jobmatch.storage.StorageService;
 public class FileSystemStorageService implements StorageService {
 
     private final Path rootLocation;
+    private final MessageService messageService;
 
-    public FileSystemStorageService(StorageProperties properties) {
-        if (properties.getLocation().trim().length() == 0) {
-            throw new StorageException("Storage location is not set");
+    public FileSystemStorageService(StorageProperties properties, MessageService messageService) {
+        if (properties.getLocation().trim().isEmpty()) {
+            throw new StorageException(messageService.getMessage("storage.location.not.set"));
         }
         this.rootLocation = Paths.get(properties.getLocation());
+        this.messageService = messageService;
         // create the directory if it doesn't exist
         try {
             Files.createDirectories(this.rootLocation);
         } catch (IOException e) {
-            throw new StorageException("Failed to create storage directory", e);
+            throw new StorageException(messageService.getMessage("storage.failed.create.directory"), e);
         }
     }
 
@@ -42,7 +45,7 @@ public class FileSystemStorageService implements StorageService {
         try {
             Files.delete(rootLocation.resolve(fileName));
         } catch (IOException e) {
-            throw new StorageException("Failed to delete file " + fileName, e);
+            throw new StorageException(messageService.getMessage("storage.failed.delete.file", fileName), e);
         }
     }
 
@@ -59,7 +62,7 @@ public class FileSystemStorageService implements StorageService {
                     .map(rootLocation::relativize)
                     .collect(Collectors.toList());
         } catch (IOException e) {
-            throw new StorageException("Failed to read stored files", e);
+            throw new StorageException(messageService.getMessage("storage.failed.read.files"), e);
         }
     }
 
@@ -69,7 +72,7 @@ public class FileSystemStorageService implements StorageService {
             delete(oldFileName);
             return store(newFile);
         } catch (Exception e) {
-            throw new StorageException("Failed to replace file " + oldFileName, e);
+            throw new StorageException(messageService.getMessage("storage.failed.replace.file", oldFileName), e);
         }
     }
 
@@ -77,15 +80,14 @@ public class FileSystemStorageService implements StorageService {
     public String store(MultipartFile file) {
         try {
 			if (file.isEmpty()) {
-				throw new StorageException("Failed to store empty file.");
+				throw new StorageException(messageService.getMessage("storage.failed.store.empty"));
 			}
 			Path destinationFile = this.rootLocation.resolve(
 					Paths.get(file.getOriginalFilename()))
 					.normalize().toAbsolutePath();
 			if (!destinationFile.getParent().equals(this.rootLocation.toAbsolutePath())) {
 				// This is a security check
-				throw new StorageException(
-						"Cannot store file outside current directory.");
+				throw new StorageException(messageService.getMessage("storage.failed.store.outside.directory"));
 			}
 			try (InputStream inputStream = file.getInputStream()) {
 				Files.copy(inputStream, destinationFile,
@@ -94,7 +96,7 @@ public class FileSystemStorageService implements StorageService {
             return destinationFile.toString();
 		}
 		catch (IOException e) {
-			throw new StorageException("Failed to store file.", e);
+			throw new StorageException(messageService.getMessage("storage.failed.store.file"), e);
 		}
     }
 
@@ -107,10 +109,10 @@ public class FileSystemStorageService implements StorageService {
                 return resource;
             }
             else {
-                throw new StorageException("Could not read file: " + fileName);
+                throw new StorageException(messageService.getMessage("storage.file.not.readable", fileName));
             }
         } catch (MalformedURLException e) {
-            throw new StorageException("Could not read file: " + fileName, e);
+            throw new StorageException(messageService.getMessage("storage.file.not.readable", fileName), e);
         }
     }
 }
