@@ -7,6 +7,7 @@ import com.aprilboiz.jobmatch.dto.request.RegisterRequest;
 import com.aprilboiz.jobmatch.dto.response.AuthResponse;
 import com.aprilboiz.jobmatch.exception.ApiResponse;
 import com.aprilboiz.jobmatch.service.AuthService;
+import com.aprilboiz.jobmatch.service.MessageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -28,9 +29,11 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Authentication", description = "Authentication and authorization operations including login, registration, token refresh, and logout")
 public class AuthController {
     private final AuthService authService;
+    private final MessageService messageService;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, MessageService messageService) {
         this.authService = authService;
+        this.messageService = messageService;
     }
 
     @Operation(
@@ -53,7 +56,8 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<AuthResponse>> login(@RequestBody @Valid AuthRequest authRequest) {
         AuthResponse response = authService.login(authRequest);
-        return ResponseEntity.ok(ApiResponse.success("Login successful", response));
+        String successMessage = messageService.getMessage("api.success.login");
+        return ResponseEntity.ok(ApiResponse.success(successMessage, response));
     }
 
     @Operation(
@@ -76,7 +80,8 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<Void>> register(@RequestBody @Valid RegisterRequest registerRequest) {
         authService.register(registerRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success("User registered successfully", null));
+        String successMessage = messageService.getMessage("api.success.register");
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(successMessage, null));
     }
 
     @Operation(
@@ -95,7 +100,8 @@ public class AuthController {
     public ResponseEntity<ApiResponse<AuthResponse>> refreshToken(@RequestBody @Valid RefreshTokenRequest refreshTokenRequest) {
         log.info("Refresh token request received");
         AuthResponse response = authService.refreshToken(refreshTokenRequest);
-        return ResponseEntity.ok(ApiResponse.success("Token refreshed successfully", response));
+        String successMessage = messageService.getMessage("api.success.token.refresh");
+        return ResponseEntity.ok(ApiResponse.success(successMessage, response));
     }
 
     @Operation(
@@ -114,6 +120,7 @@ public class AuthController {
     public ResponseEntity<ApiResponse<Void>> logout(@RequestBody @Valid LogoutRequest logoutRequest) {
         log.info("Logout request received");
         authService.logout(logoutRequest);
-        return ResponseEntity.ok(ApiResponse.success("Logout successful", null));
+        String successMessage = messageService.getMessage("api.success.logout");
+        return ResponseEntity.ok(ApiResponse.success(successMessage, null));
     }
 }

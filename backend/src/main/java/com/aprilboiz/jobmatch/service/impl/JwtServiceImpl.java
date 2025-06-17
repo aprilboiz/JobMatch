@@ -1,9 +1,11 @@
 package com.aprilboiz.jobmatch.service.impl;
 
 import com.aprilboiz.jobmatch.service.JwtService;
+import com.aprilboiz.jobmatch.service.MessageService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -19,7 +21,10 @@ import java.util.UUID;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class JwtServiceImpl implements JwtService {
+    
+    private final MessageService messageService;
     
     @Value("${jwt.secret-key:7e28991c10c1f5294a74dbcab40b23d77a291c612692b97eb8f8c3d67c6d0e0507059122d8cb52b9ca009b214b83977cf4d4d7472d924c745102f1e18497df05}")
     private String secretKey;
@@ -56,19 +61,19 @@ public class JwtServiceImpl implements JwtService {
             return true;
         } catch (MalformedJwtException ex) {
             log.error("Invalid JWT token: {}", ex.getMessage());
-            throw new BadCredentialsException("Invalid JWT token", ex);
+            throw new BadCredentialsException(messageService.getMessage("auth.token.invalid"), ex);
         } catch (ExpiredJwtException ex) {
             log.error("JWT token is expired: {}", ex.getMessage());
-            throw new CredentialsExpiredException("JWT token is expired", ex);
+            throw new CredentialsExpiredException(messageService.getMessage("auth.token.expired"), ex);
         } catch (UnsupportedJwtException ex) {
             log.error("JWT token is unsupported: {}", ex.getMessage());
-            throw new BadCredentialsException("JWT token is unsupported", ex);
+            throw new BadCredentialsException(messageService.getMessage("auth.token.unsupported"), ex);
         } catch (IllegalArgumentException ex) {
             log.error("JWT claims string is empty: {}", ex.getMessage());
-            throw new BadCredentialsException("JWT claims string is empty", ex);
+            throw new BadCredentialsException(messageService.getMessage("auth.token.claims.empty"), ex);
         } catch (Exception ex) {
             log.error("JWT token validation failed: {}", ex.getMessage());
-            throw new AuthenticationException("JWT token validation failed", ex) {};
+            throw new AuthenticationException(messageService.getMessage("auth.token.validation.failed"), ex) {};
         }
     }
 
@@ -78,7 +83,7 @@ public class JwtServiceImpl implements JwtService {
             return extractAllClaims(token).getSubject();
         } catch (Exception ex) {
             log.error("Failed to extract username from token: {}", ex.getMessage());
-            throw new BadCredentialsException("Failed to extract username from token", ex);
+            throw new BadCredentialsException(messageService.getMessage("auth.username.extraction.failed"), ex);
         }
     }
 
@@ -106,7 +111,7 @@ public class JwtServiceImpl implements JwtService {
             return extractAllClaims(token).getExpiration();
         } catch (Exception ex) {
             log.error("Failed to extract expiration from token: {}", ex.getMessage());
-            throw new BadCredentialsException("Failed to extract expiration from token", ex);
+            throw new BadCredentialsException(messageService.getMessage("auth.expiration.extraction.failed"), ex);
         }
     }
 
@@ -140,7 +145,7 @@ public class JwtServiceImpl implements JwtService {
             return extractAllClaims(token).getId();
         } catch (Exception ex) {
             log.error("Failed to extract JTI from token: {}", ex.getMessage());
-            throw new BadCredentialsException("Failed to extract JTI from token", ex);
+            throw new BadCredentialsException(messageService.getMessage("auth.jti.extraction.failed"), ex);
         }
     }
 
@@ -163,7 +168,7 @@ public class JwtServiceImpl implements JwtService {
             return Keys.hmacShaKeyFor(keyBytes);
         } catch (Exception ex) {
             log.error("Failed to create signing key: {}", ex.getMessage());
-            throw new BadCredentialsException("Failed to create JWT signing key", ex);
+            throw new BadCredentialsException(messageService.getMessage("auth.signing.key.failed"), ex);
         }
     }
 }

@@ -10,12 +10,12 @@ import lombok.Data;
 @Schema(description = "User login request")
 public class AuthRequest {
     @Schema(description = "User's email address", example = "john.doe@example.com")
-    @NotBlank(message = "Email is required!")
-    @Email(message = "Email is invalid!")
+    @NotBlank(message = "{validation.email.required}")
+    @Email(message = "{validation.email.invalid}")
     private String email;
 
     @Schema(description = "User's password", example = "password123", minLength = 6, maxLength = 20)
-    @NotBlank(message = "Password is required!")
-    @Size(min = 6, max = 20, message = "Password must be between 6 and 20 characters!")
+    @NotBlank(message = "{validation.password.required}")
+    @Size(min = 6, max = 20, message = "{validation.password.size}")
     private String password;
 }
