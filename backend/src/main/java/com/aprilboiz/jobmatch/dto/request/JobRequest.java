@@ -1,8 +1,10 @@
 package com.aprilboiz.jobmatch.dto.request;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.aprilboiz.jobmatch.enumerate.JobType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -16,10 +18,10 @@ public class JobRequest {
     private String title;
     
     @NotBlank(message = "Job type is required")
-    private String jobType;
+    private JobType jobType;
     
     @NotNull(message = "Salary is required")
-    private Double salary;
+    private BigDecimal salary;
     
     @NotNull(message = "Number of openings is required")
     private Integer numberOfOpenings;

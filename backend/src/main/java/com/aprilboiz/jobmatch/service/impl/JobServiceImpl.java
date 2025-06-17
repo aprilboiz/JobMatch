@@ -1,9 +1,17 @@
 package com.aprilboiz.jobmatch.service.impl;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
+import com.aprilboiz.jobmatch.enumerate.JobStatus;
+import com.aprilboiz.jobmatch.enumerate.JobType;
+import com.aprilboiz.jobmatch.service.ApplicationService;
+import com.aprilboiz.jobmatch.service.MessageService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,18 +35,23 @@ import com.aprilboiz.jobmatch.service.JobService;
 public class JobServiceImpl implements JobService{
     private final JobRepository jobRepository;
     private final ApplicationMapper applicationMapper;
+    private final ApplicationService applicationService;
+    private final MessageService messageService;
 
-    public JobServiceImpl(JobRepository jobRepository, ApplicationMapper applicationMapper) {
+    public JobServiceImpl(JobRepository jobRepository, ApplicationMapper applicationMapper, 
+                         ApplicationService applicationService, MessageService messageService) {
         this.jobRepository = jobRepository;
         this.applicationMapper = applicationMapper;
+        this.applicationService = applicationService;
+        this.messageService = messageService;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public JobResponse createJob(JobRequest jobRequest) {
-        Optional<Job> existingJob = jobRepository.findByTitle(jobRequest.getTitle());
+        Optional<Job> existingJob = jobRepository.findByTitleIgnoreCase(jobRequest.getTitle());
         if (existingJob.isPresent()) {
-            throw new DuplicateException("Job with title " + jobRequest.getTitle() + " already exists");
+            throw new DuplicateException(messageService.getMessage("error.job.title.duplicate", jobRequest.getTitle()));
         }
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -53,6 +66,7 @@ public class JobServiceImpl implements JobService{
             .numberOfOpenings(jobRequest.getNumberOfOpenings())
             .applicationDeadline(jobRequest.getApplicationDeadline())
             .description(jobRequest.getDescription())
+            .location(jobRequest.getLocation())
             .company(ownerCompany)
             .recruiter(owner)
             .build();
@@ -63,17 +77,19 @@ public class JobServiceImpl implements JobService{
     @Override
     @Transactional(readOnly = true)
     public JobResponse getJob(Long id) {
-        Job job = jobRepository.findById(id).orElseThrow(() -> new NotFoundException("Job with id " + id + " not found"));
+        Job job = jobRepository.findById(id).orElseThrow(() -> 
+            new NotFoundException(messageService.getMessage("error.job.not.found", id)));
         return applicationMapper.jobToJobResponse(job);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public JobResponse updateJob(Long id, JobRequest jobRequest) {
-        Job job = jobRepository.findById(id).orElseThrow(() -> new NotFoundException("Job with id " + id + " not found"));
+        Job job = jobRepository.findById(id).orElseThrow(() -> 
+            new NotFoundException(messageService.getMessage("error.job.not.found", id)));
 
         if (!checkJobOwnership(job)) {
-            throw new AccessDeniedException("You are not allowed to update this job");
+            throw new AccessDeniedException(messageService.getMessage("error.job.update.permission"));
         }
 
         job.setTitle(jobRequest.getTitle());
@@ -82,16 +98,18 @@ public class JobServiceImpl implements JobService{
         job.setNumberOfOpenings(jobRequest.getNumberOfOpenings());
         job.setApplicationDeadline(jobRequest.getApplicationDeadline());
         job.setDescription(jobRequest.getDescription());
+        job.setLocation(jobRequest.getLocation());
         return applicationMapper.jobToJobResponse(jobRepository.save(job));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteJob(Long id) {
-        Job job = jobRepository.findById(id).orElseThrow(() -> new NotFoundException("Job with id " + id + " not found"));
+        Job job = jobRepository.findById(id).orElseThrow(() -> 
+            new NotFoundException(messageService.getMessage("error.job.not.found", id)));
 
         if (!checkJobOwnership(job)) {
-            throw new AccessDeniedException("You are not allowed to delete this job");
+            throw new AccessDeniedException(messageService.getMessage("error.job.delete.permission"));
         }
 
         jobRepository.delete(job);
@@ -99,15 +117,81 @@ public class JobServiceImpl implements JobService{
 
     @Override
     @Transactional(readOnly = true)
-    public List<JobResponse> getAllJobs() {
-        return jobRepository.findAll().stream().map(applicationMapper::jobToJobResponse).collect(Collectors.toList());
+    public Page<JobResponse> getAllJobs(PageRequest pageRequest) {
+        Page<Job> jobs = jobRepository.findAll(pageRequest);
+        List<JobResponse> jobResponses = jobs.getContent().stream().map(applicationMapper::jobToJobResponse).toList();
+        return new PageImpl<>(jobResponses, pageRequest, jobs.getTotalElements());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<ApplicationResponse> getJobApplications(Long id) {
-        // TODO: Implement this method
-        throw new UnsupportedOperationException("Unimplemented method 'getJobApplications'");
+    public Page<JobResponse> getJobsByRecruiter(Recruiter recruiter, PageRequest pageRequest) {
+        Page<Job> jobs = jobRepository.findAllByRecruiter(recruiter, pageRequest);
+        List<JobResponse> jobResponses = jobs.getContent().stream().map(applicationMapper::jobToJobResponse).toList();
+        return new PageImpl<>(jobResponses, pageRequest, jobs.getTotalElements());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<JobResponse> getJobsByCompany(Company company, PageRequest pageRequest) {
+        Page<Job> jobs = jobRepository.findAllByCompany(company, pageRequest);
+        List<JobResponse> jobResponses = jobs.getContent().stream().map(applicationMapper::jobToJobResponse).toList();
+        return new PageImpl<>(jobResponses, pageRequest, jobs.getTotalElements());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<ApplicationResponse> getJobApplications(Long jobId, PageRequest pageRequest) {
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Recruiter recruiter = userPrincipal.getUser().getRecruiter();
+        if (recruiter == null) {
+            throw new AccessDeniedException(messageService.getMessage("error.user.not.recruiter.permission"));
+        }
+
+        Job existingJob = jobRepository.findById(jobId).orElseThrow(() -> 
+            new NotFoundException(messageService.getMessage("error.job.not.found", jobId)));
+        if (!existingJob.getRecruiter().getId().equals(recruiter.getId()) && !existingJob.getCompany().getId().equals(recruiter.getCompany().getId())) {
+            throw new AccessDeniedException(messageService.getMessage("error.job.view.permission"));
+        }
+
+        Page<ApplicationResponse> responses = applicationService.getAllApplications(existingJob, pageRequest);
+        return new PageImpl<>(responses.getContent(), pageRequest, responses.getTotalElements());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<JobResponse> searchAndFilterJobs(
+            String keyword,
+            JobType jobType,
+            String location,
+            BigDecimal minSalary,
+            BigDecimal maxSalary,
+            String companyName,
+            JobStatus status,
+            LocalDate applicationDeadlineAfter,
+            PageRequest pageRequest) {
+        
+        Page<Job> jobs = jobRepository.searchAndFilterJobs(
+                keyword, jobType, location, minSalary, maxSalary, 
+                companyName, status, applicationDeadlineAfter, pageRequest);
+        
+        List<JobResponse> jobResponses = jobs.getContent().stream()
+                .map(applicationMapper::jobToJobResponse)
+                .toList();
+        
+        return new PageImpl<>(jobResponses, pageRequest, jobs.getTotalElements());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<String> getDistinctLocations() {
+        return jobRepository.findDistinctLocations();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<String> getDistinctCompanyNames() {
+        return jobRepository.findDistinctCompanyNames();
     }
 
     private Boolean checkJobOwnership(Job job) {
@@ -117,5 +201,4 @@ public class JobServiceImpl implements JobService{
         Company ownerCompany = owner.getCompany();
         return job.getRecruiter().getId().equals(owner.getId()) || job.getCompany().getId().equals(ownerCompany.getId());
     }
-
 }

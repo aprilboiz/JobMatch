@@ -1,5 +1,7 @@
 package com.aprilboiz.jobmatch.model;
 
+import com.aprilboiz.jobmatch.enumerate.JobStatus;
+import com.aprilboiz.jobmatch.enumerate.JobType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -8,8 +10,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 
@@ -27,16 +29,18 @@ public class Job extends AuditableEntity{
     @NotNull
     private String title;
     @NotNull
-    private String jobType;
+    @Enumerated(EnumType.STRING)
+    private JobType jobType;
     @NotNull
-    private Double salary;
+    private BigDecimal salary;
     @NotNull
     private Integer numberOfOpenings;
     @NotNull
     private LocalDate applicationDeadline;
 
     @Builder.Default
-    private Boolean isActive = Boolean.TRUE;
+    @Enumerated(EnumType.STRING)
+    private JobStatus status = JobStatus.OPEN;
     
     @Lob
     private String description;
