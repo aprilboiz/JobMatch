@@ -11,4 +11,5 @@ import java.util.List;
 public interface CvRepository extends JpaRepository<CV, Long> {
     List<CV> findByCandidate(Candidate candidate);
     Optional<CV> findByFileNameAndCandidate(String fileName, Candidate candidate);
+    Optional<CV> findByIdAndCandidate(Long id, Candidate candidate);
 }

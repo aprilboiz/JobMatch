@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -52,7 +53,7 @@ public class CandidateController {
         UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Candidate candidate = userPrincipal.getUser().getCandidate();
         if (candidate == null) {
-            throw new AccessDeniedException("User is not a candidate!");
+            throw new AccessDeniedException(messageService.getMessage("error.user.not.candidate"));
         }
         CvResponse cvResponse = cvService.createCv(file, candidate);
         String successMessage = messageService.getMessage("api.success.cv.created");
@@ -84,12 +85,11 @@ public class CandidateController {
     }
 
     @GetMapping("/cvs/{id}/download")
-    public ResponseEntity<ApiResponse<Resource>> downloadCv(@PathVariable Long id) {
+    public ResponseEntity<Resource> downloadCv(@PathVariable Long id) {
         Resource resource = cvService.downloadCv(id);
-        String successMessage = messageService.getMessage("api.success.cv.downloaded");
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-                .body(ApiResponse.success(successMessage, resource));
+                .body(resource);
     }
 
     @GetMapping("/applications")
@@ -100,7 +100,7 @@ public class CandidateController {
             throw new AccessDeniedException("User is not a candidate!");
         }
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSortOr(Sort.by(Sort.Direction.DESC, "createdAt")));
-        Page<ApplicationResponse> applicationResponses = applicationService.getAllApplications(pageRequest);
+        Page<ApplicationResponse> applicationResponses = applicationService.getAllApplications(candidate, pageRequest);
         String successMessage = messageService.getMessage("api.success.applications.fetched");
         return ResponseEntity.ok(ApiResponse.success(successMessage, applicationResponses));
     }
@@ -113,16 +113,21 @@ public class CandidateController {
     }
 
     @PostMapping("/applications")
-    public ResponseEntity<ApiResponse<Void>> createApplication(@RequestBody @Valid ApplicationRequest request) {
-        ApplicationResponse createdApplication = applicationService.createApplication(request);
-        URI uri = UriComponentsBuilder.fromPath("/api/me/applications/{id}").buildAndExpand(createdApplication.getId()).toUri();
+    public ResponseEntity<ApiResponse<ApplicationResponse>> createApplication(@RequestBody @Valid ApplicationRequest applicationRequest) {
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Candidate candidate = userPrincipal.getUser().getCandidate();
+        if (candidate == null) {
+            throw new AccessDeniedException(messageService.getMessage("error.user.not.candidate"));
+        }
+        ApplicationResponse applicationResponse = applicationService.createApplication(applicationRequest);
         String successMessage = messageService.getMessage("api.success.application.created");
-        return ResponseEntity.created(uri).body(ApiResponse.success(successMessage, null));
+        return ResponseEntity.created(URI.create("/api/me/applications/" + applicationResponse.getId()))
+                .body(ApiResponse.success(successMessage, applicationResponse));
     }
 
     @DeleteMapping("/applications/{id}")
-    public ResponseEntity<ApiResponse<Void>> withdrawApplication(@PathVariable Long id) {
-        applicationService.withdrawApplication(id);
+    public ResponseEntity<ApiResponse<Void>> withdrawApplication(@PathVariable Long id, @AuthenticationPrincipal UserPrincipal userDetails) {
+        applicationService.withdrawApplication(id, userDetails.getUser().getCandidate());
         String successMessage = messageService.getMessage("api.success.application.withdrawn");
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success(successMessage, null));
     }
