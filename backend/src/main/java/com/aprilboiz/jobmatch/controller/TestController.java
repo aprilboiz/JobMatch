@@ -1,5 +1,7 @@
 package com.aprilboiz.jobmatch.controller;
 
+import com.aprilboiz.jobmatch.exception.ApiResponse;
+import com.aprilboiz.jobmatch.service.MessageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -17,6 +19,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.aprilboiz.jobmatch.storage.StorageService;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -25,9 +28,11 @@ import java.util.Map;
 public class TestController {
 
     private final StorageService storageService;
+    private final MessageService messageService;
 
-    public TestController(StorageService storageService) {
+    public TestController(StorageService storageService, MessageService messageService) {
         this.storageService = storageService;
+        this.messageService = messageService;
     }
 
     @Operation(summary = "Hello World", description = "Simple hello world")
@@ -96,5 +101,21 @@ public class TestController {
         System.out.println(filePath);
         System.out.println(file.getSize());
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(
+            summary = "Test Internationalization"
+    )
+    @GetMapping("/test-lang")
+    public ResponseEntity<ApiResponse<Map<String, Object>>> testInternationalization() {
+        Map<String, Object> testMessages = new HashMap<>();
+        testMessages.put("login_success", messageService.getMessage("api.success.login"));
+        testMessages.put("register_success", messageService.getMessage("api.success.register"));
+        testMessages.put("validation_email_required", messageService.getMessage("validation.email.required"));
+        testMessages.put("validation_password_required", messageService.getMessage("validation.password.required"));
+        testMessages.put("current_locale", messageService.getCurrentLocale().toString());
+
+        String successMessage = messageService.getMessage("operation.completed");
+        return ResponseEntity.ok(ApiResponse.success(successMessage, testMessages));
     }
 } 

@@ -11,6 +11,14 @@ spring:
   application:
     name: JobMatch
 
+  # Internationalization Configuration
+  messages:
+    basename: messages
+    encoding: UTF-8
+    cache-duration: 3600s
+    fallback-to-system-locale: false
+    use-code-as-default-message: true
+
   servlet:
     multipart:
       max-file-size: 5MB
