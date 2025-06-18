@@ -51,7 +51,7 @@ public class JobServiceImpl implements JobService{
     public JobResponse createJob(JobRequest jobRequest) {
         Optional<Job> existingJob = jobRepository.findByTitleIgnoreCase(jobRequest.getTitle());
         if (existingJob.isPresent()) {
-            throw new DuplicateException(messageService.getMessage("error.job.title.duplicate", jobRequest.getTitle()));
+            throw new DuplicateException(messageService.getMessage("error.duplicate.job.title", jobRequest.getTitle()));
         }
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -78,7 +78,7 @@ public class JobServiceImpl implements JobService{
     @Transactional(readOnly = true)
     public JobResponse getJob(Long id) {
         Job job = jobRepository.findById(id).orElseThrow(() -> 
-            new NotFoundException(messageService.getMessage("error.job.not.found", id)));
+            new NotFoundException(messageService.getMessage("error.not.found.job", id)));
         return applicationMapper.jobToJobResponse(job);
     }
 
@@ -86,10 +86,10 @@ public class JobServiceImpl implements JobService{
     @Transactional(rollbackFor = Exception.class)
     public JobResponse updateJob(Long id, JobRequest jobRequest) {
         Job job = jobRepository.findById(id).orElseThrow(() -> 
-            new NotFoundException(messageService.getMessage("error.job.not.found", id)));
+            new NotFoundException(messageService.getMessage("error.not.found.job", id)));
 
         if (!checkJobOwnership(job)) {
-            throw new AccessDeniedException(messageService.getMessage("error.job.update.permission"));
+            throw new AccessDeniedException(messageService.getMessage("error.permission.job.update"));
         }
 
         job.setTitle(jobRequest.getTitle());
@@ -106,10 +106,10 @@ public class JobServiceImpl implements JobService{
     @Transactional(rollbackFor = Exception.class)
     public void deleteJob(Long id) {
         Job job = jobRepository.findById(id).orElseThrow(() -> 
-            new NotFoundException(messageService.getMessage("error.job.not.found", id)));
+            new NotFoundException(messageService.getMessage("error.not.found.job", id)));
 
         if (!checkJobOwnership(job)) {
-            throw new AccessDeniedException(messageService.getMessage("error.job.delete.permission"));
+            throw new AccessDeniedException(messageService.getMessage("error.permission.job.delete"));
         }
 
         jobRepository.delete(job);
@@ -145,13 +145,13 @@ public class JobServiceImpl implements JobService{
         UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Recruiter recruiter = userPrincipal.getUser().getRecruiter();
         if (recruiter == null) {
-            throw new AccessDeniedException(messageService.getMessage("error.user.not.recruiter.permission"));
+            throw new AccessDeniedException(messageService.getMessage("error.authorization.recruiter.required"));
         }
 
         Job existingJob = jobRepository.findById(jobId).orElseThrow(() -> 
-            new NotFoundException(messageService.getMessage("error.job.not.found", jobId)));
+            new NotFoundException(messageService.getMessage("error.not.found.job", jobId)));
         if (!existingJob.getRecruiter().getId().equals(recruiter.getId()) && !existingJob.getCompany().getId().equals(recruiter.getCompany().getId())) {
-            throw new AccessDeniedException(messageService.getMessage("error.job.view.permission"));
+            throw new AccessDeniedException(messageService.getMessage("error.permission.job.view"));
         }
 
         Page<ApplicationResponse> responses = applicationService.getAllApplications(existingJob, pageRequest);
