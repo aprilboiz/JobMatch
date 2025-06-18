@@ -22,7 +22,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -298,8 +297,22 @@ public class CvController {
             @Parameter(description = "CV ID to download", required = true, example = "1")
             @PathVariable Long id) {
         Resource resource = cvService.downloadCv(id);
+        
+        // Handle non-UTF-8 characters in filename using RFC 6266
+        String filename = resource.getFilename();
+        String encodedFilename;
+        try {
+            encodedFilename = java.net.URLEncoder.encode(filename, "UTF-8").replace("+", "%20");
+        } catch (java.io.UnsupportedEncodingException e) {
+            // Fallback to original filename if encoding fails
+            encodedFilename = filename;
+        }
+        
+        String contentDisposition = String.format("attachment; filename=\"%s\"; filename*=UTF-8''%s", 
+                filename, encodedFilename);
+        
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
                 .body(resource);
     }
 }
