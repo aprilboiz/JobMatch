@@ -2,9 +2,11 @@ package com.aprilboiz.jobmatch.config;
 
 import com.aprilboiz.jobmatch.dto.RoleDTO;
 import com.aprilboiz.jobmatch.dto.response.CvResponse;
+import com.aprilboiz.jobmatch.dto.response.JobResponse;
 import com.aprilboiz.jobmatch.dto.response.UserResponse;
 import com.aprilboiz.jobmatch.mapper.ApplicationMapper;
 import com.aprilboiz.jobmatch.model.CV;
+import com.aprilboiz.jobmatch.model.Job;
 import com.aprilboiz.jobmatch.model.Role;
 import com.aprilboiz.jobmatch.model.User;
 import com.aprilboiz.jobmatch.security.JwtAuthenticationFilter;
@@ -70,6 +72,17 @@ public class TestConfig {
                         .fileName(cv.getFileName())
                         .fileType(cv.getFileType())
                         .updatedAt(cv.getUpdatedAt().toString())
+                        .build();
+            }
+
+            @Override
+            public JobResponse jobToJobResponse(Job job) {
+                return JobResponse.builder()
+                        .id(job.getId())
+                        .title(job.getTitle())
+                        .description(job.getDescription())
+                        .companyId(job.getCompany() != null ? job.getCompany().getId().toString() : null)
+                        .recruiterId(job.getRecruiter() != null ? job.getRecruiter().getId().toString() : null)
                         .build();
             }
         };

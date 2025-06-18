@@ -115,7 +115,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void logout(LogoutRequest logoutRequest) {
         try {
-            String accessToken = logoutRequest.getAccessToken();
+            String accessToken = logoutRequest.getToken();
             String refreshToken = logoutRequest.getRefreshToken();
             
             Duration accessTokenTtl = Duration.ofSeconds(jwtService.getExpirationTime());
