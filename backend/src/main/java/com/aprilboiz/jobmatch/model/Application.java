@@ -3,9 +3,6 @@ package com.aprilboiz.jobmatch.model;
 import com.aprilboiz.jobmatch.enumerate.ApplicationStatus;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-
-import java.time.LocalDateTime;
 
 
 @EqualsAndHashCode(callSuper = true)

@@ -11,8 +11,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Mapper(componentModel = "spring")
 public interface ApplicationMapper {
 
-    ApplicationMapper INSTANCE = Mappers.getMapper(ApplicationMapper.class);
-
     @Mapping(source = "role", target = "role")
     @Mapping(target = "phoneNumber", expression = "java(getPhoneNumber(user))")
     UserResponse userToUserResponse(User user);
@@ -43,6 +41,9 @@ public interface ApplicationMapper {
     @Mapping(source = "createdAt", target = "appliedOn")
     @Mapping(source = "cv.fileName", target = "cvFileName")
     ApplicationDetailResponse applicationToApplicationDetailResponse(Application application);
+
+    @Mapping(source = "name", target = "name")
+    CompanyResponse companyToCompanyResponse(Company company);
 
     default String getPhoneNumber(User user) {
         if (user.getCandidate() != null) {
