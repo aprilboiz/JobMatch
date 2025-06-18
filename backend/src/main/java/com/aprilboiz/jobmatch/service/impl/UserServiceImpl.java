@@ -72,11 +72,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
 
         if (registerRequest.getRole() == null) {
-            throw new IllegalArgumentException(messageService.getMessage("error.role.required"));
+            throw new IllegalArgumentException(messageService.getMessage("validation.required.role"));
         }
 
         if (!EnumUtils.isValidEnum(RoleName.class, registerRequest.getRole().toUpperCase())) {
-            throw new IllegalArgumentException(messageService.getMessage("error.role.invalid", registerRequest.getRole()));
+            throw new IllegalArgumentException(messageService.getMessage("validation.invalid.role", registerRequest.getRole()));
         }
 
         RoleName roleName = RoleName.valueOf(registerRequest.getRole().toUpperCase());
@@ -110,7 +110,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 recruiterRepository.save(newRecruiter);
             }
             default -> {
-                throw new IllegalArgumentException(messageService.getMessage("error.role.invalid", registerRequest.getRole()));
+                throw new IllegalArgumentException(messageService.getMessage("validation.invalid.role", registerRequest.getRole()));
             }
         }
 
@@ -143,15 +143,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Transactional(rollbackFor = Exception.class)
     public UserResponse updateProfile(String email, CandidateProfileUpdateRequest profileRequest) {
         User user = userRepository.getUserByEmail(email)
-                .orElseThrow(() -> new NotFoundException(messageService.getMessage("error.user.email.not.found", email)));
+                .orElseThrow(() -> new NotFoundException(messageService.getMessage("error.not.found.user.email", email)));
 
         if (user.getRole().getName() != RoleName.CANDIDATE) {
-            throw new AuthorizationDeniedException(messageService.getMessage("error.user.authorization.candidate"));
+            throw new AuthorizationDeniedException(messageService.getMessage("error.authorization.candidate.required"));
         }
 
         Candidate candidate = user.getCandidate();
         if (candidate == null) {
-            throw new NotFoundException(messageService.getMessage("error.candidate.not.found"));
+            throw new NotFoundException(messageService.getMessage("error.not.found.candidate"));
         }
 
         candidate.setFullName(profileRequest.getFullName());
@@ -165,15 +165,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Transactional(rollbackFor = Exception.class)
     public UserResponse updateProfile(String email, RecruiterProfileUpdateRequest profileRequest) {
         User user = userRepository.getUserByEmail(email)
-                .orElseThrow(() -> new NotFoundException(messageService.getMessage("error.user.email.not.found", email)));
+                .orElseThrow(() -> new NotFoundException(messageService.getMessage("error.not.found.user.email", email)));
 
         if (user.getRole().getName() != RoleName.RECRUITER) {
-            throw new AuthorizationDeniedException(messageService.getMessage("error.user.authorization.recruiter"));
+            throw new AuthorizationDeniedException(messageService.getMessage("error.authorization.recruiter.required"));
         }
 
         Recruiter recruiter = user.getRecruiter();
         if (recruiter == null) {
-            throw new NotFoundException(messageService.getMessage("error.recruiter.not.found"));
+            throw new NotFoundException(messageService.getMessage("error.not.found.recruiter"));
         }
 
         recruiter.setFullName(profileRequest.getFullName());
@@ -181,7 +181,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         if (profileRequest.getCompanyId() != null) {
             Company company = companyRepository.findById(profileRequest.getCompanyId())
-                    .orElseThrow(() -> new NotFoundException(messageService.getMessage("error.company.not.found")));
+                    .orElseThrow(() -> new NotFoundException(messageService.getMessage("error.not.found.company")));
             recruiter.setCompany(company);
         }
 

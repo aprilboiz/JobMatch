@@ -1,5 +1,6 @@
 package com.aprilboiz.jobmatch.controller;
 
+import com.aprilboiz.jobmatch.exception.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -42,9 +43,9 @@ public class UserController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized - Invalid or missing token")
     })
     @GetMapping("/profile")
-    public ResponseEntity<UserResponse> getUserProfile(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<ApiResponse<UserResponse>> getUserProfile(@AuthenticationPrincipal UserDetails userDetails) {
         UserResponse response = userService.getUserByEmail(userDetails.getUsername());
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     @Operation(
@@ -61,11 +62,11 @@ public class UserController {
     })
     @PutMapping("/profile/candidate")
     @PreAuthorize("hasRole('CANDIDATE')")
-    public ResponseEntity<UserResponse> updateCandidateProfile(
+    public ResponseEntity<ApiResponse<UserResponse>> updateCandidateProfile(
             @AuthenticationPrincipal UserDetails userDetails,
             @Valid @RequestBody CandidateProfileUpdateRequest profileRequest) {
         UserResponse response = userService.updateProfile(userDetails.getUsername(), profileRequest);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     @Operation(
@@ -82,10 +83,10 @@ public class UserController {
     })
     @PutMapping("/profile/recruiter")
     @PreAuthorize("hasRole('RECRUITER')")
-    public ResponseEntity<UserResponse> updateRecruiterProfile(
+    public ResponseEntity<ApiResponse<UserResponse>> updateRecruiterProfile(
             @AuthenticationPrincipal UserDetails userDetails,
             @Valid @RequestBody RecruiterProfileUpdateRequest profileRequest) {
         UserResponse response = userService.updateProfile(userDetails.getUsername(), profileRequest);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 }
