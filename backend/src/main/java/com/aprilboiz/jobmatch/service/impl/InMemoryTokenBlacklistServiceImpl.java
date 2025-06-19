@@ -1,5 +1,6 @@
 package com.aprilboiz.jobmatch.service.impl;
 
+import com.aprilboiz.jobmatch.service.MessageService;
 import com.aprilboiz.jobmatch.service.TokenBlacklistService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -21,8 +22,10 @@ public class InMemoryTokenBlacklistServiceImpl implements TokenBlacklistService 
     
     private final Map<String, LocalDateTime> blacklistedTokens = new ConcurrentHashMap<>();
     private final ScheduledExecutorService cleanupScheduler = Executors.newSingleThreadScheduledExecutor();
+    private final MessageService messageService;
     
-    public InMemoryTokenBlacklistServiceImpl() {
+    public InMemoryTokenBlacklistServiceImpl(MessageService messageService) {
+        this.messageService = messageService;
         // Start cleanup task to remove expired tokens every 5 minutes
         cleanupScheduler.scheduleAtFixedRate(this::cleanupExpiredTokens, 5, 5, TimeUnit.MINUTES);
         log.warn("Using in-memory token blacklist service. Tokens will not persist across application restarts!");
@@ -36,7 +39,7 @@ public class InMemoryTokenBlacklistServiceImpl implements TokenBlacklistService 
             log.debug("Token blacklisted in memory with TTL: {} seconds", timeToLive.getSeconds());
         } catch (Exception e) {
             log.error("Failed to blacklist token in memory", e);
-            throw new RuntimeException("Failed to blacklist token", e);
+            throw new RuntimeException(messageService.getMessage("token.blacklist.operation.failed", "blacklist"), e);
         }
     }
     
@@ -68,7 +71,7 @@ public class InMemoryTokenBlacklistServiceImpl implements TokenBlacklistService 
             log.debug("Token removed from in-memory blacklist successfully");
         } catch (Exception e) {
             log.error("Failed to remove token from in-memory blacklist", e);
-            throw new RuntimeException("Failed to remove token from blacklist", e);
+            throw new RuntimeException(messageService.getMessage("token.blacklist.operation.failed", "remove"), e);
         }
     }
 
@@ -80,7 +83,7 @@ public class InMemoryTokenBlacklistServiceImpl implements TokenBlacklistService 
             log.debug("Cleared {} blacklisted tokens from memory", count);
         } catch (Exception e) {
             log.error("Failed to clear all blacklisted tokens from memory", e);
-            throw new RuntimeException("Failed to clear all blacklisted tokens", e);
+            throw new RuntimeException(messageService.getMessage("token.blacklist.operation.failed", "clear all"), e);
         }
     }
 

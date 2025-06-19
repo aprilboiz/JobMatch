@@ -3,6 +3,7 @@ package com.aprilboiz.jobmatch.dto.request;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import com.aprilboiz.jobmatch.dto.validation.ValidationMessages;
 import com.aprilboiz.jobmatch.enumerate.JobType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -21,62 +22,55 @@ public class JobRequest {
     @Schema(
             description = "Job title or position name",
             example = "Senior Software Engineer",
-            maxLength = 100
-    )
-    @NotBlank(message = "Title is required")
-    @Size(max = 100, message = "Title must not exceed 100 characters")
+            maxLength = 100)
+    @NotBlank(message = "{" + ValidationMessages.JOB_TITLE_REQUIRED + "}")
+    @Size(max = 100, message = "{" + ValidationMessages.JOB_TITLE_SIZE + "}")
     private String title;
     
     @Schema(
             description = "Type of employment for the job position",
-            example = "FULL_TIME",
-            allowableValues = {"FULL_TIME", "PART_TIME", "CONTRACT", "INTERNSHIP", "REMOTE"}
+            example = "FULL_TIME"
     )
-    @NotNull(message = "Job type is required")
+    @NotNull(message = "{" + ValidationMessages.JOB_TYPE_REQUIRED + "}")
     private JobType jobType;
     
     @Schema(
-            description = "Salary offered for the position (in USD or local currency)",
-            example = "75000.00",
-            minimum = "0"
+            description = "Salary offered for the position",
+            example = "75000.0"
     )
-    @NotNull(message = "Salary is required")
-    @Positive(message = "Salary must be positive")
+    @NotNull(message = "{" + ValidationMessages.JOB_SALARY_REQUIRED + "}")
+    @Positive(message = "{" + ValidationMessages.POSITIVE + "}")
     private BigDecimal salary;
     
     @Schema(
             description = "Number of available positions for this job",
-            example = "2",
-            minimum = "1"
+            example = "2"
     )
-    @NotNull(message = "Number of openings is required")
-    @Positive(message = "Number of openings must be positive")
-    private Integer numberOfOpenings;
+    @NotNull(message = "{" + ValidationMessages.JOB_OPENINGS_REQUIRED + "}")
+    @Positive(message = "{" + ValidationMessages.POSITIVE + "}")
+    private Integer openings;
     
     @Schema(
-            description = "Last date for accepting applications (must be in the future)",
-            example = "2024-12-31",
-            format = "date"
+            description = "Last date to apply for the job",
+            example = "2024-12-31"
     )
-    @NotNull(message = "Application deadline is required")
-    @Future(message = "Application deadline must be in the future")
+    @NotNull(message = "{" + ValidationMessages.JOB_DEADLINE_REQUIRED + "}")
+    @Future(message = "{" + ValidationMessages.DEADLINE_FUTURE + "}")
     private LocalDate applicationDeadline;
 
     @Schema(
-            description = "Detailed job description including responsibilities, requirements, and benefits",
-            example = "We are looking for a Senior Software Engineer to join our team...",
-            maxLength = 5000
+            description = "Detailed description of the job role and responsibilities",
+            example = "We are looking for a Senior Software Engineer..."
     )
-    @NotEmpty(message = "Description is required")
-    @Size(max = 5000, message = "Description must not exceed 5000 characters")
+    @NotEmpty(message = "{" + ValidationMessages.JOB_DESCRIPTION_REQUIRED + "}")
+    @Size(max = 5000, message = "{" + ValidationMessages.JOB_DESCRIPTION_SIZE + "}")
     private String description;
 
     @Schema(
-            description = "Job location (city, state/province, country or 'Remote')",
-            example = "San Francisco, CA, USA",
-            maxLength = 100
+            description = "Work location for the job",
+            example = "San Francisco, CA, USA"
     )
-    @NotEmpty(message = "Location is required")
-    @Size(max = 100, message = "Location must not exceed 100 characters")
+    @NotEmpty(message = "{" + ValidationMessages.JOB_LOCATION_REQUIRED + "}")
+    @Size(max = 100, message = "{" + ValidationMessages.JOB_LOCATION_SIZE + "}")
     private String location;
 }

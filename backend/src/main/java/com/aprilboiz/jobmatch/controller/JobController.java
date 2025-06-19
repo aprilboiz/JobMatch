@@ -255,7 +255,7 @@ public class JobController {
             @RequestBody @Valid JobRequest jobRequest) {
         JobResponse jobResponse = jobService.createJob(jobRequest);
         URI jobUri = UriComponentsBuilder.fromPath("/api/jobs/{id}").buildAndExpand(jobResponse.getId()).toUri();
-        String successMessage = messageService.getMessage("api.success.job.created");
+        String successMessage = messageService.getMessage("api.success.created", "Job");
         return ResponseEntity.created(jobUri)
                 .body(ApiResponse.success(successMessage, jobResponse));
     }

@@ -1,5 +1,6 @@
 package com.aprilboiz.jobmatch.service.impl;
 
+import com.aprilboiz.jobmatch.service.MessageService;
 import com.aprilboiz.jobmatch.service.TokenBlacklistService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -15,9 +16,11 @@ public class TokenBlacklistServiceImpl implements TokenBlacklistService {
     private static final String BLACKLIST_PREFIX = "blacklisted_token:";
     
     private final RedisTemplate<String, Object> redisTemplate;
+    private final MessageService messageService;
     
-    public TokenBlacklistServiceImpl(RedisTemplate<String, Object> redisTemplate) {
+    public TokenBlacklistServiceImpl(RedisTemplate<String, Object> redisTemplate, MessageService messageService) {
         this.redisTemplate = redisTemplate;
+        this.messageService = messageService;
     }
     
     @Override
@@ -28,24 +31,20 @@ public class TokenBlacklistServiceImpl implements TokenBlacklistService {
             log.debug("Token blacklisted successfully with TTL: {} seconds", timeToLive.getSeconds());
         } catch (Exception e) {
             log.error("Failed to blacklist token", e);
-            throw new RuntimeException("Failed to blacklist token", e);
+            throw new RuntimeException(messageService.getMessage("token.blacklist.operation.failed", "blacklist"), e);
         }
     }
     
     @Override
     public boolean isTokenBlacklisted(String token) {
         try {
-            // Check if specific token is blacklisted
+            // Check if a specific token is blacklisted
             String key = BLACKLIST_PREFIX + token;
-            Boolean tokenBlacklisted = redisTemplate.hasKey(key);
-            
-            if (Boolean.TRUE.equals(tokenBlacklisted)) {
-                return true;
-            }
+
+            return redisTemplate.hasKey(key);
             
             // TODO: Extract username from token and check user-level blacklist
-            return false;
-            
+
         } catch (Exception e) {
             log.error("Failed to check token blacklist status", e);
             return true;
@@ -60,7 +59,7 @@ public class TokenBlacklistServiceImpl implements TokenBlacklistService {
             log.debug("Token removed from blacklist successfully");
         } catch (Exception e) {
             log.error("Failed to remove token from blacklist", e);
-            throw new RuntimeException("Failed to remove token from blacklist", e);
+            throw new RuntimeException(messageService.getMessage("token.blacklist.operation.failed", "remove"), e);
         }
     }
 
@@ -68,13 +67,13 @@ public class TokenBlacklistServiceImpl implements TokenBlacklistService {
     public void clearAllBlacklistedTokens() {
         try {
             Set<String> keys = redisTemplate.keys(BLACKLIST_PREFIX + "*");
-            if (keys != null && !keys.isEmpty()) {
+            if (!keys.isEmpty()) {
                 redisTemplate.delete(keys);
                 log.debug("Cleared {} blacklisted tokens", keys.size());
             }
         } catch (Exception e) {
             log.error("Failed to clear all blacklisted tokens", e);
-            throw new RuntimeException("Failed to clear all blacklisted tokens", e);
+            throw new RuntimeException(messageService.getMessage("token.blacklist.operation.failed", "clear all"), e);
         }
     }
 

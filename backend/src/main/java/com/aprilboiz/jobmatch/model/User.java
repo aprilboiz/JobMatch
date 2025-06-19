@@ -1,41 +1,48 @@
 package com.aprilboiz.jobmatch.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
-
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "user_type")
 @Table(name = "users")
-public class User extends AuditableEntity  {
+public abstract class User extends AuditableEntity {
     @Id
     @GeneratedValue
     private Long id;
+
     @Column(nullable = false, unique = true)
     private String email;
+
     @Column(nullable = false)
     private String password;
-    
-    @Builder.Default
+
+    @Column(nullable = false)
+    private String fullName;
+
+    private String phoneNumber;
+
     private Boolean isActive = Boolean.TRUE;
 
-    @OneToOne(mappedBy = "user")
-    @JsonManagedReference("user-candidate")
-    @ToString.Exclude
-    private Candidate candidate;
-    
-    @OneToOne(mappedBy = "user")
-    @JsonManagedReference("user-recruiter")
-    @ToString.Exclude
-    private Recruiter recruiter;
-    
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     @ToString.Exclude
     private Role role;
+
+    // Constructor for subclasses
+    protected User(Long id, String email, String password, String fullName, String phoneNumber, Boolean isActive,
+            Role role) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.fullName = fullName;
+        this.phoneNumber = phoneNumber;
+        this.isActive = isActive != null ? isActive : Boolean.TRUE;
+        this.role = role;
+    }
 }

@@ -1,31 +1,18 @@
 package com.aprilboiz.jobmatch.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Data
-public class Recruiter extends AuditableEntity{
-    @Id
-    @GeneratedValue
-    private Long id;
-    @NotNull
-    private String fullName;
-    private String phoneNumber;
-
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    @JsonBackReference("user-recruiter")
-    @ToString.Exclude
-    private User user;
+@DiscriminatorValue("RECRUITER")
+public class Recruiter extends User {
 
     @ManyToOne
     @JoinColumn(name = "company_id")
@@ -33,4 +20,12 @@ public class Recruiter extends AuditableEntity{
 
     @OneToMany(mappedBy = "recruiter")
     private List<Job> jobs;
+    
+    @Builder
+    public Recruiter(Long id, String email, String password, String fullName, String phoneNumber, Boolean isActive, Role role,
+                    Company company, List<Job> jobs) {
+        super(id, email, password, fullName, phoneNumber, isActive, role);
+        this.company = company;
+        this.jobs = jobs;
+    }
 }

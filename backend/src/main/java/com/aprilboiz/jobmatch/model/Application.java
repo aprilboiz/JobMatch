@@ -32,5 +32,7 @@ public class Application extends AuditableEntity{
     @JoinColumn(name = "analysis_id")
     private Analysis analysis;
 
-    private ApplicationStatus status;
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    private ApplicationStatus status = ApplicationStatus.APPLIED;
 }

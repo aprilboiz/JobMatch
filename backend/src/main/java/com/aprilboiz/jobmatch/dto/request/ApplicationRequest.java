@@ -1,5 +1,6 @@
 package com.aprilboiz.jobmatch.dto.request;
 
+import com.aprilboiz.jobmatch.dto.validation.ValidationMessages;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -10,19 +11,17 @@ import lombok.Data;
 public class ApplicationRequest {
     @Schema(
             description = "ID of the job position to apply for",
-            example = "1",
-            required = true
+            example = "1"
     )
-    @NotNull(message = "Job ID is required")
-    @Positive(message = "Job ID must be positive")
+    @NotNull(message = "{" + ValidationMessages.JOB_ID_REQUIRED + "}")
+    @Positive(message = "{" + ValidationMessages.ID_POSITIVE + "}")
     private Long jobId;
     
     @Schema(
             description = "ID of the CV to use for this application",
-            example = "1",
-            required = true
+            example = "1"
     )
-    @NotNull(message = "CV ID is required")
-    @Positive(message = "CV ID must be positive")
+    @NotNull(message = "{" + ValidationMessages.CV_ID_REQUIRED + "}")
+    @Positive(message = "{" + ValidationMessages.ID_POSITIVE + "}")
     private Long cvId;
 }

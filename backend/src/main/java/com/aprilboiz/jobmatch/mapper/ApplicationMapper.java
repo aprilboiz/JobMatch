@@ -5,14 +5,14 @@ import com.aprilboiz.jobmatch.dto.response.*;
 import com.aprilboiz.jobmatch.model.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Mapper(componentModel = "spring")
 public interface ApplicationMapper {
 
     @Mapping(source = "role", target = "role")
-    @Mapping(target = "phoneNumber", expression = "java(getPhoneNumber(user))")
+    @Mapping(source = "phoneNumber", target = "phoneNumber")
+    @Mapping(target = "userType", expression = "java(getUserType(user))")
     UserResponse userToUserResponse(User user);
 
     @Mapping(source = "name", target = "roleName")
@@ -33,7 +33,7 @@ public interface ApplicationMapper {
     ApplicationResponse applicationToApplicationResponse(Application application);
 
     @Mapping(source = "candidate.fullName", target = "candidateName")
-    @Mapping(source = "candidate.user.email", target = "candidateEmail")
+    @Mapping(source = "candidate.email", target = "candidateEmail")
     @Mapping(source = "candidate.phoneNumber", target = "candidatePhoneNumber")
     @Mapping(source = "job.company.name", target = "companyName")
     @Mapping(source = "job.id", target = "jobId")
@@ -45,16 +45,16 @@ public interface ApplicationMapper {
     @Mapping(source = "name", target = "name")
     CompanyResponse companyToCompanyResponse(Company company);
 
-    default String getPhoneNumber(User user) {
-        if (user.getCandidate() != null) {
-            return user.getCandidate().getPhoneNumber();
-        } else if (user.getRecruiter() != null) {
-            return user.getRecruiter().getPhoneNumber();
-        }
-        return null;
-    }
-
     default String getFileUri(CV cv) {
-        return UriComponentsBuilder.fromPath("/api/me/cvs/{id}").buildAndExpand(cv.getId()).toUriString();
+        return UriComponentsBuilder.fromPath("/api/cvs/{id}").buildAndExpand(cv.getId()).toUriString();
+    }
+    
+    default String getUserType(User user) {
+        if (user instanceof Candidate) {
+            return "CANDIDATE";
+        } else if (user instanceof Recruiter) {
+            return "RECRUITER";
+        }
+        return "USER";
     }
 }

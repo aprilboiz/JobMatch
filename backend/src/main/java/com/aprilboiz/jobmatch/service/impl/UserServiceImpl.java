@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.apache.commons.lang3.EnumUtils;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,7 @@ import com.aprilboiz.jobmatch.model.Company;
 import com.aprilboiz.jobmatch.model.Recruiter;
 import com.aprilboiz.jobmatch.model.Role;
 import com.aprilboiz.jobmatch.model.User;
-import com.aprilboiz.jobmatch.model.UserPrincipal;
+import com.aprilboiz.jobmatch.model.UserPrincipalAdapter;
 import com.aprilboiz.jobmatch.repository.CandidateRepository;
 import com.aprilboiz.jobmatch.repository.CompanyRepository;
 import com.aprilboiz.jobmatch.repository.RecruiterRepository;
@@ -34,21 +33,20 @@ import com.aprilboiz.jobmatch.repository.UserRepository;
 import com.aprilboiz.jobmatch.service.MessageService;
 import com.aprilboiz.jobmatch.service.UserService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
-public class UserServiceImpl implements UserService, UserDetailsService {
+@Slf4j
+public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final CandidateRepository candidateRepository;
-    private final RecruiterRepository recruiterRepository;
     private final RoleRepository roleRepository;
     private final CompanyRepository companyRepository;
     private final PasswordEncoder passwordEncoder;
     private final ApplicationMapper userMapper;
     private final MessageService messageService;
 
-    public UserServiceImpl(UserRepository userRepository, CandidateRepository candidateRepository, RecruiterRepository recruiterRepository, RoleRepository roleRepository, CompanyRepository companyRepository, PasswordEncoder passwordEncoder, ApplicationMapper userMapper, MessageService messageService) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, CompanyRepository companyRepository, PasswordEncoder passwordEncoder, ApplicationMapper userMapper, MessageService messageService) {
         this.userRepository = userRepository;
-        this.candidateRepository = candidateRepository;
-        this.recruiterRepository = recruiterRepository;
         this.roleRepository = roleRepository;
         this.companyRepository = companyRepository;
         this.passwordEncoder = passwordEncoder;
@@ -60,7 +58,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.getUserByEmail(username).orElseThrow(() -> 
             new UsernameNotFoundException(messageService.getMessage("error.user.username.not.found", username)));
-        return new UserPrincipal(user);
+        return new UserPrincipalAdapter(user);
     }
 
     @Override
@@ -82,39 +80,29 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         RoleName roleName = RoleName.valueOf(registerRequest.getRole().toUpperCase());
         Role role = roleRepository.findByName(roleName).orElseThrow(() -> new NotFoundException(messageService.getMessage("error.role.not.found", registerRequest.getRole())));
 
-        User newUser = User.builder()
-            .email(registerRequest.getEmail())
-            .password(passwordEncoder.encode(registerRequest.getPassword()))
-            .role(role)
-            .isActive(true)
-            .build();
-        User savedUser = userRepository.save(newUser);
-
+        User newUser;
         switch (roleName) {
-            case CANDIDATE -> {
-                Candidate newCandidate = Candidate.builder()
-                    .user(savedUser)
-                    .fullName(registerRequest.getFullName())
-                    .phoneNumber(registerRequest.getPhoneNumber())
-                    .build();
-                savedUser.setCandidate(newCandidate);
-                candidateRepository.save(newCandidate);
-            }
-            case RECRUITER -> {
-                Recruiter newRecruiter = Recruiter.builder()
-                    .user(savedUser)
-                    .fullName(registerRequest.getFullName())
-                    .phoneNumber(registerRequest.getPhoneNumber())
-                    .build();
-                savedUser.setRecruiter(newRecruiter);
-                recruiterRepository.save(newRecruiter);
-            }
-            default -> {
-                throw new IllegalArgumentException(messageService.getMessage("validation.invalid.role", registerRequest.getRole()));
-            }
+            case CANDIDATE -> newUser = Candidate.builder()
+                .email(registerRequest.getEmail())
+                .password(passwordEncoder.encode(registerRequest.getPassword()))
+                .fullName(registerRequest.getFullName())
+                .phoneNumber(registerRequest.getPhoneNumber())
+                .role(role)
+                .isActive(true)
+                .build();
+            case RECRUITER -> newUser = Recruiter.builder()
+                .email(registerRequest.getEmail())
+                .password(passwordEncoder.encode(registerRequest.getPassword()))
+                .fullName(registerRequest.getFullName())
+                .phoneNumber(registerRequest.getPhoneNumber())
+                .role(role)
+                .isActive(true)
+                .build();
+            default -> throw new IllegalArgumentException(messageService.getMessage("validation.invalid.role", registerRequest.getRole()));
         }
 
-        userRepository.save(savedUser);
+        userRepository.save(newUser);
+        log.info("Successfully created user with email: {}", newUser.getEmail());
     }
 
     @Override
@@ -145,20 +133,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User user = userRepository.getUserByEmail(email)
                 .orElseThrow(() -> new NotFoundException(messageService.getMessage("error.not.found.user.email", email)));
 
-        if (user.getRole().getName() != RoleName.CANDIDATE) {
+        if (!(user instanceof Candidate candidate)) {
             throw new AuthorizationDeniedException(messageService.getMessage("error.authorization.candidate.required"));
-        }
-
-        Candidate candidate = user.getCandidate();
-        if (candidate == null) {
-            throw new NotFoundException(messageService.getMessage("error.not.found.candidate"));
         }
 
         candidate.setFullName(profileRequest.getFullName());
         candidate.setPhoneNumber(profileRequest.getPhoneNumber());
-        candidateRepository.save(candidate);
+        userRepository.save(candidate);
 
-        return userMapper.userToUserResponse(user);
+        return userMapper.userToUserResponse(candidate);
     }
 
     @Override
@@ -167,13 +150,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User user = userRepository.getUserByEmail(email)
                 .orElseThrow(() -> new NotFoundException(messageService.getMessage("error.not.found.user.email", email)));
 
-        if (user.getRole().getName() != RoleName.RECRUITER) {
+        if (!(user instanceof Recruiter recruiter)) {
             throw new AuthorizationDeniedException(messageService.getMessage("error.authorization.recruiter.required"));
-        }
-
-        Recruiter recruiter = user.getRecruiter();
-        if (recruiter == null) {
-            throw new NotFoundException(messageService.getMessage("error.not.found.recruiter"));
         }
 
         recruiter.setFullName(profileRequest.getFullName());
@@ -185,8 +163,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             recruiter.setCompany(company);
         }
 
-        recruiterRepository.save(recruiter);
+        userRepository.save(recruiter);
 
-        return userMapper.userToUserResponse(user);
+        return userMapper.userToUserResponse(recruiter);
     }
 }

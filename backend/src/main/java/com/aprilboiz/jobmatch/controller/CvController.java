@@ -2,8 +2,7 @@ package com.aprilboiz.jobmatch.controller;
 
 import com.aprilboiz.jobmatch.dto.response.CvResponse;
 import com.aprilboiz.jobmatch.exception.ApiResponse;
-import com.aprilboiz.jobmatch.model.Candidate;
-import com.aprilboiz.jobmatch.model.UserPrincipal;
+import com.aprilboiz.jobmatch.model.*;
 import com.aprilboiz.jobmatch.service.CvService;
 import com.aprilboiz.jobmatch.service.MessageService;
 
@@ -14,10 +13,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -28,19 +27,16 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/cvs")
-@Tag(name = "CV Management", description = "Operations for managing CVs including upload, retrieval, deletion, and download of resume files")
+@RequiredArgsConstructor
+@Tag(name = "CV Management", description = "Operations related to CVs")
 public class CvController {
-    private final MessageService messageService;
     private final CvService cvService;
-
-    public CvController(MessageService messageService, CvService cvService) {
-        this.messageService = messageService;
-        this.cvService = cvService;
-    }
+    private final MessageService messageService;
 
     @Operation(
             summary = "Upload New CV",
@@ -50,9 +46,6 @@ public class CvController {
                     This endpoint allows candidates to upload their resume files in supported formats.
                     The uploaded file will be stored securely and associated with the candidate's profile.
                     
-                    **Supported File Formats:**
-                    - PDF (.pdf)
-                    - Microsoft Word (.doc, .docx)
                     
                     **File Requirements:**
                     - Maximum file size: 10MB
@@ -99,13 +92,13 @@ public class CvController {
                     content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE)
             )
             @RequestParam("file") MultipartFile file) {
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Candidate candidate = userPrincipal.getUser().getCandidate();
-        if (candidate == null) {
+        UserPrincipalAdapter userPrincipalAdapter = (UserPrincipalAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userPrincipalAdapter.getUser();
+        if (!(user instanceof Candidate candidate)) {
             throw new AccessDeniedException(messageService.getMessage("error.authorization.candidate.required"));
         }
         CvResponse cvResponse = cvService.createCv(file, candidate);
-        String successMessage = messageService.getMessage("api.success.cv.created");
+        String successMessage = messageService.getMessage("api.success.created", "CV");
         return ResponseEntity.created(URI.create(cvResponse.getFileUri())).body(ApiResponse.success(successMessage, cvResponse));
     }
 
@@ -143,10 +136,13 @@ public class CvController {
     })
     @GetMapping()
     @PreAuthorize("hasRole('CANDIDATE')")
-    public ResponseEntity<ApiResponse<List<CvResponse>>> getAllCv(@AuthenticationPrincipal UserPrincipal userDetails) {
-        Candidate candidate = userDetails.getUser().getCandidate();
+    public ResponseEntity<ApiResponse<List<CvResponse>>> getAllCv(@AuthenticationPrincipal UserPrincipalAdapter userDetails) {
+        User user = userDetails.getUser();
+        if (!(user instanceof Candidate candidate)) {
+            throw new AccessDeniedException(messageService.getMessage("error.authorization.candidate.required"));
+        }
         List<CvResponse> cvResponses = cvService.getAllCv(candidate);
-        String successMessage = messageService.getMessage("api.success.cv.retrieved");
+        String successMessage = messageService.getMessage("api.success.retrieved", "CVs");
         return ResponseEntity.ok(ApiResponse.success(successMessage, cvResponses));
     }
 
@@ -193,7 +189,7 @@ public class CvController {
             @Parameter(description = "CV ID", required = true, example = "1")
             @PathVariable Long id) {
         CvResponse cvResponse = cvService.getCv(id);
-        String successMessage = messageService.getMessage("api.success.cv.retrieved");
+        String successMessage = messageService.getMessage("api.success.retrieved", "CV");
         return ResponseEntity.ok(ApiResponse.success(successMessage, cvResponse));
     }
 
@@ -242,12 +238,18 @@ public class CvController {
     })
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('CANDIDATE')")
-    public ResponseEntity<ApiResponse<Void>> deleteCv(
-            @Parameter(description = "CV ID to delete", required = true, example = "1")
+    public ResponseEntity<ApiResponse<String>> deleteCv(
+            @Parameter(description = "CV ID", required = true, example = "1")
             @PathVariable Long id) {
+        UserPrincipalAdapter userPrincipalAdapter = (UserPrincipalAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userPrincipalAdapter.getUser();
+        if (!(user instanceof Candidate)) {
+            throw new AccessDeniedException(messageService.getMessage("error.authorization.candidate.required"));
+        }
+
         cvService.deleteCv(id);
-        String successMessage = messageService.getMessage("api.success.cv.deleted");
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success(successMessage, null));
+        String successMessage = messageService.getMessage("api.success.deleted", "CV");
+        return ResponseEntity.ok(ApiResponse.success(successMessage, successMessage));
     }
 
     @Operation(
@@ -298,16 +300,11 @@ public class CvController {
             @PathVariable Long id) {
         Resource resource = cvService.downloadCv(id);
         
-        // Handle non-UTF-8 characters in filename using RFC 6266
+        // Handle non-UTF-8 characters in the filename using RFC 6266
         String filename = resource.getFilename();
         String encodedFilename;
-        try {
-            encodedFilename = java.net.URLEncoder.encode(filename, "UTF-8").replace("+", "%20");
-        } catch (java.io.UnsupportedEncodingException e) {
-            // Fallback to original filename if encoding fails
-            encodedFilename = filename;
-        }
-        
+        encodedFilename = java.net.URLEncoder.encode(filename, StandardCharsets.UTF_8).replace("+", "%20");
+
         String contentDisposition = String.format("attachment; filename=\"%s\"; filename*=UTF-8''%s", 
                 filename, encodedFilename);
         

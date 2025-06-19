@@ -22,10 +22,19 @@ public class UserResponse {
     
     @Schema(description = "User's email address", example = "john.doe@example.com")
     private String email;
+    
+    @Schema(description = "User's full name", example = "John Doe")
+    private String fullName;
 
     @Schema(description = "User's phone number", example = "1234567890")
     private String phoneNumber;
+    
+    @Schema(description = "User's account status", example = "true")
+    private Boolean isActive;
 
     @Schema(description = "User's role information")
     private RoleDTO role;
+    
+    @Schema(description = "User type (CANDIDATE, RECRUITER)", example = "CANDIDATE")
+    private String userType;
 }

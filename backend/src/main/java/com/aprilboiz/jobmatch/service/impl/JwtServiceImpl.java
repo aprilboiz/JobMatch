@@ -81,9 +81,8 @@ public class JwtServiceImpl implements JwtService {
     public String extractUsername(String token) {
         try {
             return extractAllClaims(token).getSubject();
-        } catch (Exception ex) {
-            log.error("Failed to extract username from token: {}", ex.getMessage());
-            throw new BadCredentialsException(messageService.getMessage("auth.username.extraction.failed"), ex);
+        } catch (JwtException | IllegalArgumentException ex) {
+            throw new BadCredentialsException(messageService.getMessage("auth.extraction.failed", "username"), ex);
         }
     }
 
@@ -109,9 +108,8 @@ public class JwtServiceImpl implements JwtService {
     public Date extractExpiration(String token) {
         try {
             return extractAllClaims(token).getExpiration();
-        } catch (Exception ex) {
-            log.error("Failed to extract expiration from token: {}", ex.getMessage());
-            throw new BadCredentialsException(messageService.getMessage("auth.expiration.extraction.failed"), ex);
+        } catch (JwtException | IllegalArgumentException ex) {
+            throw new BadCredentialsException(messageService.getMessage("auth.extraction.failed", "expiration"), ex);
         }
     }
 
@@ -143,9 +141,8 @@ public class JwtServiceImpl implements JwtService {
     public String extractJti(String token) {
         try {
             return extractAllClaims(token).getId();
-        } catch (Exception ex) {
-            log.error("Failed to extract JTI from token: {}", ex.getMessage());
-            throw new BadCredentialsException(messageService.getMessage("auth.jti.extraction.failed"), ex);
+        } catch (JwtException | IllegalArgumentException ex) {
+            throw new BadCredentialsException(messageService.getMessage("auth.extraction.failed", "JTI"), ex);
         }
     }
 

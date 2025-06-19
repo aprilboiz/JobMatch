@@ -9,10 +9,7 @@ import com.aprilboiz.jobmatch.enumerate.RoleName;
 import com.aprilboiz.jobmatch.model.Candidate;
 import com.aprilboiz.jobmatch.model.Recruiter;
 import com.aprilboiz.jobmatch.model.Role;
-import com.aprilboiz.jobmatch.model.User;
-import com.aprilboiz.jobmatch.repository.RecruiterRepository;
 import com.aprilboiz.jobmatch.repository.RoleRepository;
-import com.aprilboiz.jobmatch.repository.CandidateRepository;
 import com.aprilboiz.jobmatch.repository.UserRepository;
 
 @Component
@@ -21,15 +18,11 @@ public class DataSeeder implements CommandLineRunner{
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final RecruiterRepository recruiterRepository;
-    private final CandidateRepository candidateRepository;
 
-    public DataSeeder(RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder, RecruiterRepository recruiterRepository, CandidateRepository candidateRepository) {
+    public DataSeeder(RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.recruiterRepository = recruiterRepository;
-        this.candidateRepository = candidateRepository;
     }
 
     @Override
@@ -46,34 +39,24 @@ public class DataSeeder implements CommandLineRunner{
         adminRole.setName(RoleName.ADMIN);
         roleRepository.save(adminRole);
 
-        User admin = new User();
-        admin.setEmail("admin@gmail.com");
-        admin.setPassword(passwordEncoder.encode("admin123"));
-        admin.setRole(adminRole);
-        userRepository.save(admin);
-
-        User recruiter = new User();
+        // Create a recruiter user
+        Recruiter recruiter = new Recruiter();
         recruiter.setEmail("recruiter@gmail.com");
         recruiter.setPassword(passwordEncoder.encode("admin123"));
+        recruiter.setFullName("Recruiter");
+        recruiter.setPhoneNumber("1234567890");
         recruiter.setRole(recruiterRole);
+        recruiter.setIsActive(true);
         userRepository.save(recruiter);
 
-        Recruiter recruiterModel = new Recruiter();
-        recruiterModel.setUser(recruiter);
-        recruiterModel.setFullName("Recruiter");
-        recruiterModel.setPhoneNumber("1234567890");
-        recruiterRepository.save(recruiterModel);
-
-        User candidate = new User();
+        // Create a candidate user  
+        Candidate candidate = new Candidate();
         candidate.setEmail("candidate@gmail.com");
         candidate.setPassword(passwordEncoder.encode("admin123"));
+        candidate.setFullName("Candidate");
+        candidate.setPhoneNumber("1234567890");
         candidate.setRole(candidateRole);
+        candidate.setIsActive(true);
         userRepository.save(candidate);
-
-        Candidate candidateModel = new Candidate();
-        candidateModel.setUser(candidate);
-        candidateModel.setFullName("Candidate");
-        candidateModel.setPhoneNumber("1234567890");
-        candidateRepository.save(candidateModel);
     }
 }

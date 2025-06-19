@@ -5,7 +5,7 @@ import com.aprilboiz.jobmatch.dto.request.LogoutRequest;
 import com.aprilboiz.jobmatch.dto.request.RefreshTokenRequest;
 import com.aprilboiz.jobmatch.dto.request.RegisterRequest;
 import com.aprilboiz.jobmatch.dto.response.AuthResponse;
-import com.aprilboiz.jobmatch.model.UserPrincipal;
+import com.aprilboiz.jobmatch.model.UserPrincipalAdapter;
 import com.aprilboiz.jobmatch.service.AuthService;
 import com.aprilboiz.jobmatch.service.JwtService;
 import com.aprilboiz.jobmatch.service.MessageService;
@@ -22,8 +22,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 
-@Service
 @Slf4j
+@Service
 public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authManager;
@@ -51,10 +51,10 @@ public class AuthServiceImpl implements AuthService {
                     )
             );
 
-            UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+            UserPrincipalAdapter userPrincipalAdapter = (UserPrincipalAdapter) authentication.getPrincipal();
 
-            String accessToken = jwtService.generateAccessToken(userPrincipal);
-            String refreshToken = jwtService.generateRefreshToken(userPrincipal);
+            String accessToken = jwtService.generateAccessToken(userPrincipalAdapter);
+            String refreshToken = jwtService.generateRefreshToken(userPrincipalAdapter);
 
             return AuthResponse.builder()
                     .token(accessToken)

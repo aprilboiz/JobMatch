@@ -5,7 +5,8 @@ import com.aprilboiz.jobmatch.dto.response.ApplicationDetailResponse;
 import com.aprilboiz.jobmatch.dto.response.ApplicationResponse;
 import com.aprilboiz.jobmatch.exception.ApiResponse;
 import com.aprilboiz.jobmatch.model.Candidate;
-import com.aprilboiz.jobmatch.model.UserPrincipal;
+import com.aprilboiz.jobmatch.model.UserPrincipalAdapter;
+import com.aprilboiz.jobmatch.model.User;
 import com.aprilboiz.jobmatch.service.ApplicationService;
 import com.aprilboiz.jobmatch.service.MessageService;
 
@@ -29,11 +30,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
-
 @RestController
 @RequestMapping("/api/applications")
-@Tag(name = "Application Management", description = "Operations for managing job applications including creating, retrieving, and withdrawing applications")
+@Tag(name = "Application Management", description = "Operations for candidates to manage their job applications")
 public class ApplicationController {
     private final ApplicationService applicationService;
     private final MessageService messageService;
@@ -44,41 +43,38 @@ public class ApplicationController {
     }
 
     @Operation(
-            summary = "Get All Applications for Candidate",
+            summary = "Get All User Applications",
             description = """
                     Retrieve a paginated list of all job applications submitted by the authenticated candidate.
-                    
-                    This endpoint returns applications with basic information including:
-                    - Application ID and submission date
-                    - Job title and company name
-                    - Application status
-                    - CV used for the application
-                    
-                    Results are sorted by creation date (most recent first) by default.
+                   
+                    Only accessible to users with CANDIDATE role.
                     """,
             security = @SecurityRequirement(name = "Bearer Authentication")
     )
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
                     responseCode = "200",
-                    description = "Applications retrieved successfully"
+                    description = "Applications retrieved successfully",
+                    content = @Content(schema = @Schema(implementation = ApiResponse.class))
             ),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
                     responseCode = "401",
-                    description = "Unauthorized - Invalid or missing token"
+                    description = "Unauthorized - Invalid or missing token",
+                    content = @Content(schema = @Schema(implementation = ApiResponse.Error.class))
             ),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
                     responseCode = "403",
-                    description = "Forbidden - User is not a candidate"
+                    description = "Forbidden - User is not a candidate",
+                    content = @Content(schema = @Schema(implementation = ApiResponse.Error.class))
             )
     })
-    @GetMapping()
+    @GetMapping
     @PreAuthorize("hasRole('CANDIDATE')")
     public ResponseEntity<ApiResponse<Page<ApplicationResponse>>> getAllApplications(
             @Parameter(description = "Pagination parameters") Pageable pageable,
-            @AuthenticationPrincipal UserPrincipal userDetails) {
-        Candidate candidate = userDetails.getUser().getCandidate();
-        if (candidate == null) {
+            @AuthenticationPrincipal UserPrincipalAdapter userDetails) {
+        User user = userDetails.getUser();
+        if (!(user instanceof Candidate candidate)) {
             throw new AccessDeniedException(messageService.getMessage("error.authorization.candidate.required"));
         }
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSortOr(Sort.by(Sort.Direction.DESC, "createdAt")));
@@ -92,11 +88,11 @@ public class ApplicationController {
             description = """
                     Retrieve detailed information about a specific job application.
                     
-                    This endpoint returns comprehensive application details including:
-                    - Complete job information
-                    - Application status and submission date
-                    - CV details used for the application
-                    - Any additional notes or comments
+                    This endpoint returns comprehensive application data including:
+                    - Complete application timeline and status history
+                    - Job posting details and requirements
+                    - Candidate information and submitted materials
+                    - Recruiter notes and feedback (if available)
                     
                     Only the candidate who submitted the application can access these details.
                     """,
@@ -109,18 +105,13 @@ public class ApplicationController {
                     content = @Content(schema = @Schema(implementation = ApiResponse.class))
             ),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "404",
+                    description = "Application not found or access denied",
+                    content = @Content(schema = @Schema(implementation = ApiResponse.Error.class))
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
                     responseCode = "401",
                     description = "Unauthorized - Invalid or missing token",
-                    content = @Content(schema = @Schema(implementation = ApiResponse.Error.class))
-            ),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(
-                    responseCode = "403",
-                    description = "Forbidden - User is not a candidate or not the application owner",
-                    content = @Content(schema = @Schema(implementation = ApiResponse.Error.class))
-            ),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(
-                    responseCode = "404",
-                    description = "Application not found",
                     content = @Content(schema = @Schema(implementation = ApiResponse.Error.class))
             )
     })
@@ -128,27 +119,35 @@ public class ApplicationController {
     @PreAuthorize("hasRole('CANDIDATE')")
     public ResponseEntity<ApiResponse<ApplicationDetailResponse>> getApplication(
             @Parameter(description = "Application ID", required = true, example = "1")
-            @PathVariable Long id) {
-        ApplicationDetailResponse applicationResponse = applicationService.getApplication(id);
-        String successMessage = messageService.getMessage("api.success.application.retrieved");
+            @PathVariable Long id,
+            @AuthenticationPrincipal UserPrincipalAdapter userDetails) {
+        User user = userDetails.getUser();
+        if (!(user instanceof Candidate candidate)) {
+            throw new AccessDeniedException(messageService.getMessage("error.authorization.candidate.required"));
+        }
+        ApplicationDetailResponse applicationResponse = applicationService.getApplication(id, candidate);
+        String successMessage = messageService.getMessage("api.success.application.detail.retrieved");
         return ResponseEntity.ok(ApiResponse.success(successMessage, applicationResponse));
     }
 
     @Operation(
             summary = "Submit Job Application",
             description = """
-                    Submit a new job application for a specific job posting.
+                    Submit a new job application for a specific position.
                     
-                    This endpoint allows candidates to apply for jobs by providing:
-                    - Job ID to apply for
-                    - CV ID to use for the application
-                    - Optional cover letter or additional notes
+                    This endpoint allows candidates to apply for jobs by:
+                    - Selecting a job posting to apply for
+                    - Choosing which CV/resume to submit
+                    - Adding optional cover letter or notes
                     
-                    Requirements:
-                    - User must have a candidate profile
-                    - Job must be active and accepting applications
-                    - Candidate cannot apply for the same job twice
-                    - CV must belong to the candidate
+                    **Requirements:**
+                    - Must be authenticated as a candidate
+                    - Job must be currently accepting applications
+                    - Cannot apply for the same job twice
+                    - Must have at least one CV uploaded
+                    
+                    Upon successful submission, the application enters "PENDING" status
+                    and recruiters are notified of the new application.
                     """,
             security = @SecurityRequirement(name = "Bearer Authentication")
     )
@@ -159,80 +158,75 @@ public class ApplicationController {
                     content = @Content(schema = @Schema(implementation = ApiResponse.class))
             ),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "409",
+                    description = "Duplicate application or job no longer accepting applications",
+                    content = @Content(schema = @Schema(implementation = ApiResponse.Error.class))
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
                     responseCode = "400",
-                    description = "Invalid request data or duplicate application",
+                    description = "Invalid request data",
                     content = @Content(schema = @Schema(implementation = ApiResponse.Error.class))
             ),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
                     responseCode = "401",
                     description = "Unauthorized - Invalid or missing token",
                     content = @Content(schema = @Schema(implementation = ApiResponse.Error.class))
-            ),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(
-                    responseCode = "403",
-                    description = "Forbidden - User is not a candidate",
-                    content = @Content(schema = @Schema(implementation = ApiResponse.Error.class))
-            ),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(
-                    responseCode = "404",
-                    description = "Job or CV not found",
-                    content = @Content(schema = @Schema(implementation = ApiResponse.Error.class))
             )
     })
-    @PostMapping()
+    @PostMapping
     @PreAuthorize("hasRole('CANDIDATE')")
-    public ResponseEntity<ApiResponse<ApplicationResponse>> createApplication(
+    public ResponseEntity<ApiResponse<ApplicationDetailResponse>> createApplication(
             @Parameter(description = "Application request data", required = true)
             @RequestBody @Valid ApplicationRequest applicationRequest,
-            @AuthenticationPrincipal UserPrincipal userDetails) {
-        Candidate candidate = userDetails.getUser().getCandidate();
-        if (candidate == null) {
+            @AuthenticationPrincipal UserPrincipalAdapter userDetails) {
+        User user = userDetails.getUser();
+        if (!(user instanceof Candidate candidate)) {
             throw new AccessDeniedException(messageService.getMessage("error.authorization.candidate.required"));
         }
-        ApplicationResponse applicationResponse = applicationService.createApplication(applicationRequest);
-        String successMessage = messageService.getMessage("api.success.application.created");
-        return ResponseEntity.created(URI.create("/api/applications/" + applicationResponse.getId()))
-                .body(ApiResponse.success(successMessage, applicationResponse));
+        ApplicationDetailResponse applicationResponse = applicationService.createApplication(applicationRequest, candidate);
+        String successMessage = messageService.getMessage("api.success.created", "Application");
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(successMessage, applicationResponse));
     }
 
     @Operation(
-            summary = "Withdraw Job Application",
+            summary = "Withdraw Application",
             description = """
                     Withdraw a previously submitted job application.
                     
-                    This endpoint allows candidates to withdraw their applications if:
-                    - The application is still pending (not yet processed)
-                    - The application deadline has not passed
-                    - The candidate is the owner of the application
+                    This action:
+                    - Changes application status to "WITHDRAWN"
+                    - Notifies the recruiter of the withdrawal
+                    - Cannot be undone - candidates must reapply if desired
                     
-                    Once withdrawn, the application status will be updated and cannot be undone.
-                    The candidate can submit a new application if the job is still accepting applications.
+                    **Restrictions:**
+                    - Can only withdraw your own applications
+                    - Cannot withdraw applications that are already processed (ACCEPTED/REJECTED)
+                    - Cannot withdraw applications after certain deadlines (company-specific)
+                    
+                    Use this feature if you're no longer interested in the position
+                    or have accepted another offer.
                     """,
             security = @SecurityRequirement(name = "Bearer Authentication")
     )
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
-                    responseCode = "204",
-                    description = "Application withdrawn successfully"
+                    responseCode = "200",
+                    description = "Application withdrawn successfully",
+                    content = @Content(schema = @Schema(implementation = ApiResponse.class))
             ),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
-                    responseCode = "400",
-                    description = "Cannot withdraw application (already processed or deadline passed)",
+                    responseCode = "404",
+                    description = "Application not found or cannot be withdrawn",
+                    content = @Content(schema = @Schema(implementation = ApiResponse.Error.class))
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "409",
+                    description = "Application cannot be withdrawn in current status",
                     content = @Content(schema = @Schema(implementation = ApiResponse.Error.class))
             ),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
                     responseCode = "401",
                     description = "Unauthorized - Invalid or missing token",
-                    content = @Content(schema = @Schema(implementation = ApiResponse.Error.class))
-            ),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(
-                    responseCode = "403",
-                    description = "Forbidden - User is not a candidate or not the application owner",
-                    content = @Content(schema = @Schema(implementation = ApiResponse.Error.class))
-            ),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(
-                    responseCode = "404",
-                    description = "Application not found",
                     content = @Content(schema = @Schema(implementation = ApiResponse.Error.class))
             )
     })
@@ -241,8 +235,12 @@ public class ApplicationController {
     public ResponseEntity<ApiResponse<Void>> withdrawApplication(
             @Parameter(description = "Application ID to withdraw", required = true, example = "1")
             @PathVariable Long id,
-            @AuthenticationPrincipal UserPrincipal userDetails) {
-        applicationService.withdrawApplication(id, userDetails.getUser().getCandidate());
+            @AuthenticationPrincipal UserPrincipalAdapter userDetails) {
+        User user = userDetails.getUser();
+        if (!(user instanceof Candidate candidate)) {
+            throw new AccessDeniedException(messageService.getMessage("error.authorization.candidate.required"));
+        }
+        applicationService.withdrawApplication(id, candidate);
         String successMessage = messageService.getMessage("api.success.application.withdrawn");
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success(successMessage, null));
     }

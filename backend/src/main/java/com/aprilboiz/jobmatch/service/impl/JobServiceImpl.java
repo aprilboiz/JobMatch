@@ -3,7 +3,6 @@ package com.aprilboiz.jobmatch.service.impl;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import com.aprilboiz.jobmatch.enumerate.JobStatus;
 import com.aprilboiz.jobmatch.enumerate.JobType;
@@ -21,57 +20,51 @@ import org.springframework.transaction.annotation.Transactional;
 import com.aprilboiz.jobmatch.dto.request.JobRequest;
 import com.aprilboiz.jobmatch.dto.response.ApplicationResponse;
 import com.aprilboiz.jobmatch.dto.response.JobResponse;
-import com.aprilboiz.jobmatch.exception.DuplicateException;
 import com.aprilboiz.jobmatch.exception.NotFoundException;
 import com.aprilboiz.jobmatch.mapper.ApplicationMapper;
 import com.aprilboiz.jobmatch.model.Company;
-import com.aprilboiz.jobmatch.model.Job;
-import com.aprilboiz.jobmatch.model.Recruiter;
-import com.aprilboiz.jobmatch.model.UserPrincipal;
+import com.aprilboiz.jobmatch.model.*;
+import com.aprilboiz.jobmatch.repository.CompanyRepository;
 import com.aprilboiz.jobmatch.repository.JobRepository;
 import com.aprilboiz.jobmatch.service.JobService;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
-public class JobServiceImpl implements JobService{
+@RequiredArgsConstructor
+public class JobServiceImpl implements JobService {
     private final JobRepository jobRepository;
     private final ApplicationMapper applicationMapper;
     private final ApplicationService applicationService;
     private final MessageService messageService;
 
-    public JobServiceImpl(JobRepository jobRepository, ApplicationMapper applicationMapper, 
-                         ApplicationService applicationService, MessageService messageService) {
-        this.jobRepository = jobRepository;
-        this.applicationMapper = applicationMapper;
-        this.applicationService = applicationService;
-        this.messageService = messageService;
-    }
-
     @Override
     @Transactional(rollbackFor = Exception.class)
     public JobResponse createJob(JobRequest jobRequest) {
-        Optional<Job> existingJob = jobRepository.findByTitleIgnoreCase(jobRequest.getTitle());
-        if (existingJob.isPresent()) {
-            throw new DuplicateException(messageService.getMessage("error.duplicate.job.title", jobRequest.getTitle()));
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserPrincipalAdapter userPrincipalAdapter = (UserPrincipalAdapter) auth.getPrincipal();
+        User user = userPrincipalAdapter.getUser();
+        if (!(user instanceof Recruiter owner)) {
+            throw new SecurityException(messageService.getMessage("error.authorization.recruiter.required"));
         }
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
-        Recruiter owner = userPrincipal.getUser().getRecruiter();
         Company ownerCompany = owner.getCompany();
 
-        Job job = Job.builder()
-            .title(jobRequest.getTitle())
-            .jobType(jobRequest.getJobType())
-            .salary(jobRequest.getSalary())
-            .numberOfOpenings(jobRequest.getNumberOfOpenings())
-            .applicationDeadline(jobRequest.getApplicationDeadline())
-            .description(jobRequest.getDescription())
-            .location(jobRequest.getLocation())
-            .company(ownerCompany)
-            .recruiter(owner)
-            .build();
+        Job newJob = Job.builder()
+                .title(jobRequest.getTitle())
+                .description(jobRequest.getDescription())
+                .location(jobRequest.getLocation())
+                .salary(jobRequest.getSalary())
+                .jobType(jobRequest.getJobType())
+                .numberOfOpenings(jobRequest.getOpenings())
+                .applicationDeadline(jobRequest.getApplicationDeadline())
+                .recruiter(owner)
+                .company(ownerCompany)
+                .build();
 
-        return applicationMapper.jobToJobResponse(jobRepository.save(job));
+        jobRepository.save(newJob);
+
+        return applicationMapper.jobToJobResponse(newJob);
     }
 
     @Override
@@ -84,22 +77,32 @@ public class JobServiceImpl implements JobService{
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public JobResponse updateJob(Long id, JobRequest jobRequest) {
-        Job job = jobRepository.findById(id).orElseThrow(() -> 
-            new NotFoundException(messageService.getMessage("error.not.found.job", id)));
+    public JobResponse updateJob(Long jobId, JobRequest jobRequest) {
+        Job existingJob = jobRepository.findById(jobId)
+                .orElseThrow(() -> new NotFoundException(messageService.getMessage("error.not.found.job", jobId)));
 
-        if (!checkJobOwnership(job)) {
-            throw new AccessDeniedException(messageService.getMessage("error.permission.job.update"));
+        if (!isUserCanModifyJob(existingJob)) {
+            throw new AccessDeniedException(messageService.getMessage("error.authorization.job.modify"));
         }
 
-        job.setTitle(jobRequest.getTitle());
-        job.setJobType(jobRequest.getJobType());
-        job.setSalary(jobRequest.getSalary());
-        job.setNumberOfOpenings(jobRequest.getNumberOfOpenings());
-        job.setApplicationDeadline(jobRequest.getApplicationDeadline());
-        job.setDescription(jobRequest.getDescription());
-        job.setLocation(jobRequest.getLocation());
-        return applicationMapper.jobToJobResponse(jobRepository.save(job));
+        UserPrincipalAdapter userPrincipalAdapter = (UserPrincipalAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userPrincipalAdapter.getUser();
+        if (!(user instanceof Recruiter recruiter)) {
+            throw new AccessDeniedException(messageService.getMessage("error.authorization.recruiter.required"));
+        }
+
+        if (!existingJob.getRecruiter().getId().equals(recruiter.getId()) && !existingJob.getCompany().getId().equals(recruiter.getCompany().getId())) {
+            throw new AccessDeniedException(messageService.getMessage("error.authorization.job.modify"));
+        }
+
+        existingJob.setTitle(jobRequest.getTitle());
+        existingJob.setJobType(jobRequest.getJobType());
+        existingJob.setSalary(jobRequest.getSalary());
+        existingJob.setNumberOfOpenings(jobRequest.getOpenings());
+        existingJob.setApplicationDeadline(jobRequest.getApplicationDeadline());
+        existingJob.setDescription(jobRequest.getDescription());
+        existingJob.setLocation(jobRequest.getLocation());
+        return applicationMapper.jobToJobResponse(jobRepository.save(existingJob));
     }
 
     @Override
@@ -108,8 +111,8 @@ public class JobServiceImpl implements JobService{
         Job job = jobRepository.findById(id).orElseThrow(() -> 
             new NotFoundException(messageService.getMessage("error.not.found.job", id)));
 
-        if (!checkJobOwnership(job)) {
-            throw new AccessDeniedException(messageService.getMessage("error.permission.job.delete"));
+        if (!isUserCanModifyJob(job)) {
+            throw new AccessDeniedException(messageService.getMessage("error.authorization.job.modify"));
         }
 
         jobRepository.delete(job);
@@ -142,16 +145,16 @@ public class JobServiceImpl implements JobService{
     @Override
     @Transactional(readOnly = true)
     public Page<ApplicationResponse> getJobApplications(Long jobId, PageRequest pageRequest) {
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Recruiter recruiter = userPrincipal.getUser().getRecruiter();
-        if (recruiter == null) {
+        UserPrincipalAdapter userPrincipalAdapter = (UserPrincipalAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userPrincipalAdapter.getUser();
+        if (!(user instanceof Recruiter recruiter)) {
             throw new AccessDeniedException(messageService.getMessage("error.authorization.recruiter.required"));
         }
 
         Job existingJob = jobRepository.findById(jobId).orElseThrow(() -> 
             new NotFoundException(messageService.getMessage("error.not.found.job", jobId)));
         if (!existingJob.getRecruiter().getId().equals(recruiter.getId()) && !existingJob.getCompany().getId().equals(recruiter.getCompany().getId())) {
-            throw new AccessDeniedException(messageService.getMessage("error.permission.job.view"));
+            throw new AccessDeniedException(messageService.getMessage("error.authorization.job.view"));
         }
 
         Page<ApplicationResponse> responses = applicationService.getAllApplications(existingJob, pageRequest);
@@ -194,10 +197,13 @@ public class JobServiceImpl implements JobService{
         return jobRepository.findDistinctCompanyNames();
     }
 
-    private Boolean checkJobOwnership(Job job) {
+    private boolean isUserCanModifyJob(Job job) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
-        Recruiter owner = userPrincipal.getUser().getRecruiter();
+        UserPrincipalAdapter userPrincipalAdapter = (UserPrincipalAdapter) auth.getPrincipal();
+        User user = userPrincipalAdapter.getUser();
+        if (!(user instanceof Recruiter owner)) {
+            return false;
+        }
         Company ownerCompany = owner.getCompany();
         return job.getRecruiter().getId().equals(owner.getId()) || job.getCompany().getId().equals(ownerCompany.getId());
     }

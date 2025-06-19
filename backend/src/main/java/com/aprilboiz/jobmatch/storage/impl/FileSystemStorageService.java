@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.core.io.Resource;
@@ -36,7 +37,7 @@ public class FileSystemStorageService implements StorageService {
         try {
             Files.createDirectories(this.rootLocation);
         } catch (IOException e) {
-            throw new StorageException(messageService.getMessage("storage.failed.create.directory"), e);
+            throw new StorageException(messageService.getMessage("storage.failed", "create directory"), e);
         }
     }
 
@@ -45,7 +46,7 @@ public class FileSystemStorageService implements StorageService {
         try {
             Files.delete(rootLocation.resolve(fileName));
         } catch (IOException e) {
-            throw new StorageException(messageService.getMessage("storage.failed.delete.file", fileName), e);
+            throw new StorageException(messageService.getMessage("storage.failed", "delete file " + fileName), e);
         }
     }
 
@@ -62,7 +63,7 @@ public class FileSystemStorageService implements StorageService {
                     .map(rootLocation::relativize)
                     .collect(Collectors.toList());
         } catch (IOException e) {
-            throw new StorageException(messageService.getMessage("storage.failed.read.files"), e);
+            throw new StorageException(messageService.getMessage("storage.failed", "read stored files"), e);
         }
     }
 
@@ -72,7 +73,7 @@ public class FileSystemStorageService implements StorageService {
             delete(oldFileName);
             return store(newFile);
         } catch (Exception e) {
-            throw new StorageException(messageService.getMessage("storage.failed.replace.file", oldFileName), e);
+            throw new StorageException(messageService.getMessage("storage.failed", "replace file " + oldFileName), e);
         }
     }
 
@@ -80,14 +81,14 @@ public class FileSystemStorageService implements StorageService {
     public String store(MultipartFile file) {
         try {
 			if (file.isEmpty()) {
-				throw new StorageException(messageService.getMessage("storage.failed.store.empty"));
+				throw new StorageException(messageService.getMessage("storage.failed", "store empty file"));
 			}
 			Path destinationFile = this.rootLocation.resolve(
-					Paths.get(file.getOriginalFilename()))
+					Paths.get(Objects.requireNonNull(file.getOriginalFilename())))
 					.normalize().toAbsolutePath();
 			if (!destinationFile.getParent().equals(this.rootLocation.toAbsolutePath())) {
 				// This is a security check
-				throw new StorageException(messageService.getMessage("storage.failed.store.outside.directory"));
+				throw new StorageException(messageService.getMessage("storage.failed", "store file outside current directory"));
 			}
 			try (InputStream inputStream = file.getInputStream()) {
 				Files.copy(inputStream, destinationFile,
@@ -96,8 +97,8 @@ public class FileSystemStorageService implements StorageService {
             return destinationFile.toString();
 		}
 		catch (IOException e) {
-			throw new StorageException(messageService.getMessage("storage.failed.store.file"), e);
-		}
+			throw new StorageException(messageService.getMessage("storage.failed", "store file"), e);
+        }
     }
 
     @Override
