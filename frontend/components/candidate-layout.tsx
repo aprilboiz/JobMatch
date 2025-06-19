@@ -18,7 +18,7 @@ import {
   Bell,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation"
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
 
 const navigation = [
@@ -35,7 +35,7 @@ function LogoutButton() {
       await logout();
       console.log("Đăng xuất thành công");
       // router.push("/auth/login");
-      window.location.href = "http://localhost:6789"
+      window.location.href = "http://localhost:6789";
     } catch (error) {
       console.error("Lỗi khi đăng xuất:", error);
     }
@@ -59,6 +59,7 @@ export default function CandidateLayout({
 }) {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { user } = useAuth();
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -173,10 +174,15 @@ export default function CandidateLayout({
               </Button>
               <div className="flex items-center space-x-2">
                 <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center">
-                  <span className="text-sm font-medium text-white">UV</span>
+                  <span className="text-sm font-medium text-white">
+                    {user?.email
+                      ? user.email.charAt(0).toUpperCase() +
+                        user.email.charAt(1).toUpperCase()
+                      : "UV"}
+                  </span>
                 </div>
                 <span className="text-sm font-medium text-gray-700">
-                  Ứng viên
+                  {user?.email?.split("@")[0] || "Ứng viên"}
                 </span>
               </div>
             </div>

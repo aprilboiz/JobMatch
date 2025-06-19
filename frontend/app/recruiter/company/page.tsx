@@ -16,7 +16,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Building, Edit, Save, Upload, Users, Calendar, AlertTriangle } from "lucide-react";
+import {
+  Building,
+  Edit,
+  Save,
+  Upload,
+  Users,
+  Calendar,
+  AlertTriangle,
+} from "lucide-react";
 import { recruiterApi } from "@/lib/api/recruiter";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { ErrorMessage } from "@/components/ui/error-message";
@@ -71,7 +79,7 @@ export default function RecruiterCompany() {
     console.log("Initializing empty company form (GET endpoint not available)");
     setLoading(false);
     setError(null);
-    
+
     // Set empty company data
     const emptyCompany: CompanyResponse = {
       id: 0,
@@ -84,7 +92,7 @@ export default function RecruiterCompany() {
       industry: "",
       description: "",
     };
-    
+
     setCompanyData(emptyCompany);
     setFormData({
       name: "",
@@ -97,8 +105,6 @@ export default function RecruiterCompany() {
       description: "",
     });
   };
-
-
 
   const handleSave = async () => {
     // Basic validation
@@ -113,7 +119,7 @@ export default function RecruiterCompany() {
 
     if (!formData.email || !formData.email.trim()) {
       toast({
-        title: "Lỗi", 
+        title: "Lỗi",
         description: "Email không được để trống",
         variant: "destructive",
       });
@@ -281,8 +287,9 @@ export default function RecruiterCompany() {
         <Alert className="border-amber-200 bg-amber-50">
           <AlertTriangle className="h-4 w-4 text-amber-600" />
           <AlertDescription className="text-amber-800">
-            <strong>Lưu ý:</strong> Nếu bạn gặp lỗi khi lưu thông tin công ty, có thể tài khoản của bạn chưa được gán công ty. 
-            Vui lòng liên hệ quản trị viên để được hỗ trợ thiết lập thông tin công ty.
+            <strong>Lưu ý:</strong> Nếu bạn gặp lỗi khi lưu thông tin công ty,
+            có thể tài khoản của bạn chưa được gán công ty. Vui lòng liên hệ
+            quản trị viên để được hỗ trợ thiết lập thông tin công ty.
           </AlertDescription>
         </Alert>
 
@@ -292,18 +299,18 @@ export default function RecruiterCompany() {
               <Building className="mr-2 h-4 w-4" />
               Thông tin cơ bản
             </TabsTrigger>
-            <TabsTrigger value="culture">
+            {/* <TabsTrigger value="culture">
               <Users className="mr-2 h-4 w-4" />
               Văn hóa công ty
-            </TabsTrigger>
-            <TabsTrigger value="benefits">
+            </TabsTrigger> */}
+            {/* <TabsTrigger value="benefits">
               <Calendar className="mr-2 h-4 w-4" />
               Phúc lợi
             </TabsTrigger>
             <TabsTrigger value="media">
               <Upload className="mr-2 h-4 w-4" />
               Hình ảnh
-            </TabsTrigger>
+            </TabsTrigger> */}
           </TabsList>
 
           {/* Basic Information */}
@@ -491,10 +498,10 @@ export default function RecruiterCompany() {
                       <span className="font-semibold">156</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">
+                      {/* <span className="text-sm text-gray-600">
                         Lượt xem công ty
                       </span>
-                      <span className="font-semibold">2,345</span>
+                      <span className="font-semibold">2,345</span> */}
                     </div>
                   </CardContent>
                 </Card>
@@ -544,7 +551,7 @@ export default function RecruiterCompany() {
                 <CardContent>
                   <div className="space-y-4">
                     <div className="flex flex-wrap gap-2">
-                      {([]).map((value, index) => (
+                      {[].map((value, index) => (
                         <Badge
                           key={index}
                           variant="secondary"
@@ -577,11 +584,7 @@ export default function RecruiterCompany() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Textarea
-                    rows={5}
-                    defaultValue=""
-                    disabled={!isEditing}
-                  />
+                  <Textarea rows={5} defaultValue="" disabled={!isEditing} />
                 </CardContent>
               </Card>
             </div>
@@ -599,7 +602,7 @@ export default function RecruiterCompany() {
               <CardContent>
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {([]).map((benefit, index) => (
+                    {[].map((benefit, index) => (
                       <div
                         key={index}
                         className="flex items-center justify-between p-3 border rounded-lg"

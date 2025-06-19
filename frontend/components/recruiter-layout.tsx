@@ -18,8 +18,8 @@ import {
   Bell,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
+import { useRouter } from "next/navigation";
 
 const navigation = [
   { name: "Dashboard", href: "/recruiter/dashboard", icon: Home },
@@ -59,6 +59,7 @@ export default function RecruiterLayout({
 }) {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { user } = useAuth();
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -170,13 +171,17 @@ export default function RecruiterLayout({
             <div className="flex items-center space-x-4 ml-auto">
               <Button variant="ghost" size="sm">
                 <Bell className="h-5 w-5" />
-              </Button>
-              <div className="flex items-center space-x-2">
+              </Button>              <div className="flex items-center space-x-2">
                 <div className="h-8 w-8 rounded-full bg-green-600 flex items-center justify-center">
-                  <span className="text-sm font-medium text-white">NTD</span>
+                  <span className="text-sm font-medium text-white">
+                    {user?.email 
+                      ? user.email.charAt(0).toUpperCase() + user.email.charAt(1).toUpperCase()
+                      : 'NTD'
+                    }
+                  </span>
                 </div>
                 <span className="text-sm font-medium text-gray-700">
-                  Nhà tuyển dụng
+                  {user?.email?.split('@')[0] || 'Nhà tuyển dụng'}
                 </span>
               </div>
             </div>
