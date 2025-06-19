@@ -22,6 +22,6 @@ public class ApplicationRequest {
             example = "1"
     )
     @NotNull(message = "{" + ValidationMessages.CV_ID_REQUIRED + "}")
-    @Positive(message = "{" + ValidationMessages.ID_POSITIVE + "}")
+    @Positive(message = "{" + ValidationMessages.CV_ID_POSITIVE + "}")
     private Long cvId;
 }

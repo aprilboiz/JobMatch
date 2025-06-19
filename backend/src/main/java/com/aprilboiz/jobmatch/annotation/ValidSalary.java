@@ -13,7 +13,6 @@ import java.lang.annotation.Target;
 
 /**
  * Custom validation annotation to ensure salary data consistency based on salary type.
- * 
  * Rules:
  * - FIXED: minSalary required, maxSalary optional (if provided, must equal minSalary)
  * - RANGE: both minSalary and maxSalary required, maxSalary >= minSalary

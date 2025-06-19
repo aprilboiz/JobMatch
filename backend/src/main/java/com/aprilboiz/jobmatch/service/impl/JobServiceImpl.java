@@ -7,7 +7,6 @@ import java.util.List;
 import com.aprilboiz.jobmatch.dto.SalaryDto;
 import com.aprilboiz.jobmatch.enumerate.JobStatus;
 import com.aprilboiz.jobmatch.enumerate.JobType;
-import com.aprilboiz.jobmatch.enumerate.SalaryType;
 import com.aprilboiz.jobmatch.service.ApplicationService;
 import com.aprilboiz.jobmatch.service.MessageService;
 import org.springframework.data.domain.Page;
@@ -26,7 +25,6 @@ import com.aprilboiz.jobmatch.exception.NotFoundException;
 import com.aprilboiz.jobmatch.mapper.ApplicationMapper;
 import com.aprilboiz.jobmatch.model.Company;
 import com.aprilboiz.jobmatch.model.*;
-import com.aprilboiz.jobmatch.repository.CompanyRepository;
 import com.aprilboiz.jobmatch.repository.JobRepository;
 import com.aprilboiz.jobmatch.service.JobService;
 

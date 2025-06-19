@@ -45,7 +45,7 @@ public class JobRequest {
             example = "2"
     )
     @NotNull(message = "{" + ValidationMessages.JOB_OPENINGS_REQUIRED + "}")
-    @Positive(message = "{" + ValidationMessages.POSITIVE + "}")
+    @Positive(message = "{" + ValidationMessages.OPENINGS_POSITIVE + "}")
     private Integer openings;
     
     @Schema(
