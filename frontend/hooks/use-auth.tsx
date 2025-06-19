@@ -9,7 +9,10 @@ import { userApi } from "@/lib/api/user";
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (email: string, password: string) => Promise<AuthResponse & { user?: User }>;
+  login: (
+    email: string,
+    password: string
+  ) => Promise<AuthResponse & { user?: User }>;
   register: (data: {
     fullName: string;
     email: string;

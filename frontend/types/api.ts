@@ -132,3 +132,27 @@ export interface CreateJobRequest {
   skills: string[];
   deadline: string;
 }
+
+// Company Types (Based on backend CompanyResponse and CompanyRequest)
+export interface CompanyResponse {
+  id: number;
+  name: string;
+  website?: string;
+  phoneNumber?: string;
+  email?: string;
+  address: string;
+  companySize: string;
+  industry: string;
+  description?: string;
+}
+
+export interface CompanyRequest {
+  name: string;
+  website?: string;
+  phoneNumber?: string;
+  email?: string;
+  address: string;
+  companySize: string;
+  industry: string;
+  description?: string;
+}

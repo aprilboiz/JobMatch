@@ -1,45 +1,215 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import RecruiterLayout from "@/components/recruiter-layout"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Badge } from "@/components/ui/badge"
-import { Building, Edit, Save, Upload, Users, Calendar } from "lucide-react"
+import { useState, useEffect } from "react";
+import RecruiterLayout from "@/components/recruiter-layout";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Building, Edit, Save, Upload, Users, Calendar, AlertTriangle } from "lucide-react";
+import { recruiterApi } from "@/lib/api/recruiter";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { ErrorMessage } from "@/components/ui/error-message";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/use-auth";
+import { useRouter } from "next/navigation";
+import type { CompanyResponse, CompanyRequest } from "@/types/api";
 
 export default function RecruiterCompany() {
-  const [isEditing, setIsEditing] = useState(false)
+  const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [companyData, setCompanyData] = useState<CompanyResponse | null>(null);
+  const [formData, setFormData] = useState<CompanyRequest>({
+    name: "",
+    website: "",
+    phoneNumber: "",
+    email: "",
+    address: "",
+    companySize: "",
+    industry: "",
+    description: "",
+  });
 
-  const companyInfo = {
-    name: "TechCorp Vietnam",
-    industry: "Công nghệ thông tin",
-    size: "100-500 nhân viên",
-    founded: "2015",
-    website: "https://techcorp.vn",
-    email: "hr@techcorp.vn",
-    phone: "024-1234-5678",
-    address: "Tầng 10, Tòa nhà ABC, 123 Đường XYZ, Cầu Giấy, Hà Nội",
-    description:
-      "TechCorp Vietnam là công ty công nghệ hàng đầu chuyên phát triển các giải pháp phần mềm cho doanh nghiệp. Chúng tôi tập trung vào việc tạo ra những sản phẩm công nghệ tiên tiến và môi trường làm việc năng động cho đội ngũ nhân viên.",
-    mission: "Tạo ra những giải pháp công nghệ đột phá giúp doanh nghiệp phát triển bền vững",
-    vision: "Trở thành công ty công nghệ hàng đầu Việt Nam trong lĩnh vực enterprise software",
-    values: ["Đổi mới sáng tạo", "Làm việc nhóm", "Chất lượng cao", "Phát triển bền vững"],
-    benefits: [
-      "Lương thưởng cạnh tranh",
-      "Bảo hiểm sức khỏe toàn diện",
-      "Môi trường làm việc hiện đại",
-      "Cơ hội đào tạo và phát triển",
-      "Team building định kỳ",
-      "Flexible working time",
-      "Work from home",
-      "Nghỉ phép có lương",
-    ],
-    culture:
-      "Văn hóa công ty tập trung vào sự đổi mới, hợp tác và phát triển cá nhân. Chúng tôi khuyến khích nhân viên học hỏi, thử nghiệm và đóng góp ý tưởng mới.",
+  const { user, loading: authLoading } = useAuth();
+  const router = useRouter();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    // Wait for auth to load
+    if (authLoading) return;
+
+    // Check if user is authenticated and is recruiter
+    if (!user) {
+      console.log("User not authenticated, redirecting to login");
+      router.push("/auth/login");
+      return;
+    }
+
+    if (user.role.roleName !== "RECRUITER") {
+      console.log("User is not a recruiter, redirecting");
+      router.push("/");
+      return;
+    }
+
+    // Since backend doesn't have GET endpoint yet, we'll start with empty form
+    initializeEmptyForm();
+  }, [user, authLoading, router]);
+
+  const initializeEmptyForm = () => {
+    console.log("Initializing empty company form (GET endpoint not available)");
+    setLoading(false);
+    setError(null);
+    
+    // Set empty company data
+    const emptyCompany: CompanyResponse = {
+      id: 0,
+      name: "",
+      website: "",
+      phoneNumber: "",
+      email: "",
+      address: "",
+      companySize: "",
+      industry: "",
+      description: "",
+    };
+    
+    setCompanyData(emptyCompany);
+    setFormData({
+      name: "",
+      website: "",
+      phoneNumber: "",
+      email: "",
+      address: "",
+      companySize: "",
+      industry: "",
+      description: "",
+    });
+  };
+
+
+
+  const handleSave = async () => {
+    // Basic validation
+    if (!formData.name.trim()) {
+      toast({
+        title: "Lỗi",
+        description: "Tên công ty không được để trống",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!formData.email || !formData.email.trim()) {
+      toast({
+        title: "Lỗi", 
+        description: "Email không được để trống",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email.trim())) {
+      toast({
+        title: "Lỗi",
+        description: "Email không hợp lệ",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      setSaving(true);
+      console.log("Saving company profile:", formData);
+
+      await recruiterApi.updateCompanyProfile(formData);
+
+      // Update local state with saved data since we don't have GET endpoint
+      const updatedCompany: CompanyResponse = {
+        id: companyData?.id || 0,
+        ...formData,
+      };
+      setCompanyData(updatedCompany);
+
+      setIsEditing(false);
+      toast({
+        title: "Thành công",
+        description: "Thông tin công ty đã được cập nhật",
+      });
+    } catch (error) {
+      console.error("Failed to save company profile:", error);
+      toast({
+        title: "Lỗi",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Không thể cập nhật thông tin công ty",
+        variant: "destructive",
+      });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleInputChange = (field: keyof CompanyRequest, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  // Show loading while authentication is being checked
+  if (authLoading) {
+    return (
+      <RecruiterLayout>
+        <div className="flex justify-center items-center min-h-[400px]">
+          <LoadingSpinner size="lg" />
+        </div>
+      </RecruiterLayout>
+    );
+  }
+
+  if (loading) {
+    return (
+      <RecruiterLayout>
+        <div className="flex justify-center items-center min-h-[400px]">
+          <LoadingSpinner size="lg" />
+        </div>
+      </RecruiterLayout>
+    );
+  }
+
+  if (error) {
+    return (
+      <RecruiterLayout>
+        <ErrorMessage message={error} onRetry={initializeEmptyForm} />
+      </RecruiterLayout>
+    );
+  }
+
+  // Don't show "not found" message since we start with empty form
+  // when GET endpoint is not available
+  if (!companyData) {
+    return (
+      <RecruiterLayout>
+        <div className="flex justify-center items-center min-h-[400px]">
+          <LoadingSpinner size="lg" />
+        </div>
+      </RecruiterLayout>
+    );
   }
 
   return (
@@ -48,23 +218,73 @@ export default function RecruiterCompany() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Thông tin công ty</h1>
+            <h1 className="text-2xl font-bold text-gray-900">
+              Thông tin công ty
+            </h1>
             <p className="text-gray-600">Quản lý thông tin và hồ sơ công ty</p>
           </div>
-          <Button onClick={() => setIsEditing(!isEditing)} variant={isEditing ? "default" : "outline"}>
-            {isEditing ? (
-              <>
-                <Save className="mr-2 h-4 w-4" />
-                Lưu thay đổi
-              </>
-            ) : (
-              <>
-                <Edit className="mr-2 h-4 w-4" />
-                Chỉnh sửa
-              </>
+          <div className="flex space-x-2">
+            {isEditing && (
+              <Button
+                onClick={() => {
+                  setIsEditing(false);
+                  // Reset form data to original company data
+                  setFormData({
+                    name: companyData.name || "",
+                    website: companyData.website || "",
+                    phoneNumber: companyData.phoneNumber || "",
+                    email: companyData.email || "",
+                    address: companyData.address || "",
+                    companySize: companyData.companySize || "",
+                    industry: companyData.industry || "",
+                    description: companyData.description || "",
+                  });
+                }}
+                variant="outline"
+                disabled={saving}
+              >
+                Hủy
+              </Button>
             )}
-          </Button>
+            <Button
+              onClick={() => {
+                if (isEditing) {
+                  handleSave();
+                } else {
+                  setIsEditing(true);
+                }
+              }}
+              variant={isEditing ? "default" : "outline"}
+              disabled={saving}
+            >
+              {saving ? (
+                <>
+                  <LoadingSpinner size="sm" className="mr-2" />
+                  Đang lưu...
+                </>
+              ) : isEditing ? (
+                <>
+                  <Save className="mr-2 h-4 w-4" />
+                  Lưu thay đổi
+                </>
+              ) : (
+                <>
+                  <Edit className="mr-2 h-4 w-4" />
+                  Chỉnh sửa
+                </>
+              )}
+            </Button>
+          </div>
         </div>
+
+        {/* Alert about company setup */}
+        <Alert className="border-amber-200 bg-amber-50">
+          <AlertTriangle className="h-4 w-4 text-amber-600" />
+          <AlertDescription className="text-amber-800">
+            <strong>Lưu ý:</strong> Nếu bạn gặp lỗi khi lưu thông tin công ty, có thể tài khoản của bạn chưa được gán công ty. 
+            Vui lòng liên hệ quản trị viên để được hỗ trợ thiết lập thông tin công ty.
+          </AlertDescription>
+        </Alert>
 
         <Tabs defaultValue="basic" className="space-y-6">
           <TabsList className="grid w-full grid-cols-4">
@@ -93,25 +313,65 @@ export default function RecruiterCompany() {
                 <Card>
                   <CardHeader>
                     <CardTitle>Thông tin công ty</CardTitle>
-                    <CardDescription>Thông tin cơ bản về công ty</CardDescription>
+                    <CardDescription>
+                      Thông tin cơ bản về công ty
+                    </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="companyName">Tên công ty</Label>
-                        <Input id="companyName" defaultValue={companyInfo.name} disabled={!isEditing} />
+                        <Input
+                          id="companyName"
+                          value={isEditing ? formData.name : companyData.name}
+                          onChange={(e) =>
+                            handleInputChange("name", e.target.value)
+                          }
+                          disabled={!isEditing}
+                        />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="industry">Ngành nghề</Label>
-                        <Input id="industry" defaultValue={companyInfo.industry} disabled={!isEditing} />
+                        <Input
+                          id="industry"
+                          value={
+                            isEditing ? formData.industry : companyData.industry
+                          }
+                          onChange={(e) =>
+                            handleInputChange("industry", e.target.value)
+                          }
+                          disabled={!isEditing}
+                        />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="size">Quy mô</Label>
-                        <Input id="size" defaultValue={companyInfo.size} disabled={!isEditing} />
+                        <Input
+                          id="size"
+                          value={
+                            isEditing
+                              ? formData.companySize
+                              : companyData.companySize
+                          }
+                          onChange={(e) =>
+                            handleInputChange("companySize", e.target.value)
+                          }
+                          disabled={!isEditing}
+                        />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="founded">Năm thành lập</Label>
-                        <Input id="founded" defaultValue={companyInfo.founded} disabled={!isEditing} />
+                        <Label htmlFor="website">Website</Label>
+                        <Input
+                          id="website"
+                          value={
+                            isEditing
+                              ? formData.website
+                              : companyData.website || ""
+                          }
+                          onChange={(e) =>
+                            handleInputChange("website", e.target.value)
+                          }
+                          disabled={!isEditing}
+                        />
                       </div>
                     </div>
 
@@ -120,7 +380,14 @@ export default function RecruiterCompany() {
                       <Textarea
                         id="description"
                         rows={4}
-                        defaultValue={companyInfo.description}
+                        value={
+                          isEditing
+                            ? formData.description
+                            : companyData.description || ""
+                        }
+                        onChange={(e) =>
+                          handleInputChange("description", e.target.value)
+                        }
                         disabled={!isEditing}
                       />
                     </div>
@@ -130,27 +397,56 @@ export default function RecruiterCompany() {
                 <Card>
                   <CardHeader>
                     <CardTitle>Thông tin liên hệ</CardTitle>
-                    <CardDescription>Thông tin liên hệ và địa chỉ</CardDescription>
+                    <CardDescription>
+                      Thông tin liên hệ và địa chỉ
+                    </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="website">Website</Label>
-                        <Input id="website" defaultValue={companyInfo.website} disabled={!isEditing} />
-                      </div>
-                      <div className="space-y-2">
                         <Label htmlFor="email">Email</Label>
-                        <Input id="email" type="email" defaultValue={companyInfo.email} disabled={!isEditing} />
+                        <Input
+                          id="email"
+                          type="email"
+                          value={
+                            isEditing ? formData.email : companyData.email || ""
+                          }
+                          onChange={(e) =>
+                            handleInputChange("email", e.target.value)
+                          }
+                          disabled={!isEditing}
+                        />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="phone">Số điện thoại</Label>
-                        <Input id="phone" defaultValue={companyInfo.phone} disabled={!isEditing} />
+                        <Input
+                          id="phone"
+                          value={
+                            isEditing
+                              ? formData.phoneNumber
+                              : companyData.phoneNumber || ""
+                          }
+                          onChange={(e) =>
+                            handleInputChange("phoneNumber", e.target.value)
+                          }
+                          disabled={!isEditing}
+                        />
                       </div>
                     </div>
 
                     <div className="space-y-2">
                       <Label htmlFor="address">Địa chỉ</Label>
-                      <Textarea id="address" rows={3} defaultValue={companyInfo.address} disabled={!isEditing} />
+                      <Textarea
+                        id="address"
+                        rows={3}
+                        value={
+                          isEditing ? formData.address : companyData.address
+                        }
+                        onChange={(e) =>
+                          handleInputChange("address", e.target.value)
+                        }
+                        disabled={!isEditing}
+                      />
                     </div>
                   </CardContent>
                 </Card>
@@ -183,15 +479,21 @@ export default function RecruiterCompany() {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Số JD đang tuyển</span>
+                      <span className="text-sm text-gray-600">
+                        Số JD đang tuyển
+                      </span>
                       <span className="font-semibold">8</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Tổng ứng viên</span>
+                      <span className="text-sm text-gray-600">
+                        Tổng ứng viên
+                      </span>
                       <span className="font-semibold">156</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Lượt xem công ty</span>
+                      <span className="text-sm text-gray-600">
+                        Lượt xem công ty
+                      </span>
                       <span className="font-semibold">2,345</span>
                     </div>
                   </CardContent>
@@ -206,16 +508,28 @@ export default function RecruiterCompany() {
               <Card>
                 <CardHeader>
                   <CardTitle>Tầm nhìn & Sứ mệnh</CardTitle>
-                  <CardDescription>Định hướng phát triển của công ty</CardDescription>
+                  <CardDescription>
+                    Định hướng phát triển của công ty
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="mission">Sứ mệnh</Label>
-                    <Textarea id="mission" rows={3} defaultValue={companyInfo.mission} disabled={!isEditing} />
+                    <Textarea
+                      id="mission"
+                      rows={3}
+                      defaultValue=""
+                      disabled={!isEditing}
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="vision">Tầm nhìn</Label>
-                    <Textarea id="vision" rows={3} defaultValue={companyInfo.vision} disabled={!isEditing} />
+                    <Textarea
+                      id="vision"
+                      rows={3}
+                      defaultValue=""
+                      disabled={!isEditing}
+                    />
                   </div>
                 </CardContent>
               </Card>
@@ -223,15 +537,25 @@ export default function RecruiterCompany() {
               <Card>
                 <CardHeader>
                   <CardTitle>Giá trị cốt lõi</CardTitle>
-                  <CardDescription>Những giá trị mà công ty theo đuổi</CardDescription>
+                  <CardDescription>
+                    Những giá trị mà công ty theo đuổi
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
                     <div className="flex flex-wrap gap-2">
-                      {companyInfo.values.map((value, index) => (
-                        <Badge key={index} variant="secondary" className="text-sm">
+                      {([]).map((value, index) => (
+                        <Badge
+                          key={index}
+                          variant="secondary"
+                          className="text-sm"
+                        >
                           {value}
-                          {isEditing && <button className="ml-2 hover:text-red-500">×</button>}
+                          {isEditing && (
+                            <button className="ml-2 hover:text-red-500">
+                              ×
+                            </button>
+                          )}
                         </Badge>
                       ))}
                     </div>
@@ -248,10 +572,16 @@ export default function RecruiterCompany() {
               <Card>
                 <CardHeader>
                   <CardTitle>Văn hóa công ty</CardTitle>
-                  <CardDescription>Mô tả về văn hóa và môi trường làm việc</CardDescription>
+                  <CardDescription>
+                    Mô tả về văn hóa và môi trường làm việc
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Textarea rows={5} defaultValue={companyInfo.culture} disabled={!isEditing} />
+                  <Textarea
+                    rows={5}
+                    defaultValue=""
+                    disabled={!isEditing}
+                  />
                 </CardContent>
               </Card>
             </div>
@@ -262,16 +592,25 @@ export default function RecruiterCompany() {
             <Card>
               <CardHeader>
                 <CardTitle>Phúc lợi nhân viên</CardTitle>
-                <CardDescription>Các chế độ đãi ngộ và phúc lợi</CardDescription>
+                <CardDescription>
+                  Các chế độ đãi ngộ và phúc lợi
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {companyInfo.benefits.map((benefit, index) => (
-                      <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                    {([]).map((benefit, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between p-3 border rounded-lg"
+                      >
                         <span>{benefit}</span>
                         {isEditing && (
-                          <Button variant="ghost" size="sm" className="text-red-600">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-red-600"
+                          >
                             ×
                           </Button>
                         )}
@@ -295,14 +634,20 @@ export default function RecruiterCompany() {
               <Card>
                 <CardHeader>
                   <CardTitle>Hình ảnh công ty</CardTitle>
-                  <CardDescription>Upload hình ảnh về văn phòng, team, hoạt động</CardDescription>
+                  <CardDescription>
+                    Upload hình ảnh về văn phòng, team, hoạt động
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
                     <Upload className="mx-auto h-12 w-12 text-gray-400" />
                     <div className="mt-4">
-                      <p className="text-lg font-medium text-gray-900">Upload hình ảnh</p>
-                      <p className="text-sm text-gray-600 mt-1">Kéo thả hoặc click để chọn file</p>
+                      <p className="text-lg font-medium text-gray-900">
+                        Upload hình ảnh
+                      </p>
+                      <p className="text-sm text-gray-600 mt-1">
+                        Kéo thả hoặc click để chọn file
+                      </p>
                     </div>
                     <Button className="mt-4">Chọn hình ảnh</Button>
                   </div>
@@ -312,13 +657,20 @@ export default function RecruiterCompany() {
               <Card>
                 <CardHeader>
                   <CardTitle>Video giới thiệu</CardTitle>
-                  <CardDescription>Video giới thiệu về công ty và văn hóa</CardDescription>
+                  <CardDescription>
+                    Video giới thiệu về công ty và văn hóa
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    <Input placeholder="URL video YouTube/Vimeo" disabled={!isEditing} />
+                    <Input
+                      placeholder="URL video YouTube/Vimeo"
+                      disabled={!isEditing}
+                    />
                     <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
-                      <p className="text-gray-500">Video preview sẽ hiển thị ở đây</p>
+                      <p className="text-gray-500">
+                        Video preview sẽ hiển thị ở đây
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -328,5 +680,5 @@ export default function RecruiterCompany() {
         </Tabs>
       </div>
     </RecruiterLayout>
-  )
+  );
 }
