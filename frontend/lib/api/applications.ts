@@ -17,7 +17,7 @@ export const applicationsApi = {
 
     const queryString = searchParams.toString()
     const response = await apiClient.get<ApiResponse<PaginatedResponse<ApplicationResponse>>>(
-      `/candidate/applications${queryString ? `?${queryString}` : ""}`,
+      `/applications${queryString ? `?${queryString}` : ""}`,
     )
     return response.data
   },

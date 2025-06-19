@@ -11,7 +11,45 @@ import type {
 export const authApi = {
   async register(data: RegisterRequest): Promise<void> {
     console.log("Register request:", data); // Debug log
-    await apiClient.post<ApiResponse<void>>("/auth/register", data);
+
+    // Make register request without authorization header
+    const response = await fetch(
+      `${
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api"
+      }/auth/register`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Register error response:", errorText);
+
+      let errorData;
+      try {
+        errorData = JSON.parse(errorText);
+      } catch {
+        errorData = { message: errorText || `HTTP ${response.status}` };
+      }
+
+      // Handle specific register errors
+      if (response.status === 409) {
+        throw new Error("Email đã được sử dụng. Vui lòng chọn email khác.");
+      } else if (response.status === 400) {
+        throw new Error(errorData.message || "Thông tin đăng ký không hợp lệ");
+      }
+
+      throw new Error(
+        errorData.message || "Đăng ký thất bại. Vui lòng thử lại."
+      );
+    }
+
+    console.log("Register successful");
     // Register endpoint returns void, no tokens to store
   },
 

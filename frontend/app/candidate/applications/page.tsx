@@ -7,29 +7,83 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Building, Calendar, Clock, Eye, FileText, MapPin, Star } from "lucide-react"
-import { candidateApi } from "@/lib/api/candidate"
+import { applicationsApi } from "@/lib/api/applications"
 import { LoadingSpinner } from "@/components/ui/loading-spinner"
 import { ErrorMessage } from "@/components/ui/error-message"
+import { useAuth } from "@/hooks/use-auth"
+import { useRouter } from "next/navigation"
 import type { ApplicationResponse } from "@/types/api"
 
 export default function CandidateApplications() {
   const [applications, setApplications] = useState<ApplicationResponse[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const { user, loading: authLoading } = useAuth()
+  const router = useRouter()
 
   useEffect(() => {
+    // Wait for auth to load
+    if (authLoading) return
+
+    // Check if user is authenticated
+    if (!user) {
+      console.log("User not authenticated, redirecting to login")
+      router.push("/auth/login")
+      return
+    }
+
+    // Check if user has the right role
+    if (user.role.roleName !== "CANDIDATE") {
+      console.log("User is not a candidate, redirecting")
+      router.push("/")
+      return
+    }
+
     loadApplications()
-  }, [])
+  }, [user, authLoading, router])
 
   const loadApplications = async () => {
     try {
       setLoading(true)
       setError(null)
-      const data = await candidateApi.getApplications()
-      setApplications(data)
+      console.log("Loading applications...")
+      
+      // Check if we have a valid token before making the request
+      const token = typeof window !== "undefined" ? localStorage.getItem("access_token") : null
+      console.log("Current token:", token ? `${token.substring(0, 20)}...` : "No token")
+      
+      if (!token) {
+        console.log("No token found, redirecting to login")
+        router.push("/auth/login")
+        return
+      }
+      
+      const response = await applicationsApi.getCandidateApplications()
+      console.log("Applications response received:", response)
+      
+      // Extract data from paginated response
+      const data = response.data || []
+      console.log("Applications data:", data)
+      
+      // Ensure data is an array
+      if (Array.isArray(data)) {
+        setApplications(data)
+      } else {
+        console.warn("Applications data is not an array:", data)
+        setApplications([])
+      }
     } catch (error) {
-      setError("Không thể tải danh sách ứng tuyển")
       console.error("Failed to load applications:", error)
+      
+      // Handle authentication errors specifically
+      if (error instanceof Error && error.message.includes("Authentication failed")) {
+        console.log("Authentication failed, redirecting to login")
+        router.push("/auth/login")
+        return
+      }
+      
+      setError("Không thể tải danh sách ứng tuyển")
+      setApplications([]) // Ensure applications is always an array
     } finally {
       setLoading(false)
     }
@@ -86,8 +140,12 @@ export default function CandidateApplications() {
     }
   }
 
-  const pendingApplications = applications.filter((app) => ["PENDING", "REVIEWING", "INTERVIEW"].includes(app.status))
-  const completedApplications = applications.filter((app) => ["REJECTED", "ACCEPTED"].includes(app.status))
+  const pendingApplications = Array.isArray(applications) 
+    ? applications.filter((app) => ["PENDING", "REVIEWING", "INTERVIEW"].includes(app.status))
+    : []
+  const completedApplications = Array.isArray(applications)
+    ? applications.filter((app) => ["REJECTED", "ACCEPTED"].includes(app.status))
+    : []
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("vi-VN")
@@ -178,6 +236,17 @@ export default function CandidateApplications() {
       </CardContent>
     </Card>
   )
+
+  // Show loading while authentication is being checked
+  if (authLoading) {
+    return (
+      <CandidateLayout>
+        <div className="flex justify-center items-center min-h-[400px]">
+          <LoadingSpinner size="lg" />
+        </div>
+      </CandidateLayout>
+    )
+  }
 
   if (loading) {
     return (
