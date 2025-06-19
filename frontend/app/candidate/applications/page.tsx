@@ -1,172 +1,199 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import CandidateLayout from "@/components/candidate-layout"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Building, Calendar, Clock, Eye, FileText, MapPin, Star } from "lucide-react"
-import { applicationsApi } from "@/lib/api/applications"
-import { LoadingSpinner } from "@/components/ui/loading-spinner"
-import { ErrorMessage } from "@/components/ui/error-message"
-import { useAuth } from "@/hooks/use-auth"
-import { useRouter } from "next/navigation"
-import type { ApplicationResponse } from "@/types/api"
+import { useState, useEffect } from "react";
+import CandidateLayout from "@/components/candidate-layout";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Building,
+  Calendar,
+  Clock,
+  Eye,
+  FileText,
+  MapPin,
+  Star,
+} from "lucide-react";
+import { applicationsApi } from "@/lib/api/applications";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { ErrorMessage } from "@/components/ui/error-message";
+import { useAuth } from "@/hooks/use-auth";
+import { useRouter } from "next/navigation";
+import type { ApplicationResponse } from "@/types/api";
 
 export default function CandidateApplications() {
-  const [applications, setApplications] = useState<ApplicationResponse[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const { user, loading: authLoading } = useAuth()
-  const router = useRouter()
+  const [applications, setApplications] = useState<ApplicationResponse[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const { user, loading: authLoading } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     // Wait for auth to load
-    if (authLoading) return
+    if (authLoading) return;
 
     // Check if user is authenticated
     if (!user) {
-      console.log("User not authenticated, redirecting to login")
-      router.push("/auth/login")
-      return
+      console.log("User not authenticated, redirecting to login");
+      router.push("/auth/login");
+      return;
     }
 
     // Check if user has the right role
     if (user.role.roleName !== "CANDIDATE") {
-      console.log("User is not a candidate, redirecting")
-      router.push("/")
-      return
+      console.log("User is not a candidate, redirecting");
+      router.push("/");
+      return;
     }
 
-    loadApplications()
-  }, [user, authLoading, router])
+    loadApplications();
+  }, [user, authLoading, router]);
 
   const loadApplications = async () => {
     try {
-      setLoading(true)
-      setError(null)
-      console.log("Loading applications...")
-      
+      setLoading(true);
+      setError(null);
+      console.log("Loading applications...");
+
       // Check if we have a valid token before making the request
-      const token = typeof window !== "undefined" ? localStorage.getItem("access_token") : null
-      console.log("Current token:", token ? `${token.substring(0, 20)}...` : "No token")
-      
+      const token =
+        typeof window !== "undefined"
+          ? localStorage.getItem("access_token")
+          : null;
+      console.log(
+        "Current token:",
+        token ? `${token.substring(0, 20)}...` : "No token"
+      );
+
       if (!token) {
-        console.log("No token found, redirecting to login")
-        router.push("/auth/login")
-        return
+        console.log("No token found, redirecting to login");
+        router.push("/auth/login");
+        return;
       }
-      
-      const response = await applicationsApi.getCandidateApplications()
-      console.log("Applications response received:", response)
-      
+
+      const response = await applicationsApi.getCandidateApplications();
+      console.log("Applications response received:", response);
+
       // Extract data from paginated response
-      const data = response.data || []
-      console.log("Applications data:", data)
-      
+      const data = response.data || [];
+      console.log("Applications data:", data);
+
       // Ensure data is an array
       if (Array.isArray(data)) {
-        setApplications(data)
+        setApplications(data);
       } else {
-        console.warn("Applications data is not an array:", data)
-        setApplications([])
+        console.warn("Applications data is not an array:", data);
+        setApplications([]);
       }
     } catch (error) {
-      console.error("Failed to load applications:", error)
-      
+      console.error("Failed to load applications:", error);
+
       // Handle authentication errors specifically
-      if (error instanceof Error && error.message.includes("Authentication failed")) {
-        console.log("Authentication failed, redirecting to login")
-        router.push("/auth/login")
-        return
+      if (
+        error instanceof Error &&
+        error.message.includes("Authentication failed")
+      ) {
+        console.log("Authentication failed, redirecting to login");
+        router.push("/auth/login");
+        return;
       }
-      
-      setError("Không thể tải danh sách ứng tuyển")
-      setApplications([]) // Ensure applications is always an array
+
+      setError("Không thể tải danh sách ứng tuyển");
+      setApplications([]); // Ensure applications is always an array
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const getStatusColor = (status: ApplicationResponse["status"]) => {
     switch (status) {
       case "PENDING":
-        return "secondary"
+        return "secondary";
       case "REVIEWING":
-        return "default"
+        return "default";
       case "INTERVIEW":
-        return "default"
+        return "default";
       case "REJECTED":
-        return "destructive"
+        return "destructive";
       case "ACCEPTED":
-        return "default"
+        return "default";
       default:
-        return "secondary"
+        return "secondary";
     }
-  }
+  };
 
   const getStatusText = (status: ApplicationResponse["status"]) => {
     switch (status) {
       case "PENDING":
-        return "Chờ xử lý"
+        return "Chờ xử lý";
       case "REVIEWING":
-        return "Đang xem xét"
+        return "Đang xem xét";
       case "INTERVIEW":
-        return "Phỏng vấn"
+        return "Phỏng vấn";
       case "REJECTED":
-        return "Từ chối"
+        return "Từ chối";
       case "ACCEPTED":
-        return "Đã nhận"
+        return "Đã nhận";
       default:
-        return status
+        return status;
     }
-  }
+  };
 
   const getStatusBgColor = (status: ApplicationResponse["status"]) => {
     switch (status) {
       case "PENDING":
-        return "bg-yellow-50"
+        return "bg-yellow-50";
       case "REVIEWING":
-        return "bg-blue-50"
+        return "bg-blue-50";
       case "INTERVIEW":
-        return "bg-green-50"
+        return "bg-green-50";
       case "REJECTED":
-        return "bg-red-50"
+        return "bg-red-50";
       case "ACCEPTED":
-        return "bg-green-50"
+        return "bg-green-50";
       default:
-        return "bg-gray-50"
+        return "bg-gray-50";
     }
-  }
+  };
 
-  const pendingApplications = Array.isArray(applications) 
-    ? applications.filter((app) => ["PENDING", "REVIEWING", "INTERVIEW"].includes(app.status))
-    : []
+  const pendingApplications = Array.isArray(applications)
+    ? applications.filter((app) =>
+        ["PENDING", "REVIEWING", "INTERVIEW"].includes(app.status)
+      )
+    : [];
   const completedApplications = Array.isArray(applications)
-    ? applications.filter((app) => ["REJECTED", "ACCEPTED"].includes(app.status))
-    : []
+    ? applications.filter((app) =>
+        ["REJECTED", "ACCEPTED"].includes(app.status)
+      )
+    : [];
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("vi-VN")
-  }
+    return new Date(dateString).toLocaleDateString("vi-VN");
+  };
 
-  const ApplicationCard = ({ application }: { application: ApplicationResponse }) => (
+  const ApplicationCard = ({
+    application,
+  }: {
+    application: ApplicationResponse;
+  }) => (
     <Card
       className={`${getStatusBgColor(application.status)} border-l-4 ${
         application.status === "ACCEPTED"
           ? "border-l-green-500"
           : application.status === "INTERVIEW"
-            ? "border-l-blue-500"
-            : application.status === "REJECTED"
-              ? "border-l-red-500"
-              : "border-l-yellow-500"
+          ? "border-l-blue-500"
+          : application.status === "REJECTED"
+          ? "border-l-red-500"
+          : "border-l-yellow-500"
       }`}
     >
       <CardContent className="p-6">
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1">
-            <h3 className="text-lg font-semibold text-gray-900 mb-1">{application.job.title}</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-1">
+              {application.job.title}
+            </h3>
             <div className="flex items-center text-gray-600 mb-2">
               <Building className="h-4 w-4 mr-1" />
               <span className="font-medium">{application.job.company}</span>
@@ -186,33 +213,45 @@ export default function CandidateApplications() {
             {application.matchScore && (
               <div className="flex items-center">
                 <Star className="h-4 w-4 mr-1 text-yellow-400" />
-                <span className="text-sm font-medium">{application.matchScore}%</span>
+                <span className="text-sm font-medium">
+                  {application.matchScore}%
+                </span>
               </div>
             )}
-            <Badge variant={getStatusColor(application.status)}>{getStatusText(application.status)}</Badge>
+            <Badge variant={getStatusColor(application.status)}>
+              {getStatusText(application.status)}
+            </Badge>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
           <div>
             <div className="text-sm text-gray-600">Mức lương</div>
-            <div className="font-semibold text-green-600">{application.job.salary}</div>
+            <div className="font-semibold text-green-600">
+              {application.job.salary}
+            </div>
           </div>
           {application.interviewDate && (
             <div>
               <div className="text-sm text-gray-600">Lịch phỏng vấn</div>
-              <div className="font-medium text-blue-600">{formatDate(application.interviewDate)}</div>
+              <div className="font-medium text-blue-600">
+                {formatDate(application.interviewDate)}
+              </div>
             </div>
           )}
           <div>
             <div className="text-sm text-gray-600">Trạng thái</div>
-            <div className="font-medium">{getStatusText(application.status)}</div>
+            <div className="font-medium">
+              {getStatusText(application.status)}
+            </div>
           </div>
         </div>
 
         {application.notes && (
           <div className="mb-4 p-3 bg-white rounded-lg border">
-            <div className="text-sm text-gray-600 mb-1">Ghi chú từ nhà tuyển dụng:</div>
+            <div className="text-sm text-gray-600 mb-1">
+              Ghi chú từ nhà tuyển dụng:
+            </div>
             <div className="text-sm text-gray-800">{application.notes}</div>
           </div>
         )}
@@ -235,7 +274,7 @@ export default function CandidateApplications() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 
   // Show loading while authentication is being checked
   if (authLoading) {
@@ -245,7 +284,7 @@ export default function CandidateApplications() {
           <LoadingSpinner size="lg" />
         </div>
       </CandidateLayout>
-    )
+    );
   }
 
   if (loading) {
@@ -255,7 +294,7 @@ export default function CandidateApplications() {
           <LoadingSpinner size="lg" />
         </div>
       </CandidateLayout>
-    )
+    );
   }
 
   if (error) {
@@ -263,7 +302,7 @@ export default function CandidateApplications() {
       <CandidateLayout>
         <ErrorMessage message={error} onRetry={loadApplications} />
       </CandidateLayout>
-    )
+    );
   }
 
   return (
@@ -271,28 +310,39 @@ export default function CandidateApplications() {
       <div className="space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Lịch sử ứng tuyển</h1>
-          <p className="text-gray-600">Theo dõi trạng thái các đơn ứng tuyển của bạn</p>
+          <h1 className="text-2xl font-bold text-gray-900">
+            Lịch sử ứng tuyển
+          </h1>
+          <p className="text-gray-600">
+            Theo dõi trạng thái các đơn ứng tuyển của bạn
+          </p>
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Card>
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-blue-600">{applications.length}</div>
+              <div className="text-2xl font-bold text-blue-600">
+                {applications.length}
+              </div>
               <div className="text-sm text-gray-600">Tổng ứng tuyển</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-yellow-600">{pendingApplications.length}</div>
+              <div className="text-2xl font-bold text-yellow-600">
+                {pendingApplications.length}
+              </div>
               <div className="text-sm text-gray-600">Đang chờ</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
               <div className="text-2xl font-bold text-blue-600">
-                {applications.filter((app) => app.status === "INTERVIEW").length}
+                {
+                  applications.filter((app) => app.status === "INTERVIEW")
+                    .length
+                }
               </div>
               <div className="text-sm text-gray-600">Phỏng vấn</div>
             </CardContent>
@@ -324,15 +374,22 @@ export default function CandidateApplications() {
             {pendingApplications.length > 0 ? (
               <div className="space-y-4">
                 {pendingApplications.map((application) => (
-                  <ApplicationCard key={application.id} application={application} />
+                  <ApplicationCard
+                    key={application.id}
+                    application={application}
+                  />
                 ))}
               </div>
             ) : (
               <Card>
                 <CardContent className="p-12 text-center">
                   <Clock className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">Không có đơn ứng tuyển đang chờ</h3>
-                  <p className="text-gray-600">Các đơn ứng tuyển đang chờ xử lý sẽ hiển thị ở đây</p>
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">
+                    Không có đơn ứng tuyển đang chờ
+                  </h3>
+                  <p className="text-gray-600">
+                    Các đơn ứng tuyển đang chờ xử lý sẽ hiển thị ở đây
+                  </p>
                 </CardContent>
               </Card>
             )}
@@ -342,15 +399,22 @@ export default function CandidateApplications() {
             {completedApplications.length > 0 ? (
               <div className="space-y-4">
                 {completedApplications.map((application) => (
-                  <ApplicationCard key={application.id} application={application} />
+                  <ApplicationCard
+                    key={application.id}
+                    application={application}
+                  />
                 ))}
               </div>
             ) : (
               <Card>
                 <CardContent className="p-12 text-center">
                   <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">Chưa có đơn ứng tuyển nào hoàn thành</h3>
-                  <p className="text-gray-600">Các đơn ứng tuyển đã hoàn thành sẽ hiển thị ở đây</p>
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">
+                    Chưa có đơn ứng tuyển nào hoàn thành
+                  </h3>
+                  <p className="text-gray-600">
+                    Các đơn ứng tuyển đã hoàn thành sẽ hiển thị ở đây
+                  </p>
                 </CardContent>
               </Card>
             )}
@@ -358,5 +422,5 @@ export default function CandidateApplications() {
         </Tabs>
       </div>
     </CandidateLayout>
-  )
+  );
 }
