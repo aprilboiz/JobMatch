@@ -1,11 +1,12 @@
 package com.aprilboiz.jobmatch.dto.request;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import com.aprilboiz.jobmatch.dto.SalaryDto;
 import com.aprilboiz.jobmatch.dto.validation.ValidationMessages;
 import com.aprilboiz.jobmatch.enumerate.JobType;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -34,13 +35,10 @@ public class JobRequest {
     @NotNull(message = "{" + ValidationMessages.JOB_TYPE_REQUIRED + "}")
     private JobType jobType;
     
-    @Schema(
-            description = "Salary offered for the position",
-            example = "75000.0"
-    )
-    @NotNull(message = "{" + ValidationMessages.JOB_SALARY_REQUIRED + "}")
-    @Positive(message = "{" + ValidationMessages.POSITIVE + "}")
-    private BigDecimal salary;
+    @Schema(description = "Salary information including type, range, and currency")
+    @NotNull(message = "Salary information is required")
+    @Valid
+    private SalaryDto salary;
     
     @Schema(
             description = "Number of available positions for this job",

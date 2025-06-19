@@ -26,6 +26,13 @@ public final class ValidationMessages {
     public static final String PASSWORD_SIZE = "validation.size.password";
     public static final String PHONE_SIZE = "validation.size.phone";
 
+    // Salary validation keys
+    public static final String SALARY_INVALID = "validation.salary.invalid";
+    public static final String SALARY_FIXED_MISSING = "validation.salary.fixed.missing";
+    public static final String SALARY_RANGE_MISSING = "validation.salary.range.missing";
+    public static final String SALARY_RANGE_INVALID = "validation.salary.range.invalid";
+    public static final String SALARY_NEGOTIABLE_AMOUNTS = "validation.salary.negotiable.amounts";
+
     // File validation keys
     public static final String FILE_SIZE_EXCEEDED = "validation.file.size.exceeded";
     public static final String FILE_TYPE_INVALID = "validation.file.type.invalid";

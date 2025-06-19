@@ -2,6 +2,7 @@ package com.aprilboiz.jobmatch.dto.response;
 
 import java.time.LocalDate;
 
+import com.aprilboiz.jobmatch.dto.SalaryDto;
 import com.aprilboiz.jobmatch.enumerate.JobStatus;
 import com.aprilboiz.jobmatch.enumerate.JobType;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -31,8 +32,8 @@ public class JobResponse {
     @Schema(description = "Job location", example = "San Francisco, CA, USA")
     private String location;
     
-    @Schema(description = "Salary offered for the position", example = "75000.0")
-    private Double salary;
+    @Schema(description = "Salary information including type, range, and currency")
+    private SalaryDto salary;
     
     @Schema(description = "Application deadline", example = "2024-12-31")
     private LocalDate applicationDeadline;

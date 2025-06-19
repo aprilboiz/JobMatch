@@ -4,8 +4,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.aprilboiz.jobmatch.dto.SalaryDto;
 import com.aprilboiz.jobmatch.enumerate.JobStatus;
 import com.aprilboiz.jobmatch.enumerate.JobType;
+import com.aprilboiz.jobmatch.enumerate.SalaryType;
 import com.aprilboiz.jobmatch.service.ApplicationService;
 import com.aprilboiz.jobmatch.service.MessageService;
 import org.springframework.data.domain.Page;
@@ -49,12 +51,17 @@ public class JobServiceImpl implements JobService {
         }
 
         Company ownerCompany = owner.getCompany();
+        SalaryDto salaryDto = jobRequest.getSalary();
 
         Job newJob = Job.builder()
                 .title(jobRequest.getTitle())
                 .description(jobRequest.getDescription())
                 .location(jobRequest.getLocation())
-                .salary(jobRequest.getSalary())
+                .salaryType(salaryDto.getSalaryType())
+                .minSalary(calculateMinSalary(salaryDto))
+                .maxSalary(calculateMaxSalary(salaryDto))
+                .currency(salaryDto.getCurrency())
+                .salaryPeriod(salaryDto.getSalaryPeriod())
                 .jobType(jobRequest.getJobType())
                 .numberOfOpenings(jobRequest.getOpenings())
                 .applicationDeadline(jobRequest.getApplicationDeadline())
@@ -95,9 +102,15 @@ public class JobServiceImpl implements JobService {
             throw new AccessDeniedException(messageService.getMessage("error.authorization.job.modify"));
         }
 
+        SalaryDto salaryDto = jobRequest.getSalary();
+        
         existingJob.setTitle(jobRequest.getTitle());
         existingJob.setJobType(jobRequest.getJobType());
-        existingJob.setSalary(jobRequest.getSalary());
+        existingJob.setSalaryType(salaryDto.getSalaryType());
+        existingJob.setMinSalary(calculateMinSalary(salaryDto));
+        existingJob.setMaxSalary(calculateMaxSalary(salaryDto));
+        existingJob.setCurrency(salaryDto.getCurrency());
+        existingJob.setSalaryPeriod(salaryDto.getSalaryPeriod());
         existingJob.setNumberOfOpenings(jobRequest.getOpenings());
         existingJob.setApplicationDeadline(jobRequest.getApplicationDeadline());
         existingJob.setDescription(jobRequest.getDescription());
@@ -195,6 +208,27 @@ public class JobServiceImpl implements JobService {
     @Transactional(readOnly = true)
     public List<String> getDistinctCompanyNames() {
         return jobRepository.findDistinctCompanyNames();
+    }
+
+    /**
+     * Calculate minimum salary based on salary type
+     */
+    private BigDecimal calculateMinSalary(SalaryDto salaryDto) {
+        return switch (salaryDto.getSalaryType()) {
+            case FIXED, RANGE -> salaryDto.getMinSalary();
+            case NEGOTIABLE, COMPETITIVE -> null;
+        };
+    }
+
+    /**
+     * Calculate maximum salary based on salary type
+     */
+    private BigDecimal calculateMaxSalary(SalaryDto salaryDto) {
+        return switch (salaryDto.getSalaryType()) {
+            case FIXED -> salaryDto.getMinSalary(); // For fixed salary, max = min
+            case RANGE -> salaryDto.getMaxSalary();
+            case NEGOTIABLE, COMPETITIVE -> null;
+        };
     }
 
     private boolean isUserCanModifyJob(Job job) {

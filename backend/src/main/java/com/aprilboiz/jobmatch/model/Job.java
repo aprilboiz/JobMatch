@@ -1,7 +1,10 @@
 package com.aprilboiz.jobmatch.model;
 
+import com.aprilboiz.jobmatch.enumerate.CurrencyType;
 import com.aprilboiz.jobmatch.enumerate.JobStatus;
 import com.aprilboiz.jobmatch.enumerate.JobType;
+import com.aprilboiz.jobmatch.enumerate.PeriodType;
+import com.aprilboiz.jobmatch.enumerate.SalaryType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -32,7 +35,19 @@ public class Job extends AuditableEntity{
     @Enumerated(EnumType.STRING)
     private JobType jobType;
     @NotNull
-    private BigDecimal salary;
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    private SalaryType salaryType = SalaryType.FIXED;
+    private BigDecimal minSalary;
+    private BigDecimal maxSalary;
+    
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    private CurrencyType currency = CurrencyType.USD;
+
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    private PeriodType salaryPeriod = PeriodType.ANNUAL;
     @NotNull
     private Integer numberOfOpenings;
     @NotNull
@@ -57,4 +72,21 @@ public class Job extends AuditableEntity{
     @ManyToOne
     @JoinColumn(name = "recruiter_id")
     private Recruiter recruiter;
+    
+    /**
+     * Get formatted salary string for display
+     */
+    public String getFormattedSalary() {
+        return switch (salaryType) {
+            case FIXED -> formatAmount(minSalary);
+            case RANGE -> formatAmount(minSalary) + " - " + formatAmount(maxSalary);
+            case NEGOTIABLE -> "Negotiable";
+            case COMPETITIVE -> "Competitive";
+        };
+    }
+    
+    private String formatAmount(BigDecimal amount) {
+        if (amount == null) return "N/A";
+        return String.format("%,.0f %s %s", amount, currency, salaryPeriod.name().toLowerCase());
+    }
 }

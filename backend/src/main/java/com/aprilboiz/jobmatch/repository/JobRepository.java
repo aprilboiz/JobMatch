@@ -30,8 +30,8 @@ public interface JobRepository extends JpaRepository<Job, Long> {
            "LOWER(j.company.name) LIKE LOWER(CONCAT('%', :keyword, '%'))) AND " +
            "(:jobType IS NULL OR j.jobType = :jobType) AND " +
            "(:location IS NULL OR :location = '' OR LOWER(j.location) LIKE LOWER(CONCAT('%', :location, '%'))) AND " +
-           "(:minSalary IS NULL OR j.salary >= :minSalary) AND " +
-           "(:maxSalary IS NULL OR j.salary <= :maxSalary) AND " +
+           "(:minSalary IS NULL OR j.minSalary >= :minSalary) AND " +
+           "(:maxSalary IS NULL OR j.maxSalary <= :maxSalary) AND " +
            "(:companyName IS NULL OR :companyName = '' OR LOWER(j.company.name) LIKE LOWER(CONCAT('%', :companyName, '%'))) AND " +
            "(:status IS NULL OR j.status = :status) AND " +
            "(:applicationDeadlineAfter IS NULL OR j.applicationDeadline >= :applicationDeadlineAfter)")

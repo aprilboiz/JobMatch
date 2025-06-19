@@ -537,16 +537,15 @@ class AuthIntegrationTests {
                     return roleRepository.save(role);
                 });
 
-        User user = new User();
-        user.setEmail(email);
-        user.setPassword(passwordEncoder.encode(password));
-        user.setRole(freshCandidateRole);
-        user = userRepository.save(user);
-
-        Candidate candidate = new Candidate();
-        candidate.setFullName(fullName);
-        candidate.setPhoneNumber("1234567890");
-        candidate.setUser(user);
+        // Use proper builder to create Candidate with all required fields
+        Candidate candidate = Candidate.builder()
+                .email(email)
+                .password(passwordEncoder.encode(password))
+                .fullName(fullName)
+                .phoneNumber("1234567890")
+                .role(freshCandidateRole)
+                .isActive(true)
+                .build();
         candidateRepository.save(candidate);
     }
 
@@ -559,16 +558,15 @@ class AuthIntegrationTests {
                     return roleRepository.save(role);
                 });
 
-        User user = new User();
-        user.setEmail(email);
-        user.setPassword(passwordEncoder.encode(password));
-        user.setRole(freshRecruiterRole);
-        user = userRepository.save(user);
-
-        Recruiter recruiter = new Recruiter();
-        recruiter.setFullName(fullName);
-        recruiter.setPhoneNumber("0987654321");
-        recruiter.setUser(user);
+        // Use proper builder to create Recruiter with all required fields
+        Recruiter recruiter = Recruiter.builder()
+                .email(email)
+                .password(passwordEncoder.encode(password))
+                .fullName(fullName)
+                .phoneNumber("0987654321")
+                .role(freshRecruiterRole)
+                .isActive(true)
+                .build();
         recruiterRepository.save(recruiter);
     }
 

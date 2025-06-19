@@ -1,6 +1,7 @@
 package com.aprilboiz.jobmatch.mapper;
 
 import com.aprilboiz.jobmatch.dto.RoleDTO;
+import com.aprilboiz.jobmatch.dto.SalaryDto;
 import com.aprilboiz.jobmatch.dto.response.*;
 import com.aprilboiz.jobmatch.model.*;
 import org.mapstruct.Mapper;
@@ -24,6 +25,7 @@ public interface ApplicationMapper {
 
     @Mapping(source = "company.id", target = "companyId")
     @Mapping(source = "recruiter.id", target = "recruiterId")
+    @Mapping(target = "salary", expression = "java(jobToSalaryDto(job))")
     JobResponse jobToJobResponse(Job job);
 
     @Mapping(source = "job.company.name", target = "companyName")
@@ -56,5 +58,19 @@ public interface ApplicationMapper {
             return "RECRUITER";
         }
         return "USER";
+    }
+    
+    default SalaryDto jobToSalaryDto(Job job) {
+        if (job == null) {
+            return null;
+        }
+        
+        return SalaryDto.builder()
+                .salaryType(job.getSalaryType())
+                .minSalary(job.getMinSalary())
+                .maxSalary(job.getMaxSalary())
+                .currency(job.getCurrency())
+                .salaryPeriod(job.getSalaryPeriod())
+                .build();
     }
 }
