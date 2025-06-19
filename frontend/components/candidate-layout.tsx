@@ -25,7 +25,7 @@ const navigation = [
   { name: "Dashboard", href: "/candidate/dashboard", icon: Home },
   { name: "Hồ sơ", href: "/candidate/profile", icon: User },
   // { name: "Việc làm", href: "/candidate/jobs", icon: Briefcase },
-  { name: "Ứng tuyển", href: "/candidate/applications", icon: FileText },
+  { name: "Ứng tuyển", href: "/applications", icon: FileText },
 ];
 function LogoutButton() {
   const { logout } = useAuth();

@@ -36,7 +36,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const token =
         typeof window !== "undefined"
-          ? localStorage.getItem("auth_token")
+          ? localStorage.getItem("access_token")
           : null;
       if (token) {
         // Check if token is expired
@@ -67,7 +67,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } catch (refreshError) {
         console.error("Token refresh failed:", refreshError);
         if (typeof window !== "undefined") {
-          localStorage.removeItem("auth_token");
+          localStorage.removeItem("access_token");
           localStorage.removeItem("refresh_token");
           localStorage.removeItem("token_expires_in");
         }
