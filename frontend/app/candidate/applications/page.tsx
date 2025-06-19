@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Building, Calendar, Clock, Eye, FileText, MapPin, Star } from "lucide-react"
-import { candidateApi } from "@/lib/api/candidate"
+import { applicationsApi } from "@/lib/api/applications"
 import { LoadingSpinner } from "@/components/ui/loading-spinner"
 import { ErrorMessage } from "@/components/ui/error-message"
 import type { ApplicationResponse } from "@/types/api"
@@ -25,11 +25,25 @@ export default function CandidateApplications() {
     try {
       setLoading(true)
       setError(null)
-      const data = await candidateApi.getApplications()
-      setApplications(data)
+      console.log("Loading applications...")
+      const response = await applicationsApi.getCandidateApplications()
+      console.log("Applications response received:", response)
+      
+      // Extract data from paginated response
+      const data = response.data || []
+      console.log("Applications data:", data)
+      
+      // Ensure data is an array
+      if (Array.isArray(data)) {
+        setApplications(data)
+      } else {
+        console.warn("Applications data is not an array:", data)
+        setApplications([])
+      }
     } catch (error) {
-      setError("Không thể tải danh sách ứng tuyển")
       console.error("Failed to load applications:", error)
+      setError("Không thể tải danh sách ứng tuyển")
+      setApplications([]) // Ensure applications is always an array
     } finally {
       setLoading(false)
     }
@@ -86,8 +100,12 @@ export default function CandidateApplications() {
     }
   }
 
-  const pendingApplications = applications.filter((app) => ["PENDING", "REVIEWING", "INTERVIEW"].includes(app.status))
-  const completedApplications = applications.filter((app) => ["REJECTED", "ACCEPTED"].includes(app.status))
+  const pendingApplications = Array.isArray(applications) 
+    ? applications.filter((app) => ["PENDING", "REVIEWING", "INTERVIEW"].includes(app.status))
+    : []
+  const completedApplications = Array.isArray(applications)
+    ? applications.filter((app) => ["REJECTED", "ACCEPTED"].includes(app.status))
+    : []
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("vi-VN")

@@ -24,7 +24,7 @@ import { useAuth } from "@/hooks/use-auth";
 const navigation = [
   { name: "Dashboard", href: "/candidate/dashboard", icon: Home },
   { name: "Hồ sơ", href: "/candidate/profile", icon: User },
-  { name: "Việc làm", href: "/candidate/jobs", icon: Briefcase },
+  // { name: "Việc làm", href: "/candidate/jobs", icon: Briefcase },
   { name: "Ứng tuyển", href: "/candidate/applications", icon: FileText },
 ];
 function LogoutButton() {

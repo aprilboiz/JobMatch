@@ -1,70 +1,96 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState, useEffect } from "react"
-import CandidateLayout from "@/components/candidate-layout"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Upload, FileText, Plus, X, Edit, Save, User, Briefcase, GraduationCap, Download, Trash2 } from "lucide-react"
-import { candidateApi } from "@/lib/api/candidate"
-import { useAuth } from "@/hooks/use-auth"
-import { LoadingSpinner } from "@/components/ui/loading-spinner"
-import { ErrorMessage } from "@/components/ui/error-message"
-import { useToast } from "@/hooks/use-toast"
-import type { CvResponse } from "@/types/api"
+import { useState, useEffect } from "react";
+import CandidateLayout from "@/components/candidate-layout";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Upload,
+  FileText,
+  Plus,
+  X,
+  Edit,
+  Save,
+  User,
+  Briefcase,
+  GraduationCap,
+  Download,
+  Trash2,
+} from "lucide-react";
+import { candidateApi } from "@/lib/api/candidate";
+import { useAuth } from "@/hooks/use-auth";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { ErrorMessage } from "@/components/ui/error-message";
+import { useToast } from "@/hooks/use-toast";
+import type { CvResponse } from "@/types/api";
 
 export default function CandidateProfile() {
-  const [isEditing, setIsEditing] = useState(false)
-  const [skills, setSkills] = useState(["React", "JavaScript", "TypeScript", "Node.js", "Python"])
-  const [newSkill, setNewSkill] = useState("")
-  const [cvFiles, setCvFiles] = useState<CvResponse[]>([])
-  const [loading, setLoading] = useState(false)
-  const [uploading, setUploading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [isEditing, setIsEditing] = useState(false);
+  const [skills, setSkills] = useState([
+    "React",
+    "JavaScript",
+    "TypeScript",
+    "Node.js",
+    "Python",
+  ]);
+  const [newSkill, setNewSkill] = useState("");
+  const [cvFiles, setCvFiles] = useState<CvResponse[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const { user, refreshUser } = useAuth()
-  const { toast } = useToast()
+  const { user, refreshUser } = useAuth();
+  const { toast } = useToast();
 
   useEffect(() => {
-    loadCVFiles()
-  }, [])
+    loadCVFiles();
+  }, []);
 
   const loadCVFiles = async () => {
     try {
-      setLoading(true)
-      const files = await candidateApi.getAllCVs()
-      setCvFiles(files)
+      setLoading(true);
+      const files = await candidateApi.getAllCVs();
+      setCvFiles(files);
     } catch (error) {
-      setError("Không thể tải danh sách CV")
-      console.error("Failed to load CV files:", error)
+      setError("Không thể tải danh sách CV");
+      console.error("Failed to load CV files:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
-  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (!file) return
+  const handleFileUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
 
     // Validate file type
     const allowedTypes = [
       "application/pdf",
       "application/msword",
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    ]
+    ];
     if (!allowedTypes.includes(file.type)) {
       toast({
         title: "Lỗi",
         description: "Chỉ hỗ trợ file PDF, DOC, DOCX",
         variant: "destructive",
-      })
-      return
+      });
+      return;
     }
 
     // Validate file size (10MB)
@@ -73,124 +99,165 @@ export default function CandidateProfile() {
         title: "Lỗi",
         description: "File không được vượt quá 10MB",
         variant: "destructive",
-      })
-      return
+      });
+      return;
     }
 
     try {
-      setUploading(true)
-      const response = await candidateApi.uploadCV(file)
-      setCvFiles((prev) => [...prev, response])
+      setUploading(true);
+      const response = await candidateApi.uploadCV(file);
+      setCvFiles((prev) => [...prev, response]);
       toast({
         title: "Thành công",
         description: "Upload CV thành công",
-      })
+      });
       // Reset input
-      event.target.value = ""
+      event.target.value = "";
     } catch (error) {
       toast({
         title: "Lỗi",
         description: "Không thể upload CV. Vui lòng thử lại.",
         variant: "destructive",
-      })
-      console.error("Failed to upload CV:", error)
+      });
+      console.error("Failed to upload CV:", error);
     } finally {
-      setUploading(false)
+      setUploading(false);
     }
-  }
+  };
 
   const handleDeleteCV = async (id: number) => {
-    if (!confirm("Bạn có chắc chắn muốn xóa CV này?")) return
+    if (!confirm("Bạn có chắc chắn muốn xóa CV này?")) return;
 
     try {
-      await candidateApi.deleteCV(id)
-      setCvFiles((prev) => prev.filter((cv) => cv.id !== id))
+      await candidateApi.deleteCV(id);
+      setCvFiles((prev) => prev.filter((cv) => cv.id !== id));
       toast({
         title: "Thành công",
         description: "Xóa CV thành công",
-      })
+      });
     } catch (error) {
       toast({
         title: "Lỗi",
         description: "Không thể xóa CV. Vui lòng thử lại.",
         variant: "destructive",
-      })
-      console.error("Failed to delete CV:", error)
+      });
+      console.error("Failed to delete CV:", error);
     }
-  }
+  };
 
   const handleDownloadCV = async (id: number, fileName: string) => {
     try {
-      const blob = await candidateApi.downloadCV(id)
-      const url = window.URL.createObjectURL(blob)
-      const a = document.createElement("a")
-      a.href = url
-      a.download = fileName
-      document.body.appendChild(a)
-      a.click()
-      window.URL.revokeObjectURL(url)
-      document.body.removeChild(a)
+      // Use manual approach to see the actual filename being used
+      const { blob, filename } = await candidateApi.downloadCV(id);
+      console.log("Downloaded filename:", filename);
+      console.log("Fallback filename:", fileName);
+
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename || fileName; // Use server filename or fallback
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+
+      toast({
+        title: "Thành công",
+        description: `Tải ${filename || fileName} thành công`,
+      });
     } catch (error) {
       toast({
         title: "Lỗi",
         description: "Không thể tải CV. Vui lòng thử lại.",
         variant: "destructive",
-      })
-      console.error("Failed to download CV:", error)
+      });
+      console.error("Failed to download CV:", error);
     }
-  }
+  };
+
+  // Alternative manual approach if you need custom handling
+  const handleDownloadCVManual = async (
+    id: number,
+    fallbackFileName: string
+  ) => {
+    try {
+      const { blob, filename } = await candidateApi.downloadCV(id);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename || fallbackFileName; // Use server filename or fallback
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+
+      toast({
+        title: "Thành công",
+        description: `Tải ${filename || fallbackFileName} thành công`,
+      });
+    } catch (error) {
+      toast({
+        title: "Lỗi",
+        description: "Không thể tải CV. Vui lòng thử lại.",
+        variant: "destructive",
+      });
+      console.error("Failed to download CV:", error);
+    }
+  };
 
   const handleSaveProfile = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       // Update user profile logic here
-      await refreshUser()
-      setIsEditing(false)
+      await refreshUser();
+      setIsEditing(false);
       toast({
         title: "Thành công",
         description: "Cập nhật hồ sơ thành công",
-      })
+      });
     } catch (error) {
       toast({
         title: "Lỗi",
         description: "Không thể cập nhật hồ sơ. Vui lòng thử lại.",
         variant: "destructive",
-      })
-      console.error("Failed to update profile:", error)
+      });
+      console.error("Failed to update profile:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const addSkill = () => {
     if (newSkill.trim() && !skills.includes(newSkill.trim())) {
-      setSkills([...skills, newSkill.trim()])
-      setNewSkill("")
+      setSkills([...skills, newSkill.trim()]);
+      setNewSkill("");
     }
-  }
+  };
 
   const removeSkill = (skillToRemove: string) => {
-    setSkills(skills.filter((skill) => skill !== skillToRemove))
-  }
+    setSkills(skills.filter((skill) => skill !== skillToRemove));
+  };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return "0 Bytes"
-    const k = 1024
-    const sizes = ["Bytes", "KB", "MB", "GB"]
-    const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return Number.parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i]
-  }
+    if (bytes === 0) return "0 Bytes";
+    const k = 1024;
+    const sizes = ["Bytes", "KB", "MB", "GB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return (
+      Number.parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i]
+    );
+  };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("vi-VN")
-  }
+    return new Date(dateString).toLocaleDateString("vi-VN");
+  };
 
   if (error) {
     return (
       <CandidateLayout>
         <ErrorMessage message={error} onRetry={loadCVFiles} />
       </CandidateLayout>
-    )
+    );
   }
 
   return (
@@ -200,7 +267,9 @@ export default function CandidateProfile() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Hồ sơ cá nhân</h1>
-            <p className="text-gray-600">Quản lý thông tin cá nhân và CV của bạn</p>
+            <p className="text-gray-600">
+              Quản lý thông tin cá nhân và CV của bạn
+            </p>
           </div>
           <Button
             onClick={isEditing ? handleSaveProfile : () => setIsEditing(true)}
@@ -243,25 +312,44 @@ export default function CandidateProfile() {
             <Card>
               <CardHeader>
                 <CardTitle>Thông tin cá nhân</CardTitle>
-                <CardDescription>Cập nhật thông tin cơ bản của bạn</CardDescription>
+                <CardDescription>
+                  Cập nhật thông tin cơ bản của bạn
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="fullName">Họ và tên</Label>
-                    <Input id="fullName" defaultValue={user?.fullName || ""} disabled={!isEditing} />
+                    <Input
+                      id="fullName"
+                      defaultValue={user?.fullName || ""}
+                      disabled={!isEditing}
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" defaultValue={user?.email || ""} disabled={!isEditing} />
+                    <Input
+                      id="email"
+                      type="email"
+                      defaultValue={user?.email || ""}
+                      disabled={!isEditing}
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="phoneNumber">Số điện thoại</Label>
-                    <Input id="phoneNumber" defaultValue={user?.phoneNumber || ""} disabled={!isEditing} />
+                    <Input
+                      id="phoneNumber"
+                      defaultValue={user?.phoneNumber || ""}
+                      disabled={!isEditing}
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="location">Địa chỉ</Label>
-                    <Input id="location" defaultValue="Hà Nội, Việt Nam" disabled={!isEditing} />
+                    <Input
+                      id="location"
+                      defaultValue="Hà Nội, Việt Nam"
+                      disabled={!isEditing}
+                    />
                   </div>
                 </div>
 
@@ -280,10 +368,17 @@ export default function CandidateProfile() {
                   <Label>Kỹ năng</Label>
                   <div className="flex flex-wrap gap-2">
                     {skills.map((skill) => (
-                      <Badge key={skill} variant="secondary" className="text-sm">
+                      <Badge
+                        key={skill}
+                        variant="secondary"
+                        className="text-sm"
+                      >
                         {skill}
                         {isEditing && (
-                          <button onClick={() => removeSkill(skill)} className="ml-2 hover:text-red-500">
+                          <button
+                            onClick={() => removeSkill(skill)}
+                            className="ml-2 hover:text-red-500"
+                          >
                             <X className="h-3 w-3" />
                           </button>
                         )}
@@ -313,19 +408,28 @@ export default function CandidateProfile() {
             <Card>
               <CardHeader>
                 <CardTitle>Kinh nghiệm làm việc</CardTitle>
-                <CardDescription>Thêm và quản lý kinh nghiệm làm việc của bạn</CardDescription>
+                <CardDescription>
+                  Thêm và quản lý kinh nghiệm làm việc của bạn
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-4">
                   <div className="border rounded-lg p-4">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <h3 className="font-semibold text-gray-900">Frontend Developer</h3>
-                        <p className="text-blue-600 font-medium">TechCorp Vietnam</p>
-                        <p className="text-sm text-gray-600">01/2022 - Hiện tại</p>
+                        <h3 className="font-semibold text-gray-900">
+                          Frontend Developer
+                        </h3>
+                        <p className="text-blue-600 font-medium">
+                          TechCorp Vietnam
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          01/2022 - Hiện tại
+                        </p>
                         <p className="text-sm text-gray-700 mt-2">
-                          Phát triển và duy trì các ứng dụng web sử dụng React, TypeScript. Tham gia xây dựng hệ thống
-                          quản lý nội bộ phục vụ 1000+ người dùng.
+                          Phát triển và duy trì các ứng dụng web sử dụng React,
+                          TypeScript. Tham gia xây dựng hệ thống quản lý nội bộ
+                          phục vụ 1000+ người dùng.
                         </p>
                       </div>
                       {isEditing && (
@@ -339,12 +443,17 @@ export default function CandidateProfile() {
                   <div className="border rounded-lg p-4">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <h3 className="font-semibold text-gray-900">Junior Frontend Developer</h3>
+                        <h3 className="font-semibold text-gray-900">
+                          Junior Frontend Developer
+                        </h3>
                         <p className="text-blue-600 font-medium">StartupXYZ</p>
-                        <p className="text-sm text-gray-600">06/2021 - 12/2021</p>
+                        <p className="text-sm text-gray-600">
+                          06/2021 - 12/2021
+                        </p>
                         <p className="text-sm text-gray-700 mt-2">
-                          Học hỏi và phát triển kỹ năng frontend, tham gia dự án xây dựng website thương mại điện tử sử
-                          dụng React và Redux.
+                          Học hỏi và phát triển kỹ năng frontend, tham gia dự án
+                          xây dựng website thương mại điện tử sử dụng React và
+                          Redux.
                         </p>
                       </div>
                       {isEditing && (
@@ -371,17 +480,25 @@ export default function CandidateProfile() {
             <Card>
               <CardHeader>
                 <CardTitle>Học vấn</CardTitle>
-                <CardDescription>Thông tin về trình độ học vấn và chứng chỉ</CardDescription>
+                <CardDescription>
+                  Thông tin về trình độ học vấn và chứng chỉ
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-4">
                   <div className="border rounded-lg p-4">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <h3 className="font-semibold text-gray-900">Cử nhân Công nghệ Thông tin</h3>
-                        <p className="text-blue-600 font-medium">Đại học Bách Khoa Hà Nội</p>
+                        <h3 className="font-semibold text-gray-900">
+                          Cử nhân Công nghệ Thông tin
+                        </h3>
+                        <p className="text-blue-600 font-medium">
+                          Đại học Bách Khoa Hà Nội
+                        </p>
                         <p className="text-sm text-gray-600">2017 - 2021</p>
-                        <p className="text-sm text-gray-700 mt-2">GPA: 3.2/4.0 - Chuyên ngành Kỹ thuật Phần mềm</p>
+                        <p className="text-sm text-gray-700 mt-2">
+                          GPA: 3.2/4.0 - Chuyên ngành Kỹ thuật Phần mềm
+                        </p>
                       </div>
                       {isEditing && (
                         <Button variant="ghost" size="sm">
@@ -407,15 +524,21 @@ export default function CandidateProfile() {
             <Card>
               <CardHeader>
                 <CardTitle>Quản lý CV</CardTitle>
-                <CardDescription>Upload và quản lý các phiên bản CV của bạn</CardDescription>
+                <CardDescription>
+                  Upload và quản lý các phiên bản CV của bạn
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 {/* Upload Area */}
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors">
                   <Upload className="mx-auto h-12 w-12 text-gray-400" />
                   <div className="mt-4">
-                    <p className="text-lg font-medium text-gray-900">Upload CV mới</p>
-                    <p className="text-sm text-gray-600 mt-1">Hỗ trợ định dạng PDF, DOCX (tối đa 10MB)</p>
+                    <p className="text-lg font-medium text-gray-900">
+                      Upload CV mới
+                    </p>
+                    <p className="text-sm text-gray-600 mt-1">
+                      Hỗ trợ định dạng PDF, DOCX (tối đa 10MB)
+                    </p>
                   </div>
                   <div className="mt-4">
                     <input
@@ -453,13 +576,18 @@ export default function CandidateProfile() {
                   ) : cvFiles.length > 0 ? (
                     <div className="space-y-3">
                       {cvFiles.map((cv) => (
-                        <div key={cv.id} className="flex items-center justify-between p-4 border rounded-lg">
+                        <div
+                          key={cv.id}
+                          className="flex items-center justify-between p-4 border rounded-lg"
+                        >
                           <div className="flex items-center space-x-3">
                             <FileText className="h-8 w-8 text-blue-600" />
                             <div>
-                              <p className="font-medium text-gray-900">{cv.originalFileName}</p>
+                              <p className="font-medium text-gray-900">
+                                {cv.fileName}
+                              </p>
                               <p className="text-sm text-gray-600">
-                                Uploaded {formatDate(cv.uploadedAt)} • {formatFileSize(cv.fileSize)}
+                                {/* Uploaded {formatDate(cv.uploadedAt)} • {formatFileSize(cv.fileSize)} */}
                               </p>
                             </div>
                           </div>
@@ -467,7 +595,9 @@ export default function CandidateProfile() {
                             <Button
                               variant="outline"
                               size="sm"
-                              onClick={() => handleDownloadCV(cv.id, cv.originalFileName)}
+                              onClick={() =>
+                                handleDownloadCV(cv.id, cv.originalFileName)
+                              }
                             >
                               <Download className="mr-2 h-4 w-4" />
                               Tải xuống
@@ -497,5 +627,5 @@ export default function CandidateProfile() {
         </Tabs>
       </div>
     </CandidateLayout>
-  )
+  );
 }

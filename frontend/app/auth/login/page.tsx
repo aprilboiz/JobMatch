@@ -43,7 +43,8 @@ export default function LoginPage() {
       })
 
       // Use user data from response (which now includes user info)
-      const userRole = await (await userApi.getCurrentUser()).role.roleName
+      const {role} = await userApi.getCurrentUser()
+      const userRole = role.roleName;
       console.log("Login successful, user role:", userRole)
 
       if (userRole.toUpperCase() === "CANDIDATE") {

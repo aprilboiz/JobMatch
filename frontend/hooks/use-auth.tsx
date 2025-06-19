@@ -9,7 +9,7 @@ import { userApi } from "@/lib/api/user";
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (email: string, password: string) => Promise<AuthResponse>;
+  login: (email: string, password: string) => Promise<AuthResponse & { user?: User }>;
   register: (data: {
     fullName: string;
     email: string;
@@ -80,7 +80,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (
     email: string,
     password: string
-  ): Promise<AuthResponse> => {
+  ): Promise<AuthResponse & { user?: User }> => {
     console.log("Starting login process...");
 
     const response = await authApi.login({ email, password });
@@ -105,13 +105,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.error("Failed to fetch user data after login:", error);
 
       // If fetching user data fails, we can still proceed with login
-      // but create a basic user object from the response if available
-      if (response.user) {
-        setUser(response.user);
-        return response;
-      }
-
-      // If no user data available, still return the auth response
       // The user will be fetched later or on next page load
       console.warn("Proceeding without user data - will be fetched later");
       return response;
@@ -125,9 +118,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     password: string;
     role: "CANDIDATE" | "RECRUITER" | "ADMIN";
   }) => {
-    await authApi.register(data);
-    // Register doesn't return user data, so we don't set user state
-    // User will need to login after registration
+    try {
+      console.log("Starting registration process...");
+      await authApi.register(data);
+      console.log("Registration successful");
+      // Register doesn't return user data, so we don't set user state
+      // User will need to login after registration
+    } catch (error) {
+      console.error("Registration failed:", error);
+      throw error; // Re-throw to let the component handle it
+    }
   };
 
   // const getCurrentUser = async () => {
@@ -148,6 +148,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const getCurrentUser = async (): Promise<User | null> => {
+    try {
+      const userData = await userApi.getCurrentUser();
+      setUser(userData);
+      return userData;
+    } catch (error) {
+      console.error("Failed to get current user:", error);
+      return null;
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -157,6 +168,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         register,
         logout,
         refreshUser,
+        getCurrentUser,
       }}
     >
       {children}

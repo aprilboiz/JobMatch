@@ -9,7 +9,7 @@ export interface RegisterRequest {
   email: string;
   phoneNumber: string; // Changed from phone to phoneNumber
   password: string;
-  role: "CANDIDATE" | "RECRUITER" | "ADMIN";
+  role: "CANDIDATE" | "RECRUITER" | "ADMIN"; // Added role field
 }
 
 export interface RefreshTokenRequest {
@@ -26,7 +26,6 @@ export interface AuthResponse {
   refreshToken: string;
   tokenType: string;
   expiresIn: number;
-  user?: User;
 }
 
 // User Types
