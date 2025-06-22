@@ -30,13 +30,16 @@ import com.aprilboiz.jobmatch.repository.CompanyRepository;
 import com.aprilboiz.jobmatch.repository.RecruiterRepository;
 import com.aprilboiz.jobmatch.repository.RoleRepository;
 import com.aprilboiz.jobmatch.repository.UserRepository;
+import com.aprilboiz.jobmatch.service.CloudinaryService;
 import com.aprilboiz.jobmatch.service.MessageService;
 import com.aprilboiz.jobmatch.service.UserService;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -44,15 +47,9 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final ApplicationMapper userMapper;
     private final MessageService messageService;
+    private final CloudinaryService cloudinaryService;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, CompanyRepository companyRepository, PasswordEncoder passwordEncoder, ApplicationMapper userMapper, MessageService messageService) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.companyRepository = companyRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.userMapper = userMapper;
-        this.messageService = messageService;
-    }
+    
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -166,5 +163,28 @@ public class UserServiceImpl implements UserService {
         userRepository.save(recruiter);
 
         return userMapper.userToUserResponse(recruiter);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateUserAvatar(Long userId, String avatarUrl) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(messageService.getMessage("error.user.not.found", userId)));
+
+        // Delete old avatar if exists
+        if (user.getAvatarUrl() != null && !user.getAvatarUrl().isEmpty()) {
+            try {
+                String oldPublicId = cloudinaryService.extractPublicIdFromUrl(user.getAvatarUrl());
+                if (oldPublicId != null) {
+                    cloudinaryService.delete(oldPublicId);
+                }
+            } catch (Exception e) {
+                log.warn("Failed to delete old avatar for user {}: {}", userId, e.getMessage());
+            }
+        }
+
+        user.setAvatarUrl(avatarUrl);
+        userRepository.save(user);
+        log.info("Successfully updated avatar for user {}", userId);
     }
 }

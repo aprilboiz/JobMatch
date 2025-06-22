@@ -15,4 +15,5 @@ public interface UserService extends UserDetailsService {
     UserResponse getUserByEmail(String email);
     UserResponse updateProfile(String email, CandidateProfileUpdateRequest profileRequest);
     UserResponse updateProfile(String email, RecruiterProfileUpdateRequest profileRequest);
+    void updateUserAvatar(Long userId, String avatarUrl);
 }
