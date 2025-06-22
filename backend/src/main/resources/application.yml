@@ -11,6 +11,10 @@ spring:
   application:
     name: JobMatch
 
+  # .env Configuration
+  config:
+    import: file:.env[.properties]
+
   # Internationalization Configuration
   messages:
     basename: messages
@@ -23,6 +27,7 @@ spring:
     multipart:
       max-file-size: 5MB
       enabled: true
+    
 
   data:
     redis:
@@ -78,3 +83,6 @@ cloudinary:
   cloud-name: ${CLOUDINARY_CLOUD_NAME:cloud_name}
   api-key: ${CLOUDINARY_API_KEY:api_key}
   api-secret: ${CLOUDINARY_API_SECRET:api_secret}
+
+server:
+  port: 8080
