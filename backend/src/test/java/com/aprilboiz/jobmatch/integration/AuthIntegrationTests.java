@@ -209,7 +209,7 @@ class AuthIntegrationTests {
 
             // 4. LOGOUT - Invalidate tokens
             LogoutRequest logoutRequest = new LogoutRequest();
-            logoutRequest.setAccessToken(newAccessToken);
+            logoutRequest.setToken(newAccessToken);
             logoutRequest.setRefreshToken(newRefreshToken);
 
             mockMvc.perform(post("/api/auth/logout")
@@ -258,11 +258,11 @@ class AuthIntegrationTests {
             // Verify recruiter-specific persistence
             var users = userRepository.findAll();
             assertThat(users).hasSize(1);
-            assertThat(users.get(0).getRole().getName()).isEqualTo(RoleName.RECRUITER);
+            assertThat(users.getFirst().getRole().getName()).isEqualTo(RoleName.RECRUITER);
 
             var recruiters = recruiterRepository.findAll();
             assertThat(recruiters).hasSize(1);
-            assertThat(recruiters.get(0).getFullName()).isEqualTo(fullName);
+            assertThat(recruiters.getFirst().getFullName()).isEqualTo(fullName);
 
             // Test login and token flow
             LoginTokens tokens = loginAndGetTokens(email, password);
@@ -271,7 +271,7 @@ class AuthIntegrationTests {
 
             // Test complete logout
             LogoutRequest logoutRequest = new LogoutRequest();
-            logoutRequest.setAccessToken(tokens.accessToken);
+            logoutRequest.setToken(tokens.accessToken);
             logoutRequest.setRefreshToken(tokens.refreshToken);
 
             mockMvc.perform(post("/api/auth/logout")
@@ -342,7 +342,7 @@ class AuthIntegrationTests {
             LoginTokens tokens = loginAndGetTokens("multilogout@example.com", "password123");
 
             LogoutRequest logoutRequest = new LogoutRequest();
-            logoutRequest.setAccessToken(tokens.accessToken);
+            logoutRequest.setToken(tokens.accessToken);
             logoutRequest.setRefreshToken(tokens.refreshToken);
 
             // First logout - should succeed
@@ -372,7 +372,7 @@ class AuthIntegrationTests {
 
             // Blacklist tokens
             LogoutRequest logoutRequest = new LogoutRequest();
-            logoutRequest.setAccessToken(tokens.accessToken);
+            logoutRequest.setToken(tokens.accessToken);
             logoutRequest.setRefreshToken(tokens.refreshToken);
 
             mockMvc.perform(post("/api/auth/logout")
