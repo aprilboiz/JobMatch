@@ -40,4 +40,7 @@ public class CompanyResponse {
     
     @Schema(description = "Company description", example = "Leading technology company...")
     private String description;
+    
+    @Schema(description = "Company logo URL", example = "https://res.cloudinary.com/example/image/upload/v1234567890/logos/company-logo.jpg")
+    private String logoUrl;
 }

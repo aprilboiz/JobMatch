@@ -21,9 +21,9 @@ public class Candidate extends User {
     private List<CV> cvs;
     
     @Builder
-    public Candidate(Long id, String email, String password, String fullName, String phoneNumber, Boolean isActive, Role role, 
-                    List<Application> applications, List<CV> cvs) {
-        super(id, email, password, fullName, phoneNumber, isActive, role);
+    public Candidate(Long id, String email, String password, String fullName, String phoneNumber, String avatarUrl,
+                    Boolean isActive, Role role, List<Application> applications, List<CV> cvs) {
+        super(id, email, password, fullName, phoneNumber, avatarUrl, isActive, role);
         this.applications = applications;
         this.cvs = cvs;
     }

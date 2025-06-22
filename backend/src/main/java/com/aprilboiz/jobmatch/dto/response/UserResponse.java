@@ -29,6 +29,9 @@ public class UserResponse {
     @Schema(description = "User's phone number", example = "1234567890")
     private String phoneNumber;
     
+    @Schema(description = "User's avatar URL", example = "https://res.cloudinary.com/example/image/upload/v1234567890/avatars/user-avatar.jpg")
+    private String avatarUrl;
+    
     @Schema(description = "User's account status", example = "true")
     private Boolean isActive;
 

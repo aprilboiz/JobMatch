@@ -37,6 +37,7 @@ public class Company extends AuditableEntity{
     @NotNull
     private String industry;
     private String description;
+    private String logoUrl;
 
     @OneToMany(mappedBy = "company")
     private List<Recruiter> recruiters;

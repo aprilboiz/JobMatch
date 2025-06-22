@@ -22,9 +22,9 @@ public class Recruiter extends User {
     private List<Job> jobs;
     
     @Builder
-    public Recruiter(Long id, String email, String password, String fullName, String phoneNumber, Boolean isActive, Role role,
-                    Company company, List<Job> jobs) {
-        super(id, email, password, fullName, phoneNumber, isActive, role);
+    public Recruiter(Long id, String email, String password, String fullName, String phoneNumber, String avatarUrl,
+                    Boolean isActive, Role role, Company company, List<Job> jobs) {
+        super(id, email, password, fullName, phoneNumber, avatarUrl, isActive, role);
         this.company = company;
         this.jobs = jobs;
     }
