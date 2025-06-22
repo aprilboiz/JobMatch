@@ -43,3 +43,6 @@ coverage/
 *.bak
 *.backup.*
 *.back.*
+docs/
+uploads/
+*.txt
