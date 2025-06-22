@@ -7,11 +7,9 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
-import java.util.Arrays;
 import java.util.Locale;
 
 @Configuration
@@ -28,27 +26,16 @@ public class InternationalizationConfig implements WebMvcConfigurer {
     }
 
     /**
-     * Primary LocaleResolver that stores locale preference in session.
-     * This supports both Accept-Language header detection and programmatic language switching.
+     * Primary LocaleResolver that supports both Accept-Language header and ?lang= parameter.
+     * Priority: 
+     * 1. ?lang= parameter (if present and valid)
+     * 2. Session locale (if set previously)
+     * 3. Accept-Language header (as fallback)
+     * 4. Default locale (en)
      */
     @Bean(name = "localeResolver")
-    public LocaleResolver sessionLocaleResolver() {
+    public LocaleResolver localeResolver() {
         SessionLocaleResolver localeResolver = new SessionLocaleResolver();
-        localeResolver.setDefaultLocale(Locale.forLanguageTag("en"));
-        return localeResolver;
-    }
-
-    /**
-     * Alternative AcceptHeaderLocaleResolver for read-only Accept-Language header detection.
-     * This is read-only and cannot be changed programmatically.
-     */
-    @Bean(name = "acceptHeaderLocaleResolver")
-    public LocaleResolver acceptHeaderLocaleResolver() {
-        AcceptHeaderLocaleResolver localeResolver = new AcceptHeaderLocaleResolver();
-        localeResolver.setSupportedLocales(Arrays.asList(
-                Locale.forLanguageTag("en"),
-                Locale.forLanguageTag("vi")
-        ));
         localeResolver.setDefaultLocale(Locale.forLanguageTag("en"));
         return localeResolver;
     }

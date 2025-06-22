@@ -8,6 +8,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.servlet.LocaleResolver;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Locale;
@@ -18,10 +19,13 @@ import java.util.Locale;
 public class MessageServiceImpl implements MessageService {
 
     private final MessageSource messageSource;
+    private final LocaleResolver localeResolver;
 
     @Override
     public String getMessage(String key) {
-        return getMessage(key, getCurrentLocale());
+        Locale locale = getCurrentLocale();
+        log.debug("Getting message for key: {} with locale: {}", key, locale);
+        return getMessage(key, locale);
     }
 
     @Override
@@ -53,63 +57,42 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public Locale getCurrentLocale() {
-        // Try to get locale from LocaleContextHolder
-        Locale locale = LocaleContextHolder.getLocale();
-
-        // If the session doesn't have a locale set, try to get it from Accept-Language
-        if (locale.equals(Locale.getDefault())) {
-            locale = getLocaleFromRequest();
-
-            // If we found a valid locale from Accept-Language, set it in the session
-            if (isValidLocale(locale)) {
-                setLocaleInSession(locale);
-                LocaleContextHolder.setLocale(locale);
-            }
-        }
-
-        // Default to English if no locale is found
-        return locale != null ? locale : new Locale.Builder().setLanguage("en").build();
-    }
-
-    private Locale getLocaleFromRequest() {
         try {
-            ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder
-                    .getRequestAttributes();
+            ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             if (attributes != null) {
                 HttpServletRequest request = attributes.getRequest();
-                String acceptLanguage = request.getHeader("Accept-Language");
-
-                if (acceptLanguage != null && !acceptLanguage.isEmpty()) {
-                    // Parse the Accept-Language header
-                    String[] languages = acceptLanguage.split(",");
-                    if (languages.length > 0) {
-                        String primaryLanguage = languages[0].trim();
-                        // Handle cases like "en-US" or "vi-VN"
-                        String languageCode = primaryLanguage.split("-")[0].split(";")[0];
-                        return Locale.forLanguageTag(languageCode);
+                
+                // 1. Check if there's a ?lang= parameter (handled by LocaleChangeInterceptor + SessionLocaleResolver)
+                Locale sessionLocale = localeResolver.resolveLocale(request);
+                log.debug("SessionLocaleResolver locale: {}", sessionLocale);
+                
+                // 2. If session locale is default, check Accept-Language header as fallback
+                if (sessionLocale.equals(Locale.forLanguageTag("en"))) {
+                    String acceptLanguage = request.getHeader("Accept-Language");
+                    log.debug("Accept-Language header: {}", acceptLanguage);
+                    
+                    if (acceptLanguage != null && acceptLanguage.startsWith("vi")) {
+                        sessionLocale = Locale.forLanguageTag("vi");
+                        log.debug("Using Accept-Language fallback: {}", sessionLocale);
                     }
                 }
+                
+                // Set in context and return
+                LocaleContextHolder.setLocale(sessionLocale);
+                log.debug("Final resolved locale: {}", sessionLocale);
+                return sessionLocale;
             }
+            
+            // Fallback if no request context
+            Locale contextLocale = LocaleContextHolder.getLocale();
+            log.debug("Using LocaleContextHolder fallback: {}", contextLocale);
+            return contextLocale;
+            
         } catch (Exception e) {
-            log.debug("Could not extract locale from request: {}", e.getMessage());
-        }
-        return null;
-    }
-
-    private boolean isValidLocale(Locale locale) {
-        return locale != null && ("en".equals(locale.getLanguage()) || "vi".equals(locale.getLanguage()));
-    }
-
-    private void setLocaleInSession(Locale locale) {
-        try {
-            ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder
-                    .getRequestAttributes();
-            if (attributes != null) {
-                HttpServletRequest request = attributes.getRequest();
-                request.getSession().setAttribute("lang", locale.getLanguage());
-            }
-        } catch (Exception e) {
-            log.debug("Could not set locale in session: {}", e.getMessage());
+            log.warn("Error resolving locale, falling back to English", e);
+            return Locale.ENGLISH;
         }
     }
+
+
 }
