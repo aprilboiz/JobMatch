@@ -108,7 +108,7 @@ public class AuthServiceImpl implements AuthService {
                     
         } catch (Exception ex) {
             log.error("Refresh token failed", ex);
-            throw new BadCredentialsException(messageService.getMessage("auth.refresh.invalid"));
+            throw new BadCredentialsException(ex.getMessage());
         }
     }
 

@@ -26,13 +26,13 @@ public class JwtServiceImpl implements JwtService {
     
     private final MessageService messageService;
     
-    @Value("${jwt.secret-key:7e28991c10c1f5294a74dbcab40b23d77a291c612692b97eb8f8c3d67c6d0e0507059122d8cb52b9ca009b214b83977cf4d4d7472d924c745102f1e18497df05}")
+    @Value("${jwt.secret-key}")
     private String secretKey;
     
-    @Value("${jwt.access-token-expiration:3600}")
+    @Value("${jwt.access-token-expiration}")
     private Long accessTokenExpiration; // seconds
     
-    @Value("${jwt.refresh-token-expiration:7200}")
+    @Value("${jwt.refresh-token-expiration}")
     private Long refreshTokenExpiration; // seconds
 
     @Override

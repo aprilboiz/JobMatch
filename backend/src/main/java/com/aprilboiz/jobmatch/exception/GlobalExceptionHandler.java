@@ -34,8 +34,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ApiResponse<Void>> handleBadCredentialsException(BadCredentialsException ex) {
-        String errorMessage = messageService.getMessage("api.error.invalid.credentials");
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error(errorMessage));
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error(ex.getMessage()));
     }
 
     @ExceptionHandler(CredentialsExpiredException.class)
