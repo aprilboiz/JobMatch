@@ -5,4 +5,5 @@ import com.aprilboiz.jobmatch.dto.response.CompanyResponse;
 
 public interface CompanyService {
     CompanyResponse updateCompany(Long id, CompanyRequest request);
+    void updateCompanyLogo(Long companyId, String logoUrl);
 }
