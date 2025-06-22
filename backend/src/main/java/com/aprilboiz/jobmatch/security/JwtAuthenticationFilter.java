@@ -34,12 +34,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String requestUri = request.getRequestURI();
         String jwt = this.getJwtFromRequest(request);
         String username = null;
 
-        if (jwt != null && !tokenBlacklistService.isTokenBlacklisted(jwt) && jwtService.validateToken(jwt)) {
-            username = jwtService.extractUsername(jwt);
+        log.debug("Processing authentication for request: {} {}", request.getMethod(), requestUri);
+        
+        if (jwt == null) {
+            log.debug("No JWT token found in request to: {}", requestUri);
+        } else {
+            log.debug("JWT token found in request to: {}", requestUri);
+            
+            if (tokenBlacklistService.isTokenBlacklisted(jwt)) {
+                log.warn("Blacklisted token attempted for request: {}", requestUri);
+            } else if (jwtService.validateToken(jwt)) {
+                username = jwtService.extractUsername(jwt);
+                log.debug("Valid JWT token for user: {} accessing: {}", username, requestUri);
+            } else {
+                log.warn("Invalid JWT token for request: {}", requestUri);
+            }
         }
+
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
@@ -47,6 +62,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
             SecurityContextHolder.getContext().setAuthentication(authToken);
+            log.debug("Security context set for user: {} accessing: {}", username, requestUri);
         }
         
         filterChain.doFilter(request, response);

@@ -26,6 +26,22 @@ import com.aprilboiz.jobmatch.storage.StorageService;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import com.aprilboiz.jobmatch.model.UserPrincipalAdapter;
+import com.aprilboiz.jobmatch.service.UserService;
+import com.aprilboiz.jobmatch.service.CloudinaryService;
+import com.aprilboiz.jobmatch.model.User;
+import com.aprilboiz.jobmatch.dto.response.ImageUploadResponse;
 
 @RestController
 @RequestMapping("/api/test")
@@ -34,10 +50,15 @@ public class TestController {
 
     private final StorageService storageService;
     private final MessageService messageService;
+    private final UserService userService;
+    private final CloudinaryService cloudinaryService;
+    private static final Logger log = LoggerFactory.getLogger(TestController.class);
 
-    public TestController(StorageService storageService, MessageService messageService) {
+    public TestController(StorageService storageService, MessageService messageService, UserService userService, CloudinaryService cloudinaryService) {
         this.storageService = storageService;
         this.messageService = messageService;
+        this.userService = userService;
+        this.cloudinaryService = cloudinaryService;
     }
 
     @Operation(
@@ -340,5 +361,47 @@ public class TestController {
 
         String successMessage = messageService.getMessage("operation.completed");
         return ResponseEntity.ok(ApiResponse.success(successMessage, testMessages));
+    }
+
+    @PostMapping("/sync-avatar/{id}")
+    @PreAuthorize("hasAnyRole('CANDIDATE', 'RECRUITER')")
+    public ResponseEntity<ApiResponse<ImageUploadResponse>> uploadAvatarSync(
+            @PathVariable Long id,
+            @RequestParam("avatar") MultipartFile avatar,
+            @AuthenticationPrincipal UserPrincipalAdapter userPrincipal) {
+        
+        try {
+            // Get the current user
+            User currentUser = userPrincipal.getUser();
+            log.info("Sync upload - Current user: {}, Target ID: {}", currentUser.getId(), id);
+            
+            // Check authorization
+            if (!currentUser.getId().equals(id)) {
+                return ResponseEntity.status(403).body(
+                    ApiResponse.error("You can only upload your own avatar")
+                );
+            }
+            
+            // Upload synchronously
+            String avatarUrl = cloudinaryService.upload(avatar, "avatars");
+            log.info("Sync upload completed: {}", avatarUrl);
+            
+            // Update user avatar
+            userService.updateUserAvatar(id, avatarUrl);
+            log.info("User avatar updated successfully");
+            
+            ImageUploadResponse response = ImageUploadResponse.builder()
+                    .imageUrl(avatarUrl)
+                    .uploadedAt(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                    .build();
+            
+            return ResponseEntity.ok(ApiResponse.success("Avatar uploaded successfully", response));
+            
+        } catch (Exception e) {
+            log.error("Sync avatar upload failed for user: {}", id, e);
+            return ResponseEntity.status(500).body(
+                ApiResponse.error("Upload failed: " + e.getMessage())
+            );
+        }
     }
 } 

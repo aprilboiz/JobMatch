@@ -3,8 +3,10 @@ package com.aprilboiz.jobmatch.controller;
 import com.aprilboiz.jobmatch.dto.request.ApplicationRequest;
 import com.aprilboiz.jobmatch.dto.response.ApplicationDetailResponse;
 import com.aprilboiz.jobmatch.dto.response.ApplicationResponse;
+import com.aprilboiz.jobmatch.enumerate.ApplicationStatus;
 import com.aprilboiz.jobmatch.exception.ApiResponse;
 import com.aprilboiz.jobmatch.model.Candidate;
+import com.aprilboiz.jobmatch.model.Recruiter;
 import com.aprilboiz.jobmatch.model.UserPrincipalAdapter;
 import com.aprilboiz.jobmatch.model.User;
 import com.aprilboiz.jobmatch.service.ApplicationService;
@@ -28,6 +30,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -243,5 +246,65 @@ public class ApplicationController {
         applicationService.withdrawApplication(id, candidate);
         String successMessage = messageService.getMessage("api.success.application.withdrawn");
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success(successMessage, null));
+    }
+
+    @Operation(
+            summary = "Update Application Status",
+            description = """
+                    Update the status of a job application during the recruitment process.
+                    
+                    This endpoint allows recruiters to manage application workflow:
+                    - Move applications through review stages (APPLIED → IN_REVIEW → INTERVIEW)
+                    - Make final decisions (OFFERED or REJECTED)
+                    - Track recruitment progress and candidate pipeline
+                    
+                    **Status Transition Rules:**
+                    - APPLIED → IN_REVIEW or REJECTED
+                    - IN_REVIEW → INTERVIEW or REJECTED
+                    - INTERVIEW → OFFERED or REJECTED
+                    - OFFERED and REJECTED are final states
+                    
+                    Only the recruiter who posted the job can update application status.
+                    """,
+            security = @SecurityRequirement(name = "Bearer Authentication")
+    )
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "Application status updated successfully",
+                    content = @Content(schema = @Schema(implementation = ApiResponse.class))
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid status transition",
+                    content = @Content(schema = @Schema(implementation = ApiResponse.Error.class))
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "404",
+                    description = "Application not found or access denied",
+                    content = @Content(schema = @Schema(implementation = ApiResponse.Error.class))
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized - Invalid or missing token",
+                    content = @Content(schema = @Schema(implementation = ApiResponse.Error.class))
+            )
+    })
+    @PutMapping("/applications/{id}/status")
+    @PreAuthorize("hasRole('RECRUITER')")
+    public ResponseEntity<ApiResponse<ApplicationDetailResponse>> updateApplicationStatus(
+            @Parameter(description = "Application ID", required = true, example = "1")
+            @PathVariable Long id,
+            @Parameter(description = "New application status", required = true)
+            @RequestParam ApplicationStatus status) {
+        UserPrincipalAdapter userPrincipalAdapter = (UserPrincipalAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userPrincipalAdapter.getUser();
+        if (!(user instanceof Recruiter recruiter)) {
+            throw new AccessDeniedException(messageService.getMessage("error.authorization.recruiter.required"));
+        }
+
+        ApplicationDetailResponse applicationResponse = applicationService.updateApplicationStatus(id, status, recruiter);
+        String successMessage = messageService.getMessage("api.success.application.status.updated");
+        return ResponseEntity.ok(ApiResponse.success(successMessage, applicationResponse));
     }
 }
