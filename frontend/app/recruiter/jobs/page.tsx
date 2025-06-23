@@ -113,28 +113,24 @@ export default function RecruiterJobsPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingJob, setEditingJob] = useState<Job | null>(null);
   const [formData, setFormData] = useState<JobFormData>(initialFormData);
-  const { toast } = useToast();
-  // Helper function to refresh jobs with better handling
+  const { toast } = useToast(); // Helper function to refresh jobs with better handling
   const refreshJobsList = async (showToast = false, forceDelay = false) => {
     try {
-      console.log("Refreshing jobs list...");
-
-      // Add a small delay if requested to allow backend processing
+      console.log("Refreshing jobs list..."); // Add a small delay if requested to allow backend processing
       if (forceDelay) {
         console.log("Waiting for backend processing...");
         await new Promise((resolve) => setTimeout(resolve, 1500));
       }
-
-      const response = await jobsApi.searchJobs({
-        page: 0,
-        size: 100,
-      });
+      const response = await jobsApi.getMyJobs();
 
       const jobsData = response.data || [];
       console.log("Jobs data refreshed:", jobsData);
       console.log("Current jobs count:", jobsData.length);
+      console.log("Refresh - setting jobs state with:", jobsData);
 
       setJobs(jobsData);
+
+      console.log("Refresh - jobs state should be updated now");
 
       if (showToast) {
         toast({
@@ -159,18 +155,21 @@ export default function RecruiterJobsPage() {
       setError(null);
       console.log("Fetching jobs...");
 
-      // Use search endpoint to get jobs - backend will filter by current recruiter automatically
-      const response = await jobsApi.searchJobs({
-        page: 0,
-        size: 100,
-      });
+      // Use /me/jobs endpoint to get current recruiter's jobs
+      const response = await jobsApi.getMyJobs();
 
       console.log("Fetch jobs response:", response);
+      console.log("Response data array:", response.data);
+      console.log("Response data length:", response.data?.length);
 
       const jobsData = response.data || [];
       console.log("Jobs data:", jobsData);
+      console.log("Jobs data length:", jobsData.length);
+      console.log("Setting jobs state with:", jobsData);
 
       setJobs(jobsData);
+
+      console.log("Jobs state should be updated now");
     } catch (error: any) {
       console.error("Failed to fetch jobs:", error);
 
@@ -392,6 +391,69 @@ export default function RecruiterJobsPage() {
   const closedJobs = jobs?.filter((job) => job.status === "CLOSED") || [];
   const expiredJobs = jobs?.filter((job) => job.status === "EXPIRED") || [];
 
+  // Debug logging
+  console.log("Current jobs state:", jobs);
+  console.log("Jobs length:", jobs?.length);
+  console.log("Open jobs:", openJobs);
+  console.log("Closed jobs:", closedJobs);
+  console.log("Expired jobs:", expiredJobs);
+  // Handle salary type change with proper min/max salary logic
+  const handleSalaryTypeChange = (newSalaryType: string) => {
+    console.log(
+      "Salary type changing from",
+      formData.salary.salaryType,
+      "to",
+      newSalaryType
+    );
+
+    const currentSalary = formData.salary;
+
+    let updatedSalary = {
+      ...currentSalary,
+      salaryType: newSalaryType as any,
+    };
+
+    // Handle transition logic
+    if (newSalaryType === "FIXED") {
+      // When switching to FIXED, use minSalary for both min and max
+      // If minSalary doesn't exist, try to use maxSalary
+      const fixedValue = currentSalary.minSalary || currentSalary.maxSalary;
+      updatedSalary = {
+        ...updatedSalary,
+        minSalary: fixedValue,
+        maxSalary: fixedValue, // Set both values to be the same
+      };
+      console.log("Fixed salary - setting both min and max to:", fixedValue);
+    } else if (newSalaryType === "RANGE") {
+      // When switching to RANGE, keep existing values or set defaults
+      if (!currentSalary.minSalary && !currentSalary.maxSalary) {
+        // If no values exist, clear both
+        updatedSalary = {
+          ...updatedSalary,
+          minSalary: undefined,
+          maxSalary: undefined,
+        };
+      }
+      console.log("Range salary - keeping existing values");
+      // If values exist, keep them as is
+    } else {
+      // For NEGOTIABLE or COMPETITIVE, clear salary values
+      updatedSalary = {
+        ...updatedSalary,
+        minSalary: undefined,
+        maxSalary: undefined,
+      };
+      console.log("Negotiable/Competitive salary - clearing values");
+    }
+
+    console.log("Updated salary object:", updatedSalary);
+
+    setFormData({
+      ...formData,
+      salary: updatedSalary,
+    });
+  };
+
   const resetForm = () => {
     setFormData(initialFormData);
     setEditingJob(null);
@@ -543,18 +605,10 @@ export default function RecruiterJobsPage() {
                     <Label>Salary Information</Label>
 
                     <div>
-                      <Label htmlFor="salaryType">Salary Type</Label>
+                      <Label htmlFor="salaryType">Salary Type</Label>{" "}
                       <Select
                         value={formData.salary.salaryType}
-                        onValueChange={(value) =>
-                          setFormData({
-                            ...formData,
-                            salary: {
-                              ...formData.salary,
-                              salaryType: value as any,
-                            },
-                          })
-                        }
+                        onValueChange={handleSalaryTypeChange}
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -631,8 +685,7 @@ export default function RecruiterJobsPage() {
                               </SelectContent>
                             </Select>
                           </div>
-                        </div>
-
+                        </div>{" "}
                         {formData.salary.salaryType === "FIXED" && (
                           <div>
                             <Label htmlFor="minSalary">Salary Amount</Label>
@@ -641,21 +694,22 @@ export default function RecruiterJobsPage() {
                               type="number"
                               min="0"
                               value={formData.salary.minSalary || ""}
-                              onChange={(e) =>
+                              onChange={(e) => {
+                                const value =
+                                  parseFloat(e.target.value) || undefined;
                                 setFormData({
                                   ...formData,
                                   salary: {
                                     ...formData.salary,
-                                    minSalary:
-                                      parseFloat(e.target.value) || undefined,
+                                    minSalary: value,
+                                    maxSalary: value, // Set both values to be the same for fixed salary
                                   },
-                                })
-                              }
+                                });
+                              }}
                               placeholder="e.g. 80000"
                             />
                           </div>
                         )}
-
                         {formData.salary.salaryType === "RANGE" && (
                           <div className="grid grid-cols-2 gap-2">
                             <div>

@@ -28,6 +28,49 @@ export const jobsApi = {
       `/jobs${queryString ? `?${queryString}` : ""}`
     );
     return response.data;
+  }, // Get my jobs (recruiter's own jobs)
+  async getMyJobs(): Promise<PaginatedResponse<Job>> {
+    console.log("Get my jobs API call:", `/me/jobs`);
+
+    const response = await apiClient.get<ApiResponse<any>>(`/me/jobs`);
+
+    console.log("Get my jobs response:", response);
+
+    // Handle backend response structure
+    if (response && response.data) {
+      const backendData = response.data;
+
+      // Backend returns { content: [...], pageable: {...}, ... }
+      if (backendData.content && Array.isArray(backendData.content)) {
+        return {
+          data: backendData.content,
+          total: backendData.totalElements || backendData.content.length,
+          page: backendData.pageable?.pageNumber || 0,
+          limit: backendData.pageable?.pageSize || backendData.content.length,
+          totalPages: backendData.totalPages || 1,
+        };
+      }
+
+      // Fallback: if data is directly an array
+      if (Array.isArray(backendData)) {
+        return {
+          data: backendData,
+          total: backendData.length,
+          page: 0,
+          limit: backendData.length,
+          totalPages: 1,
+        };
+      }
+    }
+
+    // Final fallback
+    return {
+      data: [],
+      total: 0,
+      page: 0,
+      limit: 0,
+      totalPages: 0,
+    };
   },
 
   // Search and filter jobs
