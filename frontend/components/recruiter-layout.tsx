@@ -171,17 +171,22 @@ export default function RecruiterLayout({
             <div className="flex items-center space-x-4 ml-auto">
               <Button variant="ghost" size="sm">
                 <Bell className="h-5 w-5" />
-              </Button>              <div className="flex items-center space-x-2">
+              </Button>{" "}
+              <div className="flex items-center space-x-2">
                 <div className="h-8 w-8 rounded-full bg-green-600 flex items-center justify-center">
                   <span className="text-sm font-medium text-white">
-                    {user?.email 
-                      ? user.email.charAt(0).toUpperCase() + user.email.charAt(1).toUpperCase()
-                      : 'NTD'
-                    }
+                    {user?.fullName
+                      ? user.fullName
+                          .split(" ")
+                          .map((n: string) => n[0])
+                          .join("")
+                          .slice(0, 2)
+                          .toUpperCase()
+                      : "NTD"}
                   </span>
                 </div>
                 <span className="text-sm font-medium text-gray-700">
-                  {user?.email?.split('@')[0] || 'Nhà tuyển dụng'}
+                  {user?.fullName || "Nhà tuyển dụng"}
                 </span>
               </div>
             </div>

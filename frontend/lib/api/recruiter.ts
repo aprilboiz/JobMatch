@@ -8,11 +8,24 @@ export const recruiterApi = {
     throw new Error(
       "GET /me/company/profile endpoint not implemented in backend yet"
     );
-  },
-  // Update company profile (this works if recruiter has a company)
+  }, // Update company profile (this works if recruiter has a company)
   async updateCompanyProfile(data: CompanyRequest): Promise<void> {
     try {
-      await apiClient.put<ApiResponse<void>>("/me/company/profile", data);
+      // The backend endpoint expects user profile format with fullName and phoneNumber
+      // We need to map company data to the expected format
+      const requestData = {
+        fullName: data.name, // Map company name to fullName
+        phoneNumber: data.phoneNumber || "", // Use company phone as user phone
+        // Add other fields that might be expected by the user profile endpoint
+        email: data.email,
+        // Note: The backend might expect additional user fields
+      };
+
+      console.log("Sending company profile data:", requestData);
+      await apiClient.put<ApiResponse<void>>(
+        "/me/profile/recruiter",
+        requestData
+      );
     } catch (error: any) {
       console.error("Error updating company profile:", error);
 

@@ -107,11 +107,20 @@ export default function RecruiterCompany() {
   };
 
   const handleSave = async () => {
-    // Basic validation
+    // Basic validation for required fields
     if (!formData.name.trim()) {
       toast({
         title: "Lỗi",
         description: "Tên công ty không được để trống",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!formData.phoneNumber?.trim()) {
+      toast({
+        title: "Lỗi",
+        description: "Số điện thoại không được để trống",
         variant: "destructive",
       });
       return;
@@ -132,6 +141,17 @@ export default function RecruiterCompany() {
       toast({
         title: "Lỗi",
         description: "Email không hợp lệ",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Phone validation
+    const phoneRegex = /^[0-9+\-\s()]+$/;
+    if (!phoneRegex.test(formData.phoneNumber.trim())) {
+      toast({
+        title: "Lỗi",
+        description: "Số điện thoại không hợp lệ",
         variant: "destructive",
       });
       return;
@@ -327,7 +347,9 @@ export default function RecruiterCompany() {
                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="companyName">Tên công ty</Label>
+                        <Label htmlFor="companyName">
+                          Tên công ty <span className="text-red-500">*</span>
+                        </Label>
                         <Input
                           id="companyName"
                           value={isEditing ? formData.name : companyData.name}
@@ -335,6 +357,8 @@ export default function RecruiterCompany() {
                             handleInputChange("name", e.target.value)
                           }
                           disabled={!isEditing}
+                          placeholder="VD: Công ty TNHH ABC"
+                          required={isEditing}
                         />
                       </div>
                       <div className="space-y-2">
@@ -411,7 +435,9 @@ export default function RecruiterCompany() {
                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="email">Email</Label>
+                        <Label htmlFor="email">
+                          Email <span className="text-red-500">*</span>
+                        </Label>
                         <Input
                           id="email"
                           type="email"
@@ -422,10 +448,14 @@ export default function RecruiterCompany() {
                             handleInputChange("email", e.target.value)
                           }
                           disabled={!isEditing}
+                          placeholder="VD: contact@company.com"
+                          required={isEditing}
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="phone">Số điện thoại</Label>
+                        <Label htmlFor="phone">
+                          Số điện thoại <span className="text-red-500">*</span>
+                        </Label>
                         <Input
                           id="phone"
                           value={
@@ -437,6 +467,8 @@ export default function RecruiterCompany() {
                             handleInputChange("phoneNumber", e.target.value)
                           }
                           disabled={!isEditing}
+                          placeholder="VD: 0123456789"
+                          required={isEditing}
                         />
                       </div>
                     </div>

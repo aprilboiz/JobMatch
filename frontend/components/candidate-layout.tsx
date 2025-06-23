@@ -25,11 +25,11 @@ const navigation = [
   { name: "Dashboard", href: "/candidate/dashboard", icon: Home },
   { name: "Hồ sơ", href: "/candidate/profile", icon: User },
   // { name: "Việc làm", href: "/candidate/jobs", icon: Briefcase },
-  { name: "Ứng tuyển", href: "/applications", icon: FileText },
+  { name: "Ứng tuyển", href: "/candidate/applications", icon: FileText },
 ];
 function LogoutButton() {
   const { logout } = useAuth();
-  const router = useRouter();
+  const router = useRouter(); 
   const handleLogout = async () => {
     try {
       await logout();
@@ -175,14 +175,18 @@ export default function CandidateLayout({
               <div className="flex items-center space-x-2">
                 <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center">
                   <span className="text-sm font-medium text-white">
-                    {user?.email
-                      ? user.email.charAt(0).toUpperCase() +
-                        user.email.charAt(1).toUpperCase()
+                    {user?.fullName
+                      ? user.fullName
+                          .split(" ")
+                          .map((n: string) => n[0])
+                          .join("")
+                          .slice(0, 2)
+                          .toUpperCase()
                       : "UV"}
                   </span>
                 </div>
                 <span className="text-sm font-medium text-gray-700">
-                  {user?.email?.split("@")[0] || "Ứng viên"}
+                  {user?.fullName || "Ứng viên"}
                 </span>
               </div>
             </div>

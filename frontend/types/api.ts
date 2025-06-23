@@ -34,16 +34,16 @@ export interface User {
   fullName: string;
   email: string;
   phoneNumber: string; // Changed from phone to phoneNumber
+  isActive?: boolean;
+  userType?: string;
   role: {
     roleName: string;
   };
 }
 
 export interface UpdateUserRequest {
-  fullName?: string;
-  phoneNumber?: string; // Changed from phone to phoneNumber
-  location?: string;
-  summary?: string;
+  fullName: string;
+  phoneNumber: string;
 }
 
 // CV Types (Updated to match backend)
@@ -100,37 +100,37 @@ export interface PaginatedResponse<T> {
   totalPages: number;
 }
 
-// Job Types
+// Job Types (Updated to match backend exactly)
+export interface SalaryDto {
+  salaryType: "FIXED" | "RANGE" | "NEGOTIABLE" | "COMPETITIVE";
+  minSalary?: number;
+  maxSalary?: number;
+  currency?: "USD" | "VND" | "EUR" | "GBP" | "JPY" | "AUD" | "CAD";
+  salaryPeriod?: "ANNUAL" | "MONTHLY" | "WEEKLY" | "HOURLY";
+}
+
 export interface Job {
   id: number;
   title: string;
-  company: string;
-  department: string;
-  location: string;
-  type: "FULL_TIME" | "PART_TIME" | "CONTRACT" | "REMOTE";
-  salary: string;
-  experience: string;
+  jobType: "FULL_TIME" | "PART_TIME" | "INTERNSHIP" | "CONTRACT" | "REMOTE";
   description: string;
-  requirements: string[];
-  skills: string[];
-  status: "ACTIVE" | "PAUSED" | "CLOSED";
-  postedAt: string;
-  deadline: string;
-  applicants: number;
-  views: number;
+  location: string;
+  salary: SalaryDto;
+  applicationDeadline: string; // LocalDate from backend (YYYY-MM-DD)
+  numberOfOpenings: number;
+  companyId: string;
+  recruiterId: string;
+  status: "OPEN" | "CLOSED" | "EXPIRED";
 }
 
 export interface CreateJobRequest {
   title: string;
-  department: string;
-  location: string;
-  type: string;
-  salary: string;
-  experience: string;
+  jobType: "FULL_TIME" | "PART_TIME" | "INTERNSHIP" | "CONTRACT" | "REMOTE";
+  salary: SalaryDto;
+  openings: number;
+  applicationDeadline: string; // LocalDate format YYYY-MM-DD
   description: string;
-  requirements: string[];
-  skills: string[];
-  deadline: string;
+  location: string;
 }
 
 // Company Types (Based on backend CompanyResponse and CompanyRequest)

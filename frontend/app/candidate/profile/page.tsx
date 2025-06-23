@@ -31,6 +31,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { candidateApi } from "@/lib/api/candidate";
+import { userApi } from "@/lib/api/user";
 import { useAuth } from "@/hooks/use-auth";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { ErrorMessage } from "@/components/ui/error-message";
@@ -51,13 +52,29 @@ export default function CandidateProfile() {
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<{
+    fullName?: string;
+    phoneNumber?: string;
+  }>({});
+  const [profileForm, setProfileForm] = useState({
+    fullName: "",
+    phoneNumber: "",
+  });
 
   const { user, refreshUser } = useAuth();
   const { toast } = useToast();
 
   useEffect(() => {
     loadCVFiles();
-  }, []);
+    // Initialize form with user data
+    if (user) {
+      setProfileForm({
+        fullName: user.fullName || "",
+        phoneNumber: user.phoneNumber || "",
+      });
+    }
+  }, [user]);
 
   const loadCVFiles = async () => {
     try {
@@ -206,24 +223,98 @@ export default function CandidateProfile() {
   };
 
   const handleSaveProfile = async () => {
+    // Clear previous validation errors
+    setValidationErrors({});
+
+    const errors: { fullName?: string; phoneNumber?: string } = {};
+
+    // Validate required fields
+    if (!profileForm.fullName.trim()) {
+      errors.fullName = "Họ và tên không được để trống";
+    } else if (
+      profileForm.fullName.trim().length < 3 ||
+      profileForm.fullName.trim().length > 50
+    ) {
+      errors.fullName = "Họ và tên phải có độ dài từ 3-50 ký tự";
+    }
+
+    if (!profileForm.phoneNumber.trim()) {
+      errors.phoneNumber = "Số điện thoại không được để trống";
+    } else {
+      // Validate phone number format (10 digits)
+      const phoneRegex = /^\d{10}$/;
+      if (!phoneRegex.test(profileForm.phoneNumber.trim())) {
+        errors.phoneNumber = "Số điện thoại phải có đúng 10 chữ số";
+      }
+    }
+
+    // If there are validation errors, show them and return
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      toast({
+        title: "Lỗi",
+        description: "Vui lòng kiểm tra thông tin và thử lại",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
-      setLoading(true);
-      // Update user profile logic here
-      await refreshUser();
+      setSaving(true);
+      console.log("Saving profile:", profileForm);
+
+      // Trim values before sending
+      const trimmedData = {
+        fullName: profileForm.fullName.trim(),
+        phoneNumber: profileForm.phoneNumber.trim(),
+      };
+
+      await userApi.updateUser(trimmedData);
+      await refreshUser(); // Refresh user data in context
+
       setIsEditing(false);
       toast({
         title: "Thành công",
-        description: "Cập nhật hồ sơ thành công",
+        description: "Cập nhật thông tin thành công",
       });
     } catch (error) {
+      console.error("Failed to save profile:", error);
+
+      let errorMessage = "Không thể cập nhật thông tin. Vui lòng thử lại.";
+
+      // Handle specific backend validation errors
+      if (
+        error instanceof Error &&
+        error.message.includes("Validation failed")
+      ) {
+        errorMessage = "Thông tin không hợp lệ. Vui lòng kiểm tra lại.";
+      }
+
       toast({
         title: "Lỗi",
-        description: "Không thể cập nhật hồ sơ. Vui lòng thử lại.",
+        description: errorMessage,
         variant: "destructive",
       });
-      console.error("Failed to update profile:", error);
     } finally {
-      setLoading(false);
+      setSaving(false);
+    }
+  };
+
+  const handleInputChange = (
+    field: keyof typeof profileForm,
+    value: string
+  ) => {
+    setProfileForm((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+
+    // Clear validation error for this field when user starts typing
+    if (validationErrors[field]) {
+      setValidationErrors((prev) => ({
+        ...prev,
+        [field]: undefined,
+      }));
     }
   };
 
@@ -252,6 +343,19 @@ export default function CandidateProfile() {
     return new Date(dateString).toLocaleDateString("vi-VN");
   };
 
+  const handleCancelEdit = () => {
+    // Reset form to original user data
+    if (user) {
+      setProfileForm({
+        fullName: user.fullName || "",
+        phoneNumber: user.phoneNumber || "",
+      });
+    }
+    // Clear validation errors
+    setValidationErrors({});
+    setIsEditing(false);
+  };
+
   if (error) {
     return (
       <CandidateLayout>
@@ -271,20 +375,35 @@ export default function CandidateProfile() {
               Quản lý thông tin cá nhân và CV của bạn
             </p>
           </div>
-          <Button
-            onClick={isEditing ? handleSaveProfile : () => setIsEditing(true)}
-            variant={isEditing ? "default" : "outline"}
-            disabled={loading}
-          >
-            {loading ? (
-              <LoadingSpinner size="sm" className="mr-2" />
-            ) : isEditing ? (
-              <Save className="mr-2 h-4 w-4" />
-            ) : (
-              <Edit className="mr-2 h-4 w-4" />
+          <div className="flex gap-2">
+            {isEditing && (
+              <Button
+                onClick={handleCancelEdit}
+                variant="outline"
+                disabled={saving}
+              >
+                Hủy
+              </Button>
             )}
-            {isEditing ? "Lưu thay đổi" : "Chỉnh sửa"}
-          </Button>
+            <Button
+              onClick={isEditing ? handleSaveProfile : () => setIsEditing(true)}
+              variant={isEditing ? "default" : "outline"}
+              disabled={loading || saving}
+            >
+              {loading || saving ? (
+                <LoadingSpinner size="sm" className="mr-2" />
+              ) : isEditing ? (
+                <Save className="mr-2 h-4 w-4" />
+              ) : (
+                <Edit className="mr-2 h-4 w-4" />
+              )}
+              {saving
+                ? "Đang lưu..."
+                : isEditing
+                ? "Lưu thay đổi"
+                : "Chỉnh sửa"}
+            </Button>
+          </div>
         </div>
 
         <Tabs defaultValue="personal" className="space-y-6">
@@ -322,9 +441,20 @@ export default function CandidateProfile() {
                     <Label htmlFor="fullName">Họ và tên</Label>
                     <Input
                       id="fullName"
-                      defaultValue={user?.fullName || ""}
+                      value={profileForm.fullName}
+                      onChange={(e) =>
+                        handleInputChange("fullName", e.target.value)
+                      }
                       disabled={!isEditing}
+                      className={
+                        validationErrors.fullName ? "border-red-500" : ""
+                      }
                     />
+                    {validationErrors.fullName && (
+                      <p className="text-sm text-red-500">
+                        {validationErrors.fullName}
+                      </p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
@@ -339,9 +469,20 @@ export default function CandidateProfile() {
                     <Label htmlFor="phoneNumber">Số điện thoại</Label>
                     <Input
                       id="phoneNumber"
-                      defaultValue={user?.phoneNumber || ""}
+                      value={profileForm.phoneNumber}
+                      onChange={(e) =>
+                        handleInputChange("phoneNumber", e.target.value)
+                      }
                       disabled={!isEditing}
+                      className={
+                        validationErrors.phoneNumber ? "border-red-500" : ""
+                      }
                     />
+                    {validationErrors.phoneNumber && (
+                      <p className="text-sm text-red-500">
+                        {validationErrors.phoneNumber}
+                      </p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="location">Địa chỉ</Label>

@@ -40,7 +40,6 @@ class ApiClient {
     }
     console.log("Tokens cleared"); // Debug log
   }
-
   private async request<T>(
     endpoint: string,
     options: RequestInit = {}
@@ -78,6 +77,65 @@ class ApiClient {
         Object.fromEntries(response.headers.entries())
       ); // Debug log
 
+      // Handle 401 Unauthorized - token expired
+      if (response.status === 401 && !endpoint.includes("/auth/")) {
+        console.log("Received 401, attempting token refresh...");
+
+        try {
+          await this.refreshToken();
+          console.log("Token refreshed successfully, retrying request...");
+
+          // Retry the original request with new token
+          const retryHeaders = {
+            ...headers,
+            Authorization: `Bearer ${this.token}`,
+          };
+
+          const retryResponse = await fetch(url, {
+            ...options,
+            headers: retryHeaders,
+          });
+
+          if (!retryResponse.ok) {
+            const errorText = await retryResponse.text();
+            console.error("Retry request failed:", errorText);
+
+            let errorData;
+            try {
+              errorData = JSON.parse(errorText);
+            } catch {
+              errorData = {
+                message: errorText || `HTTP ${retryResponse.status}`,
+              };
+            }
+
+            throw new Error(
+              errorData.message || `HTTP ${retryResponse.status}`
+            );
+          }
+
+          const responseText = await retryResponse.text();
+          console.log("Retry request success:", responseText);
+
+          const data = responseText ? JSON.parse(responseText) : {};
+          return data;
+        } catch (refreshError) {
+          console.error("Token refresh failed:", refreshError);
+
+          // Clear tokens and redirect to login
+          this.clearToken();
+
+          // Redirect to login page
+          if (typeof window !== "undefined") {
+            window.location.href = "/auth/login";
+          }
+
+          throw new Error(
+            "Authentication failed. Please check your credentials and try again."
+          );
+        }
+      }
+
       if (!response.ok) {
         const errorText = await response.text();
         console.error("Error response text:", errorText); // Debug log
@@ -100,6 +158,50 @@ class ApiClient {
     } catch (error) {
       console.error("API Request failed:", error);
       throw error;
+    }
+  }
+
+  private async refreshToken(): Promise<void> {
+    const refreshToken =
+      typeof window !== "undefined"
+        ? localStorage.getItem("refresh_token")
+        : null;
+
+    if (!refreshToken) {
+      throw new Error("No refresh token available");
+    }
+
+    console.log("Attempting to refresh token...");
+
+    const response = await fetch(`${this.baseURL}/auth/refresh`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ refreshToken }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to refresh token");
+    }
+
+    const data = await response.json();
+
+    if (data && data.data) {
+      // Update tokens
+      this.setToken(data.data.token);
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("refresh_token", data.data.refreshToken);
+        localStorage.setItem(
+          "token_expires_in",
+          data.data.expiresIn.toString()
+        );
+      }
+
+      console.log("Token refreshed successfully");
+    } else {
+      throw new Error("Invalid refresh response");
     }
   }
 
