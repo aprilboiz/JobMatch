@@ -1,317 +1,467 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import CandidateLayout from "@/components/candidate-layout"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Search, MapPin, Building, Clock, Star, Bookmark, SlidersHorizontal } from "lucide-react"
+import { useState, useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import {
+  SearchIcon,
+  MapPinIcon,
+  CalendarIcon,
+  DollarSignIcon,
+  BuildingIcon,
+} from "lucide-react";
+import { jobsApi, JobSearchParams } from "@/lib/api/jobs";
+import { JobResponse, PaginatedResponse } from "@/types/api";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { ErrorMessage } from "@/components/ui/error-message";
 
-export default function CandidateJobs() {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [selectedLocation, setSelectedLocation] = useState("")
-  const [selectedSalary, setSelectedSalary] = useState("")
-  const [selectedExperience, setSelectedExperience] = useState("")
+export default function CandidateJobsPage() {
+  const [jobs, setJobs] = useState<JobResponse[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalJobs, setTotalJobs] = useState(0);
 
-  const jobs = [
-    {
-      id: 1,
-      title: "Senior Frontend Developer",
-      company: "TechCorp Vietnam",
-      location: "Hà Nội",
-      salary: "25-35 triệu",
-      experience: "3-5 năm",
-      type: "Full-time",
-      matchScore: 95,
-      postedAt: "2 ngày trước",
-      description: "Tìm kiếm Senior Frontend Developer có kinh nghiệm với React, TypeScript...",
-      skills: ["React", "TypeScript", "Node.js", "GraphQL"],
-      saved: false,
-    },
-    {
-      id: 2,
-      title: "React Developer",
-      company: "StartupXYZ",
-      location: "TP.HCM",
-      salary: "20-30 triệu",
-      experience: "2-4 năm",
-      type: "Full-time",
-      matchScore: 92,
-      postedAt: "1 tuần trước",
-      description: "Cần React Developer để phát triển ứng dụng web hiện đại...",
-      skills: ["React", "JavaScript", "CSS", "Redux"],
-      saved: true,
-    },
-    {
-      id: 3,
-      title: "Full Stack Developer",
-      company: "BigTech Solutions",
-      location: "Đà Nẵng",
-      salary: "30-40 triệu",
-      experience: "4-6 năm",
-      type: "Full-time",
-      matchScore: 88,
-      postedAt: "3 ngày trước",
-      description: "Tuyển Full Stack Developer có kinh nghiệm với cả frontend và backend...",
-      skills: ["React", "Node.js", "MongoDB", "AWS"],
-      saved: false,
-    },
-    {
-      id: 4,
-      title: "Frontend Developer (Remote)",
-      company: "RemoteFirst Co",
-      location: "Remote",
-      salary: "18-25 triệu",
-      experience: "1-3 năm",
-      type: "Remote",
-      matchScore: 85,
-      postedAt: "5 ngày trước",
-      description: "Cơ hội làm việc remote cho Frontend Developer...",
-      skills: ["Vue.js", "JavaScript", "CSS", "Git"],
-      saved: false,
-    },
-    {
-      id: 5,
-      title: "Junior React Developer",
-      company: "GrowthTech",
-      location: "Hà Nội",
-      salary: "12-18 triệu",
-      experience: "0-2 năm",
-      type: "Full-time",
-      matchScore: 82,
-      postedAt: "1 tuần trước",
-      description: "Tuyển Junior React Developer để tham gia team phát triển sản phẩm...",
-      skills: ["React", "JavaScript", "HTML", "CSS"],
-      saved: true,
-    },
-    {
-      id: 6,
-      title: "Lead Frontend Engineer",
-      company: "Enterprise Corp",
-      location: "TP.HCM",
-      salary: "40-60 triệu",
-      experience: "5+ năm",
-      type: "Full-time",
-      matchScore: 78,
-      postedAt: "4 ngày trước",
-      description: "Tìm kiếm Lead Frontend Engineer để dẫn dắt team phát triển...",
-      skills: ["React", "TypeScript", "Leadership", "Architecture"],
-      saved: false,
-    },
-  ]
+  // Debug state changes
+  useEffect(() => {
+    console.log("🔄 State changed:", {
+      jobsCount: jobs.length,
+      loading,
+      error,
+      totalJobs,
+      currentPage,
+      totalPages,
+    });
+  }, [jobs, loading, error, totalJobs, currentPage, totalPages]);
 
-  const savedJobs = jobs.filter((job) => job.saved)
-  const recommendedJobs = jobs.filter((job) => job.matchScore >= 85)
+  // Search and filter states
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [selectedJobType, setSelectedJobType] = useState<string>("");
+  const [selectedLocation, setSelectedLocation] = useState("");
+  const [minSalary, setMinSalary] = useState<number | undefined>();
+  const [maxSalary, setMaxSalary] = useState<number | undefined>();
 
-  const getMatchScoreColor = (score: number) => {
-    if (score >= 90) return "text-green-600"
-    if (score >= 80) return "text-blue-600"
-    if (score >= 70) return "text-yellow-600"
-    return "text-gray-600"
+  const jobTypeOptions = [
+    { value: "FULL_TIME", label: "Toàn thời gian" },
+    { value: "PART_TIME", label: "Bán thời gian" },
+    { value: "INTERNSHIP", label: "Thực tập" },
+    { value: "CONTRACT", label: "Hợp đồng" },
+    { value: "REMOTE", label: "Làm việc từ xa" },
+  ];
+
+  const formatSalary = (salary: any) => {
+    if (!salary) return "Thương lượng";
+
+    switch (salary.salaryType) {
+      case "NEGOTIABLE":
+        return "Thương lượng";
+      case "COMPETITIVE":
+        return "Lương cạnh tranh";
+      case "FIXED":
+        return salary.minSalary
+          ? `${salary.minSalary.toLocaleString()} ${salary.currency || "VND"}/${
+              salary.salaryPeriod?.toLowerCase() || "tháng"
+            }`
+          : "Thương lượng";
+      case "RANGE":
+        return salary.minSalary && salary.maxSalary
+          ? `${salary.minSalary.toLocaleString()} - ${salary.maxSalary.toLocaleString()} ${
+              salary.currency || "VND"
+            }/${salary.salaryPeriod?.toLowerCase() || "tháng"}`
+          : "Thương lượng";
+      default:
+        return "Thương lượng";
+    }
+  };
+
+  const formatJobType = (jobType: string) => {
+    const option = jobTypeOptions.find((opt) => opt.value === jobType);
+    return option ? option.label : jobType;
+  };
+
+  const formatDeadline = (deadline: string) => {
+    return new Date(deadline).toLocaleDateString("vi-VN");
+  };
+  const getStatusBadgeVariant = (status: string) => {
+    switch (status) {
+      case "OPEN":
+        return "default";
+      case "CLOSED":
+        return "outline";
+      case "EXPIRED":
+        return "destructive";
+      default:
+        return "secondary";
+    }
+  };
+
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case "OPEN":
+        return "Đang tuyển";
+      case "CLOSED":
+        return "Đã đóng";
+      case "EXPIRED":
+        return "Hết hạn";
+      default:
+        return status;
+    }
+  };
+  const loadJobs = async (page: number = 0, useSearch: boolean = false) => {
+    try {
+      setLoading(true);
+      setError(null);
+      console.log("🔍 loadJobs called with:", { page, useSearch });
+
+      let result: PaginatedResponse<JobResponse>;
+
+      if (
+        useSearch &&
+        (searchKeyword ||
+          selectedJobType ||
+          selectedLocation ||
+          minSalary ||
+          maxSalary)
+      ) {
+        // Use search API with filters
+        const searchParams: JobSearchParams = {
+          page,
+          size: 10,
+          sort: "createdAt,desc",
+        };
+
+        if (searchKeyword) searchParams.keyword = searchKeyword;
+        if (selectedJobType) searchParams.jobType = selectedJobType as any;
+        if (selectedLocation) searchParams.location = selectedLocation;
+        if (minSalary) searchParams.minSalary = minSalary;
+        if (maxSalary) searchParams.maxSalary = maxSalary;
+        searchParams.status = "OPEN"; // Only show open jobs for candidates
+
+        console.log("🔍 Using search API with params:", searchParams);
+        result = await jobsApi.searchJobs(searchParams);
+      } else {
+        // Use general get all jobs API
+        console.log("📋 Using getAllJobs API");
+        result = await jobsApi.getAllJobs(page, 10, "createdAt,desc");
+      }
+
+      console.log("✅ API result:", result);
+      console.log("📊 Jobs data:", result?.data);
+      console.log("📝 Jobs count:", result?.data?.length);
+
+      setJobs(result?.data || []);
+      setTotalPages(result?.totalPages || 0);
+      setTotalJobs(result?.total || 0);
+      setCurrentPage(page);
+
+      console.log(
+        "🎯 State updated - jobs count:",
+        (result?.data || []).length
+      );
+    } catch (err: any) {
+      console.error("❌ Error loading jobs:", err);
+      setError(err.message || "Không thể tải danh sách việc làm");
+      setJobs([]);
+      setTotalPages(0);
+      setTotalJobs(0);
+    } finally {
+      setLoading(false);
+    }
+  };
+  // Load jobs on component mount
+  useEffect(() => {
+    console.log("🚀 Component mounted, loading jobs...");
+    loadJobs(0, false);
+  }, []);
+
+  const handleSearch = () => {
+    console.log("🔍 Handling search...");
+    loadJobs(0, true);
+  };
+
+  const handleClearFilters = () => {
+    console.log("🧹 Clearing filters...");
+    setSearchKeyword("");
+    setSelectedJobType("");
+    setSelectedLocation("");
+    setMinSalary(undefined);
+    setMaxSalary(undefined);
+    loadJobs(0, false);
+  };
+  const handlePageChange = (newPage: number) => {
+    const hasFilters = !!(
+      searchKeyword ||
+      selectedJobType ||
+      selectedLocation ||
+      minSalary ||
+      maxSalary
+    );
+    loadJobs(newPage, hasFilters);
+  };
+  if (loading && (!jobs || jobs.length === 0)) {
+    console.log("🔄 Loading state - showing spinner");
+    return (
+      <div className="flex justify-center items-center min-h-96">
+        <LoadingSpinner />
+      </div>
+    );
   }
 
-  const JobCard = ({ job }: { job: (typeof jobs)[0] }) => (
-    <Card className="hover:shadow-md transition-shadow">
-      <CardContent className="p-6">
-        <div className="flex items-start justify-between mb-4">
-          <div className="flex-1">
-            <h3 className="text-lg font-semibold text-gray-900 mb-1">{job.title}</h3>
-            <div className="flex items-center text-gray-600 mb-2">
-              <Building className="h-4 w-4 mr-1" />
-              <span className="font-medium">{job.company}</span>
-            </div>
-            <div className="flex items-center space-x-4 text-sm text-gray-600">
-              <div className="flex items-center">
-                <MapPin className="h-4 w-4 mr-1" />
-                {job.location}
-              </div>
-              <div className="flex items-center">
-                <Clock className="h-4 w-4 mr-1" />
-                {job.postedAt}
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center space-x-2">
-            <div className="flex items-center">
-              <Star className={`h-4 w-4 mr-1 ${getMatchScoreColor(job.matchScore)}`} />
-              <span className={`text-sm font-medium ${getMatchScoreColor(job.matchScore)}`}>{job.matchScore}%</span>
-            </div>
-            <Button variant="ghost" size="sm">
-              <Bookmark className={`h-4 w-4 ${job.saved ? "fill-current text-blue-600" : ""}`} />
-            </Button>
-          </div>
-        </div>
-
-        <p className="text-gray-700 text-sm mb-4 line-clamp-2">{job.description}</p>
-
-        <div className="flex flex-wrap gap-2 mb-4">
-          {job.skills.map((skill) => (
-            <Badge key={skill} variant="secondary" className="text-xs">
-              {skill}
-            </Badge>
-          ))}
-        </div>
-
-        <div className="flex items-center justify-between">
-          <div className="space-y-1">
-            <div className="text-sm text-gray-600">Mức lương</div>
-            <div className="font-semibold text-green-600">{job.salary}</div>
-          </div>
-          <div className="space-y-1">
-            <div className="text-sm text-gray-600">Kinh nghiệm</div>
-            <div className="font-medium">{job.experience}</div>
-          </div>
-          <div className="space-y-1">
-            <Badge variant={job.type === "Remote" ? "default" : "outline"}>{job.type}</Badge>
-          </div>
-        </div>
-
-        <div className="flex space-x-2 mt-4">
-          <Button className="flex-1">Ứng tuyển ngay</Button>
-          <Button variant="outline">Xem chi tiết</Button>
-        </div>
-      </CardContent>
-    </Card>
-  )
+  console.log("🎨 Rendering jobs page:", {
+    loading,
+    jobsCount: jobs?.length,
+    error,
+    totalJobs,
+  });
 
   return (
-    <CandidateLayout>
-      <div className="space-y-6">
-        {/* Header */}
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Tìm việc làm</h1>
-          <p className="text-gray-600">Khám phá các cơ hội nghề nghiệp phù hợp với bạn</p>
-        </div>
-
-        {/* Search and Filters */}
-        <Card>
-          <CardContent className="p-6">
-            <div className="space-y-4">
-              {/* Search Bar */}
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <Input
-                  placeholder="Tìm kiếm theo vị trí, công ty, kỹ năng..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-
-              {/* Filters */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <Select value={selectedLocation} onValueChange={setSelectedLocation}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Địa điểm" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="hanoi">Hà Nội</SelectItem>
-                    <SelectItem value="hcm">TP.HCM</SelectItem>
-                    <SelectItem value="danang">Đà Nẵng</SelectItem>
-                    <SelectItem value="remote">Remote</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <Select value={selectedSalary} onValueChange={setSelectedSalary}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Mức lương" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="under-15">Dưới 15 triệu</SelectItem>
-                    <SelectItem value="15-25">15-25 triệu</SelectItem>
-                    <SelectItem value="25-35">25-35 triệu</SelectItem>
-                    <SelectItem value="over-35">Trên 35 triệu</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <Select value={selectedExperience} onValueChange={setSelectedExperience}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Kinh nghiệm" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="0-1">0-1 năm</SelectItem>
-                    <SelectItem value="1-3">1-3 năm</SelectItem>
-                    <SelectItem value="3-5">3-5 năm</SelectItem>
-                    <SelectItem value="5+">5+ năm</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <Button variant="outline">
-                  <SlidersHorizontal className="mr-2 h-4 w-4" />
-                  Bộ lọc nâng cao
-                </Button>
-              </div>
+    <div className="space-y-6">
+      {/* Search and Filter Section */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Tìm kiếm và lọc</CardTitle>
+          <CardDescription>
+            Sử dụng các bộ lọc để tìm công việc phù hợp với bạn
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {/* Search Bar */}
+          <div className="flex gap-2">
+            <div className="relative flex-1">
+              <SearchIcon className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Tìm kiếm theo tiêu đề, mô tả công việc..."
+                value={searchKeyword}
+                onChange={(e) => setSearchKeyword(e.target.value)}
+                className="pl-10"
+                onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+              />
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Job Tabs */}
-        <Tabs defaultValue="all" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="all">Tất cả việc làm ({jobs.length})</TabsTrigger>
-            <TabsTrigger value="recommended">Phù hợp ({recommendedJobs.length})</TabsTrigger>
-            <TabsTrigger value="saved">Đã lưu ({savedJobs.length})</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="all" className="space-y-4">
-            <div className="flex items-center justify-between">
-              <p className="text-sm text-gray-600">Hiển thị {jobs.length} việc làm</p>
-              <Select defaultValue="match">
-                <SelectTrigger className="w-48">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="match">Độ phù hợp cao nhất</SelectItem>
-                  <SelectItem value="newest">Mới nhất</SelectItem>
-                  <SelectItem value="salary">Lương cao nhất</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="grid gap-4">
-              {jobs.map((job) => (
-                <JobCard key={job.id} job={job} />
-              ))}
-            </div>
-          </TabsContent>
-
-          <TabsContent value="recommended" className="space-y-4">
-            <div className="flex items-center justify-between">
-              <p className="text-sm text-gray-600">
-                Hiển thị {recommendedJobs.length} việc làm phù hợp (≥85% matching)
-              </p>
-            </div>
-            <div className="grid gap-4">
-              {recommendedJobs.map((job) => (
-                <JobCard key={job.id} job={job} />
-              ))}
-            </div>
-          </TabsContent>
-
-          <TabsContent value="saved" className="space-y-4">
-            <div className="flex items-center justify-between">
-              <p className="text-sm text-gray-600">Hiển thị {savedJobs.length} việc làm đã lưu</p>
-            </div>
-            {savedJobs.length > 0 ? (
-              <div className="grid gap-4">
-                {savedJobs.map((job) => (
-                  <JobCard key={job.id} job={job} />
+            <Button onClick={handleSearch} disabled={loading}>
+              {loading ? <LoadingSpinner className="h-4 w-4" /> : "Tìm kiếm"}
+            </Button>
+          </div>
+          {/* Filters Row */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <Select value={selectedJobType} onValueChange={setSelectedJobType}>
+              <SelectTrigger>
+                <SelectValue placeholder="Loại công việc" />
+              </SelectTrigger>
+              <SelectContent>
+                {jobTypeOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
                 ))}
-              </div>
-            ) : (
-              <Card>
-                <CardContent className="p-12 text-center">
-                  <Bookmark className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">Chưa có việc làm nào được lưu</h3>
-                  <p className="text-gray-600">Lưu các việc làm yêu thích để xem lại sau</p>
-                </CardContent>
+              </SelectContent>
+            </Select>
+
+            <Input
+              placeholder="Địa điểm"
+              value={selectedLocation}
+              onChange={(e) => setSelectedLocation(e.target.value)}
+            />
+
+            <Input
+              type="number"
+              placeholder="Lương tối thiểu"
+              value={minSalary || ""}
+              onChange={(e) =>
+                setMinSalary(
+                  e.target.value ? Number(e.target.value) : undefined
+                )
+              }
+            />
+
+            <Input
+              type="number"
+              placeholder="Lương tối đa"
+              value={maxSalary || ""}
+              onChange={(e) =>
+                setMaxSalary(
+                  e.target.value ? Number(e.target.value) : undefined
+                )
+              }
+            />
+          </div>{" "}
+          {/* Action Buttons */}
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={handleClearFilters}>
+              Xóa bộ lọc
+            </Button>
+            <Button variant="outline" onClick={() => loadJobs(0, false)}>
+              🔄 Force Reload
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => console.log("Current jobs state:", jobs)}
+            >
+              🐛 Log Jobs
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+      {/* Error Display */}
+      {error && (
+        <ErrorMessage
+          message={error}
+          onRetry={() => loadJobs(currentPage, false)}
+        />
+      )}{" "}
+      {/* Jobs List */}
+      <div className="space-y-6">
+        {(() => {
+          console.log("🔍 Jobs list render check:", {
+            jobs,
+            jobsLength: jobs?.length,
+            loading,
+          });
+          return null;
+        })()}
+        {(!jobs || jobs.length === 0) && !loading ? (
+          <Card>
+            <CardContent className="text-center py-10">
+              <p className="text-muted-foreground">
+                Không tìm thấy việc làm nào phù hợp với tiêu chí tìm kiếm của
+                bạn.
+              </p>
+              <Button
+                variant="outline"
+                onClick={handleClearFilters}
+                className="mt-4"
+              >
+                Xóa bộ lọc và xem tất cả
+              </Button>
+            </CardContent>
+          </Card>
+        ) : (
+          jobs?.map((job) => {
+            console.log("🎯 Rendering job:", job.id, job.title);
+            return (
+              <Card key={job.id} className="hover:shadow-md transition-shadow">
+                <CardHeader>
+                  <div className="flex justify-between items-start">
+                    <div className="space-y-2">
+                      <CardTitle className="text-xl hover:text-primary cursor-pointer">
+                        {job.title}
+                      </CardTitle>
+                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-1">
+                          <BuildingIcon className="h-4 w-4" />
+                          <span>Công ty ID: {job.companyId}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <MapPinIcon className="h-4 w-4" />
+                          <span>{job.location}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <Badge variant={getStatusBadgeVariant(job.status)}>
+                      {getStatusLabel(job.status)}
+                    </Badge>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <CardDescription className="line-clamp-3">
+                    {job.description}
+                  </CardDescription>
+
+                  <div className="flex flex-wrap gap-2">
+                    <Badge variant="secondary">
+                      {formatJobType(job.jobType)}
+                    </Badge>
+                    <Badge variant="outline">
+                      <DollarSignIcon className="h-3 w-3 mr-1" />
+                      {formatSalary(job.salary)}
+                    </Badge>
+                    <Badge variant="outline">
+                      <CalendarIcon className="h-3 w-3 mr-1" />
+                      Hạn nộp: {formatDeadline(job.applicationDeadline)}
+                    </Badge>
+                    <Badge variant="outline">
+                      {job.numberOfOpenings} vị trí
+                    </Badge>
+                  </div>
+
+                  <div className="flex justify-between items-center pt-4">
+                    <div className="text-sm text-muted-foreground">
+                      ID: {job.id}
+                    </div>
+                    <div className="flex gap-2">
+                      <Button variant="outline" size="sm">
+                        Xem chi tiết
+                      </Button>{" "}
+                      <Button size="sm" disabled={job.status !== "OPEN"}>
+                        Ứng tuyển
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>{" "}
               </Card>
-            )}
-          </TabsContent>
-        </Tabs>
+            );
+          })
+        )}
       </div>
-    </CandidateLayout>
-  )
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center space-x-2">
+          <Button
+            variant="outline"
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 0 || loading}
+          >
+            Trang trước
+          </Button>
+
+          <div className="flex items-center gap-1">
+            {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+              const pageNumber = currentPage < 3 ? i : currentPage - 2 + i;
+              if (pageNumber >= totalPages) return null;
+
+              return (
+                <Button
+                  key={pageNumber}
+                  variant={pageNumber === currentPage ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => handlePageChange(pageNumber)}
+                  disabled={loading}
+                >
+                  {pageNumber + 1}
+                </Button>
+              );
+            })}
+          </div>
+
+          <Button
+            variant="outline"
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage >= totalPages - 1 || loading}
+          >
+            Trang sau
+          </Button>
+        </div>
+      )}{" "}
+      {/* Results Summary */}
+      <div className="text-center text-sm text-muted-foreground">
+        Hiển thị {jobs?.length || 0} / {totalJobs} việc làm
+        {totalPages > 1 && ` • Trang ${currentPage + 1} / ${totalPages}`}
+      </div>
+    </div>
+  );
 }

@@ -1,4 +1,5 @@
 import { apiClient } from "./client";
+import { TokenManager } from "@/lib/utils/token-manager";
 import type {
   AuthResponse,
   AuthRequest,
@@ -77,25 +78,20 @@ export const authApi = {
         console.error("No access token in response:", response.data);
         throw new Error("No access token received");
       }
-
       console.log("Login successful, setting token...");
       console.log(
         "Access token (first 20 chars):",
         response.data.token.substring(0, 20) + "..."
       );
 
-      // Store tokens and set token in apiClient immediately
-      apiClient.setToken(response.data.token);
+      // Store tokens using TokenManager and set token in apiClient
+      apiClient.setToken(
+        response.data.token,
+        response.data.refreshToken,
+        response.data.expiresIn || 3600
+      );
 
-      if (typeof window !== "undefined") {
-        localStorage.setItem("refresh_token", response.data.refreshToken || "");
-        localStorage.setItem(
-          "token_expires_in",
-          (response.data.expiresIn || 3600).toString()
-        );
-        console.log("Tokens stored in localStorage");
-      }
-
+      console.log("Tokens stored using TokenManager");
       console.log("=== LOGIN SUCCESS ===");
       return response.data;
     } catch (error) {
@@ -114,12 +110,8 @@ export const authApi = {
       throw error;
     }
   },
-
   async refreshToken(): Promise<AuthResponse> {
-    const refreshToken =
-      typeof window !== "undefined"
-        ? localStorage.getItem("refresh_token")
-        : null;
+    const refreshToken = TokenManager.getRefreshToken();
 
     if (!refreshToken) {
       throw new Error("No refresh token available");
@@ -132,28 +124,19 @@ export const authApi = {
       } as RefreshTokenRequest
     );
 
-    // Update tokens and set new token in apiClient
-    apiClient.setToken(response.data.token);
-    if (typeof window !== "undefined") {
-      localStorage.setItem("refresh_token", response.data.refreshToken);
-      localStorage.setItem(
-        "token_expires_in",
-        response.data.expiresIn.toString()
-      );
-    }
+    // Update tokens using TokenManager and set new token in apiClient
+    apiClient.setToken(
+      response.data.token,
+      response.data.refreshToken,
+      response.data.expiresIn
+    );
 
     return response.data;
   },
 
   async logout(): Promise<void> {
-    const refreshToken =
-      typeof window !== "undefined"
-        ? localStorage.getItem("refresh_token")
-        : null;
-    const accessToken =
-      typeof window !== "undefined"
-        ? localStorage.getItem("access_token")
-        : null;
+    const refreshToken = TokenManager.getRefreshToken();
+    const accessToken = TokenManager.getAccessToken();
 
     try {
       if (refreshToken && accessToken) {
