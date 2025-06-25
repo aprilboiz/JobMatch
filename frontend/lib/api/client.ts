@@ -1,3 +1,5 @@
+import { TokenManager } from "@/lib/utils/token-manager";
+
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api";
 
@@ -13,31 +15,55 @@ class ApiClient {
 
   private loadToken() {
     if (typeof window !== "undefined") {
-      this.token = localStorage.getItem("access_token");
+      this.token = TokenManager.getAccessToken();
       console.log("Token loaded:", this.token ? "Present" : "Not found"); // Debug log
+
+      // Check if token is expired
+      this.checkTokenExpiry();
     }
   }
 
-  setToken(token: string) {
+  private checkTokenExpiry() {
+    if (typeof window === "undefined") return;
+
+    if (TokenManager.isTokenExpired()) {
+      console.log("Token has expired, clearing...");
+      this.clearToken();
+      TokenManager.dispatchTokenExpiredEvent();
+      return;
+    }
+
+    // Check if token will expire soon, try to refresh
+    if (TokenManager.isTokenNearExpiry()) {
+      console.log("Token will expire soon, attempting refresh...");
+      TokenManager.ensureSingleRefresh(() => this.refreshToken()).catch(() => {
+        console.log("Refresh failed, token may be expired");
+      });
+    }
+  }
+  setToken(token: string, refreshToken?: string, expiresIn?: number) {
     console.log(
       "Setting token in ApiClient:",
       token ? "Token provided" : "No token"
     );
     this.token = token;
+
     if (typeof window !== "undefined") {
-      localStorage.setItem("access_token", token);
-      console.log("Token saved to localStorage");
+      // Use TokenManager for better token management
+      TokenManager.setTokens({
+        token,
+        refreshToken: refreshToken || TokenManager.getRefreshToken() || "",
+        expiresIn: expiresIn || 3600,
+        timestamp: Date.now(),
+      });
+      console.log("Token saved to localStorage with timestamp");
     }
     console.log("Current token after set:", this.token ? "Present" : "Not set");
   }
 
   clearToken() {
     this.token = null;
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("access_token");
-      localStorage.removeItem("refresh_token");
-      localStorage.removeItem("token_expires_in");
-    }
+    TokenManager.clearTokens();
     console.log("Tokens cleared"); // Debug log
   }
   private async request<T>(
@@ -75,9 +101,7 @@ class ApiClient {
       console.log(
         "Response headers:",
         Object.fromEntries(response.headers.entries())
-      ); // Debug log
-
-      // Handle 401 Unauthorized - token expired
+      ); // Debug log      // Handle 401 Unauthorized - token expired
       if (response.status === 401 && !endpoint.includes("/auth/")) {
         console.log("Received 401, attempting token refresh...");
 
@@ -120,18 +144,23 @@ class ApiClient {
           const data = responseText ? JSON.parse(responseText) : {};
           return data;
         } catch (refreshError) {
-          console.error("Token refresh failed:", refreshError);
-
-          // Clear tokens and redirect to login
+          console.error("Token refresh failed:", refreshError); // Clear tokens and redirect to login
           this.clearToken();
 
-          // Redirect to login page
+          // Show user-friendly message using TokenManager
+          TokenManager.dispatchTokenExpiredEvent(
+            "Phiên đăng nhập đã hết hạn. Đang chuyển hướng đến trang đăng nhập..."
+          );
+
+          // Redirect after a delay
           if (typeof window !== "undefined") {
-            window.location.href = "/auth/login";
+            setTimeout(() => {
+              window.location.href = "/auth/login";
+            }, 3000);
           }
 
           throw new Error(
-            "Authentication failed. Please check your credentials and try again."
+            "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại."
           );
         }
       }
@@ -160,12 +189,8 @@ class ApiClient {
       throw error;
     }
   }
-
   private async refreshToken(): Promise<void> {
-    const refreshToken =
-      typeof window !== "undefined"
-        ? localStorage.getItem("refresh_token")
-        : null;
+    const refreshToken = TokenManager.getRefreshToken();
 
     if (!refreshToken) {
       throw new Error("No refresh token available");
@@ -188,16 +213,12 @@ class ApiClient {
     const data = await response.json();
 
     if (data && data.data) {
-      // Update tokens
-      this.setToken(data.data.token);
-
-      if (typeof window !== "undefined") {
-        localStorage.setItem("refresh_token", data.data.refreshToken);
-        localStorage.setItem(
-          "token_expires_in",
-          data.data.expiresIn.toString()
-        );
-      }
+      // Update tokens using TokenManager
+      this.setToken(
+        data.data.token,
+        data.data.refreshToken,
+        data.data.expiresIn
+      );
 
       console.log("Token refreshed successfully");
     } else {

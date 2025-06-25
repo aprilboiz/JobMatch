@@ -41,9 +41,29 @@ export interface User {
   };
 }
 
+export interface UserResponse {
+  id: number;
+  email: string;
+  fullName: string;
+  phoneNumber: string;
+  avatarUrl?: string;
+  isActive: boolean;
+  role: {
+    roleName: string;
+  };
+  userType: string;
+}
+
 export interface UpdateUserRequest {
   fullName: string;
   phoneNumber: string;
+}
+
+// Recruiter profile update request (simplified)
+export interface UpdateRecruiterProfileRequest {
+  fullName: string;
+  phoneNumber: string;
+  companyId: number;
 }
 
 // CV Types (Updated to match backend)
@@ -57,24 +77,22 @@ export interface CvResponse {
   contentType: string;
 }
 
-// Application Types (Updated to match backend)
+// Application Types (Updated to match backend exactly)
 export interface ApplicationResponse {
-  id: number;
-  jobId: number;
-  candidateId: number;
-  status: "PENDING" | "REVIEWING" | "INTERVIEW" | "REJECTED" | "ACCEPTED";
-  appliedAt: string;
-  matchScore?: number;
-  notes?: string;
-  interviewDate?: string;
-  job: {
-    id: number;
-    title: string;
-    company: string;
-    location: string;
-    salary: string;
-    description: string;
-  };
+  id: string;
+  jobId: string;
+  jobTitle: string;
+  companyName: string;
+  status: string;
+  appliedOn: string;
+}
+
+// Detailed application response (when candidate details are included)
+export interface ApplicationDetailResponse extends ApplicationResponse {
+  candidateName: string;
+  candidateEmail: string;
+  candidatePhoneNumber: string;
+  cvFileName?: string;
 }
 
 // API Response wrapper (matching backend ApiResponse)
@@ -109,6 +127,20 @@ export interface SalaryDto {
   salaryPeriod?: "ANNUAL" | "MONTHLY" | "WEEKLY" | "HOURLY";
 }
 
+export interface JobResponse {
+  id: number;
+  title: string;
+  jobType: "FULL_TIME" | "PART_TIME" | "INTERNSHIP" | "CONTRACT" | "REMOTE";
+  description: string;
+  location: string;
+  salary: SalaryDto;
+  applicationDeadline: string; // LocalDate from backend (YYYY-MM-DD)
+  numberOfOpenings: number;
+  companyId: string;
+  recruiterId: string;
+  status: "OPEN" | "CLOSED" | "EXPIRED";
+}
+
 export interface Job {
   id: number;
   title: string;
@@ -123,14 +155,14 @@ export interface Job {
   status: "OPEN" | "CLOSED" | "EXPIRED";
 }
 
-export interface CreateJobRequest {
+export interface JobRequest {
   title: string;
   jobType: "FULL_TIME" | "PART_TIME" | "INTERNSHIP" | "CONTRACT" | "REMOTE";
-  salary: SalaryDto;
-  openings: number;
-  applicationDeadline: string; // LocalDate format YYYY-MM-DD
   description: string;
   location: string;
+  salary: SalaryDto;
+  applicationDeadline: string; // LocalDate from backend (YYYY-MM-DD)
+  numberOfOpenings: number;
 }
 
 // Company Types (Based on backend CompanyResponse and CompanyRequest)
@@ -144,6 +176,7 @@ export interface CompanyResponse {
   companySize: string;
   industry: string;
   description?: string;
+  logoUrl?: string;
 }
 
 export interface CompanyRequest {

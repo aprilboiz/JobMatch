@@ -19,13 +19,17 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
+import { useTokenExpiry } from "@/hooks/use-token-expiry";
+import { useTokenMonitor } from "@/hooks/use-token-monitor";
+import { TokenStatusIndicator } from "@/components/ui/token-status-indicator";
+import { TokenHelp } from "@/components/ui/token-help";
 import { useRouter } from "next/navigation";
 
 const navigation = [
   { name: "Dashboard", href: "/recruiter/dashboard", icon: Home },
   { name: "Công ty", href: "/recruiter/company", icon: Building },
   { name: "Việc làm", href: "/recruiter/jobs", icon: Briefcase },
-  { name: "Ứng viên", href: "/recruiter/candidates", icon: Users },
+  { name: "Ứng viên", href: "/recruiter/applications", icon: Users },
 ];
 function LogoutButton() {
   const { logout } = useAuth();
@@ -60,6 +64,12 @@ export default function RecruiterLayout({
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { user } = useAuth();
+
+  // Add token expiry handling
+  useTokenExpiry();
+
+  // Add token monitoring
+  useTokenMonitor();
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -167,8 +177,10 @@ export default function RecruiterLayout({
       <div className="lg:pl-64 flex flex-col flex-1">
         <div className="sticky top-0 z-10 bg-white shadow-sm border-b border-gray-200">
           <div className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
-            <div className="lg:hidden">{/* Mobile menu button space */}</div>
+            <div className="lg:hidden">{/* Mobile menu button space */}</div>{" "}
             <div className="flex items-center space-x-4 ml-auto">
+              <TokenHelp />
+              <TokenStatusIndicator />
               <Button variant="ghost" size="sm">
                 <Bell className="h-5 w-5" />
               </Button>{" "}
