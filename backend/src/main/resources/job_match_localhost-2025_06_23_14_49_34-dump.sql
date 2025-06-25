@@ -26,11 +26,11 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.analysis (
-    score real NOT NULL,
-    created_at timestamp(6) without time zone,
     id bigint NOT NULL,
+    created_at timestamp(6) without time zone,
     match_skills character varying(255),
-    missing_skills character varying(255)
+    missing_skills character varying(255),
+    score real NOT NULL
 );
 
 
@@ -55,12 +55,18 @@ ALTER SEQUENCE public.analysis_seq OWNER TO postgres;
 --
 
 CREATE TABLE public.application (
+    id bigint NOT NULL,
+    created_at timestamp(6) without time zone,
+    created_by character varying(255),
+    deleted_at timestamp(6) without time zone,
+    updated_at timestamp(6) without time zone,
+    updated_by character varying(255),
+    status character varying(255),
     analysis_id bigint,
     candidate_id bigint,
-    created_at timestamp(6) without time zone,
     cv_id bigint,
-    id bigint NOT NULL,
-    job_id bigint
+    job_id bigint,
+    CONSTRAINT application_status_check CHECK (((status)::text = ANY ((ARRAY['APPLIED'::character varying, 'IN_REVIEW'::character varying, 'INTERVIEW'::character varying, 'OFFERED'::character varying, 'REJECTED'::character varying, 'WITHDRAWN'::character varying])::text[])))
 );
 
 
@@ -85,51 +91,31 @@ ALTER SEQUENCE public.application_seq OWNER TO postgres;
 --
 
 CREATE TABLE public.candidate (
-    created_at timestamp(6) without time zone,
-    deleted_at timestamp(6) without time zone,
-    id bigint NOT NULL,
-    updated_at timestamp(6) without time zone,
-    user_id bigint,
-    created_by character varying(255),
-    full_name character varying(255) NOT NULL,
-    phone_number character varying(255),
-    updated_by character varying(255)
+    id bigint NOT NULL
 );
 
 
 ALTER TABLE public.candidate OWNER TO postgres;
 
 --
--- Name: candidate_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.candidate_seq
-    START WITH 1
-    INCREMENT BY 50
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.candidate_seq OWNER TO postgres;
-
---
 -- Name: company; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.company (
-    created_at timestamp(6) without time zone,
-    deleted_at timestamp(6) without time zone,
     id bigint NOT NULL,
+    created_at timestamp(6) without time zone,
+    created_by character varying(255),
+    deleted_at timestamp(6) without time zone,
     updated_at timestamp(6) without time zone,
+    updated_by character varying(255),
     address character varying(255) NOT NULL,
     company_size character varying(255) NOT NULL,
-    created_by character varying(255),
+    description character varying(255),
     email character varying(255),
     industry character varying(255) NOT NULL,
+    logo_url character varying(255),
     name character varying(255) NOT NULL,
     phone_number character varying(255),
-    updated_by character varying(255),
     website character varying(255)
 );
 
@@ -155,14 +141,17 @@ ALTER SEQUENCE public.company_seq OWNER TO postgres;
 --
 
 CREATE TABLE public.cv (
-    created_at timestamp(6) without time zone,
-    deleted_at timestamp(6) without time zone,
     id bigint NOT NULL,
-    updated_at timestamp(6) without time zone,
+    created_at timestamp(6) without time zone,
     created_by character varying(255),
-    file_path character varying(255),
+    deleted_at timestamp(6) without time zone,
+    updated_at timestamp(6) without time zone,
     updated_by character varying(255),
-    content oid
+    file_name character varying(255),
+    file_path character varying(255),
+    file_size character varying(255),
+    file_type character varying(255),
+    candidate_id bigint
 );
 
 
@@ -183,48 +172,35 @@ CREATE SEQUENCE public.cv_seq
 ALTER SEQUENCE public.cv_seq OWNER TO postgres;
 
 --
--- Name: job; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.job (
-    is_active boolean,
-    number_of_openings integer NOT NULL,
-    salary double precision NOT NULL,
-    created_at timestamp(6) without time zone,
-    deleted_at timestamp(6) without time zone,
-    recruiter_id bigint,
-    updated_at timestamp(6) without time zone,
-    company_id uuid,
-    id uuid NOT NULL,
-    created_by character varying(255),
-    "position" character varying(255) NOT NULL,
-    title character varying(255) NOT NULL,
-    updated_by character varying(255),
-    description oid
-);
-
-
-ALTER TABLE public.job OWNER TO postgres;
-
---
 -- Name: jobs; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.jobs (
-    is_active boolean,
-    number_of_openings integer NOT NULL,
-    salary double precision NOT NULL,
-    company_id bigint,
-    created_at timestamp(6) without time zone,
-    deleted_at timestamp(6) without time zone,
     id bigint NOT NULL,
-    recruiter_id bigint,
-    updated_at timestamp(6) without time zone,
+    created_at timestamp(6) without time zone,
     created_by character varying(255),
-    "position" character varying(255) NOT NULL,
-    title character varying(255) NOT NULL,
+    deleted_at timestamp(6) without time zone,
+    updated_at timestamp(6) without time zone,
     updated_by character varying(255),
-    description oid
+    application_deadline date NOT NULL,
+    currency character varying(255),
+    description oid,
+    job_type character varying(255) NOT NULL,
+    location character varying(255),
+    max_salary numeric(38,2),
+    min_salary numeric(38,2),
+    number_of_openings integer NOT NULL,
+    salary_period character varying(255),
+    salary_type character varying(255) NOT NULL,
+    status character varying(255),
+    title character varying(255) NOT NULL,
+    company_id bigint,
+    recruiter_id bigint,
+    CONSTRAINT jobs_currency_check CHECK (((currency)::text = ANY ((ARRAY['USD'::character varying, 'VND'::character varying, 'EUR'::character varying, 'GBP'::character varying, 'JPY'::character varying, 'AUD'::character varying, 'CAD'::character varying])::text[]))),
+    CONSTRAINT jobs_job_type_check CHECK (((job_type)::text = ANY ((ARRAY['FULL_TIME'::character varying, 'PART_TIME'::character varying, 'INTERNSHIP'::character varying, 'CONTRACT'::character varying, 'REMOTE'::character varying])::text[]))),
+    CONSTRAINT jobs_salary_period_check CHECK (((salary_period)::text = ANY ((ARRAY['ANNUAL'::character varying, 'MONTHLY'::character varying, 'WEEKLY'::character varying, 'HOURLY'::character varying])::text[]))),
+    CONSTRAINT jobs_salary_type_check CHECK (((salary_type)::text = ANY ((ARRAY['FIXED'::character varying, 'RANGE'::character varying, 'NEGOTIABLE'::character varying, 'COMPETITIVE'::character varying])::text[]))),
+    CONSTRAINT jobs_status_check CHECK (((status)::text = ANY ((ARRAY['OPEN'::character varying, 'CLOSED'::character varying, 'EXPIRED'::character varying])::text[])))
 );
 
 
@@ -249,34 +225,12 @@ ALTER SEQUENCE public.jobs_seq OWNER TO postgres;
 --
 
 CREATE TABLE public.recruiter (
-    company_id bigint,
-    created_at timestamp(6) without time zone,
-    deleted_at timestamp(6) without time zone,
     id bigint NOT NULL,
-    updated_at timestamp(6) without time zone,
-    user_id bigint,
-    created_by character varying(255),
-    full_name character varying(255) NOT NULL,
-    phone_number character varying(255),
-    updated_by character varying(255)
+    company_id bigint
 );
 
 
 ALTER TABLE public.recruiter OWNER TO postgres;
-
---
--- Name: recruiter_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.recruiter_seq
-    START WITH 1
-    INCREMENT BY 50
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.recruiter_seq OWNER TO postgres;
 
 --
 -- Name: roles; Type: TABLE; Schema: public; Owner: postgres
@@ -285,7 +239,7 @@ ALTER SEQUENCE public.recruiter_seq OWNER TO postgres;
 CREATE TABLE public.roles (
     id bigint NOT NULL,
     name character varying(255),
-    CONSTRAINT roles_name_check CHECK (((name)::text = ANY ((ARRAY['ROLE_CANDIDATE'::character varying, 'ROLE_RECRUITER'::character varying, 'ROLE_ADMIN'::character varying])::text[])))
+    CONSTRAINT roles_name_check CHECK (((name)::text = ANY ((ARRAY['ADMIN'::character varying, 'CANDIDATE'::character varying, 'RECRUITER'::character varying])::text[])))
 );
 
 
@@ -310,16 +264,20 @@ ALTER SEQUENCE public.roles_seq OWNER TO postgres;
 --
 
 CREATE TABLE public.users (
-    is_active boolean,
-    created_at timestamp(6) without time zone,
-    deleted_at timestamp(6) without time zone,
+    user_type character varying(31) NOT NULL,
     id bigint NOT NULL,
-    role_id bigint,
-    updated_at timestamp(6) without time zone,
+    created_at timestamp(6) without time zone,
     created_by character varying(255),
+    deleted_at timestamp(6) without time zone,
+    updated_at timestamp(6) without time zone,
+    updated_by character varying(255),
+    avatar_url character varying(255),
     email character varying(255) NOT NULL,
+    full_name character varying(255) NOT NULL,
+    is_active boolean,
     password character varying(255) NOT NULL,
-    updated_by character varying(255)
+    phone_number character varying(255),
+    role_id bigint
 );
 
 
@@ -340,71 +298,86 @@ CREATE SEQUENCE public.users_seq
 ALTER SEQUENCE public.users_seq OWNER TO postgres;
 
 --
+-- Name: 42662; Type: BLOB METADATA; Schema: -; Owner: postgres
+--
+
+SELECT pg_catalog.lo_create('42662');
+
+ALTER LARGE OBJECT 42662 OWNER TO postgres;
+
+--
 -- Data for Name: analysis; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+COPY public.analysis (id, created_at, match_skills, missing_skills, score) FROM stdin;
+\.
 
 
 --
 -- Data for Name: application; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+COPY public.application (id, created_at, created_by, deleted_at, updated_at, updated_by, status, analysis_id, candidate_id, cv_id, job_id) FROM stdin;
+\.
 
 
 --
 -- Data for Name: candidate; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.candidate (created_at, deleted_at, id, updated_at, user_id, created_by, full_name, phone_number, updated_by) VALUES ('2025-06-05 13:04:23.464139', NULL, 1, '2025-06-05 13:04:23.464139', 3, 'anonymous', 'Candidate', '1234567890', 'anonymous');
+COPY public.candidate (id) FROM stdin;
+\.
 
 
 --
 -- Data for Name: company; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+COPY public.company (id, created_at, created_by, deleted_at, updated_at, updated_by, address, company_size, description, email, industry, logo_url, name, phone_number, website) FROM stdin;
+\.
 
 
 --
 -- Data for Name: cv; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-
-
---
--- Data for Name: job; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
+COPY public.cv (id, created_at, created_by, deleted_at, updated_at, updated_by, file_name, file_path, file_size, file_type, candidate_id) FROM stdin;
+\.
 
 
 --
 -- Data for Name: jobs; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+COPY public.jobs (id, created_at, created_by, deleted_at, updated_at, updated_by, application_deadline, currency, description, job_type, location, max_salary, min_salary, number_of_openings, salary_period, salary_type, status, title, company_id, recruiter_id) FROM stdin;
+\.
 
 
 --
 -- Data for Name: recruiter; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.recruiter (company_id, created_at, deleted_at, id, updated_at, user_id, created_by, full_name, phone_number, updated_by) VALUES (NULL, '2025-06-05 13:04:23.33425', NULL, 1, '2025-06-05 13:04:23.33425', 2, 'anonymous', 'Recruiter', '1234567890', 'anonymous');
+COPY public.recruiter (id, company_id) FROM stdin;
+\.
 
 
 --
 -- Data for Name: roles; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.roles (id, name) VALUES (1, 'ROLE_CANDIDATE');
-INSERT INTO public.roles (id, name) VALUES (2, 'ROLE_RECRUITER');
-INSERT INTO public.roles (id, name) VALUES (3, 'ROLE_ADMIN');
+COPY public.roles (id, name) FROM stdin;
+1	CANDIDATE
+2	RECRUITER
+3	ADMIN
+\.
 
 
 --
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.users (is_active, created_at, deleted_at, id, role_id, updated_at, created_by, email, password, updated_by) VALUES (true, '2025-06-05 13:04:23.216025', NULL, 1, 3, '2025-06-05 13:04:23.216025', 'anonymous', 'admin@gmail.com', '$2a$10$4M3JIPKqrTBZYkhCVgCiL.06eN3YEvYDJO7RUYNmO.d0jb9CHacaO', 'anonymous');
-INSERT INTO public.users (is_active, created_at, deleted_at, id, role_id, updated_at, created_by, email, password, updated_by) VALUES (true, '2025-06-05 13:04:23.317889', NULL, 2, 2, '2025-06-05 13:04:23.317889', 'anonymous', 'recruiter@gmail.com', '$2a$10$73gGyJs0znUqHeQj0RH.xOxCNjVj9nSrmzlgNlqf6trZ6KMAVPt.q', 'anonymous');
-INSERT INTO public.users (is_active, created_at, deleted_at, id, role_id, updated_at, created_by, email, password, updated_by) VALUES (true, '2025-06-05 13:04:23.449691', NULL, 3, 1, '2025-06-05 13:04:23.449691', 'anonymous', 'candidate@gmail.com', '$2a$10$LOMxl9bwwjGy08QLLjt4T.4PMSZbKFzubLENAAvo6BES1HOfpnq6e', 'anonymous');
+COPY public.users (user_type, id, created_at, created_by, deleted_at, updated_at, updated_by, avatar_url, email, full_name, is_active, password, phone_number, role_id) FROM stdin;
+\.
 
 
 --
@@ -419,13 +392,6 @@ SELECT pg_catalog.setval('public.analysis_seq', 1, false);
 --
 
 SELECT pg_catalog.setval('public.application_seq', 1, false);
-
-
---
--- Name: candidate_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.candidate_seq', 1, true);
 
 
 --
@@ -450,25 +416,30 @@ SELECT pg_catalog.setval('public.jobs_seq', 1, false);
 
 
 --
--- Name: recruiter_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.recruiter_seq', 1, true);
-
-
---
 -- Name: roles_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.roles_seq', 51, true);
+SELECT pg_catalog.setval('public.roles_seq', 1, false);
 
 
 --
 -- Name: users_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.users_seq', 51, true);
+SELECT pg_catalog.setval('public.users_seq', 1, false);
 
+
+--
+-- Data for Name: 42662; Type: BLOBS; Schema: -; Owner: postgres
+--
+
+BEGIN;
+
+SELECT pg_catalog.lo_open('42662', 131072);
+SELECT pg_catalog.lowrite(0, '\x576520617265206c6f6f6b696e6720666f7220612053656e696f7220536f66747761726520456e67696e6565722e2e2e');
+SELECT pg_catalog.lo_close(0);
+
+COMMIT;
 
 --
 -- Name: analysis analysis_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
@@ -476,14 +447,6 @@ SELECT pg_catalog.setval('public.users_seq', 51, true);
 
 ALTER TABLE ONLY public.analysis
     ADD CONSTRAINT analysis_pkey PRIMARY KEY (id);
-
-
---
--- Name: application application_analysis_id_key; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.application
-    ADD CONSTRAINT application_analysis_id_key UNIQUE (analysis_id);
 
 
 --
@@ -503,14 +466,6 @@ ALTER TABLE ONLY public.candidate
 
 
 --
--- Name: candidate candidate_user_id_key; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.candidate
-    ADD CONSTRAINT candidate_user_id_key UNIQUE (user_id);
-
-
---
 -- Name: company company_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -524,14 +479,6 @@ ALTER TABLE ONLY public.company
 
 ALTER TABLE ONLY public.cv
     ADD CONSTRAINT cv_pkey PRIMARY KEY (id);
-
-
---
--- Name: job job_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.job
-    ADD CONSTRAINT job_pkey PRIMARY KEY (id);
 
 
 --
@@ -551,14 +498,6 @@ ALTER TABLE ONLY public.recruiter
 
 
 --
--- Name: recruiter recruiter_user_id_key; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.recruiter
-    ADD CONSTRAINT recruiter_user_id_key UNIQUE (user_id);
-
-
---
 -- Name: roles roles_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -567,11 +506,19 @@ ALTER TABLE ONLY public.roles
 
 
 --
--- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: users uk6dotkott2kjsp8vw4d0m25fb7; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.users
-    ADD CONSTRAINT users_email_key UNIQUE (email);
+    ADD CONSTRAINT uk6dotkott2kjsp8vw4d0m25fb7 UNIQUE (email);
+
+
+--
+-- Name: application uku7ojbxmo4btw2ajkqck6srek; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.application
+    ADD CONSTRAINT uku7ojbxmo4btw2ajkqck6srek UNIQUE (analysis_id);
 
 
 --
@@ -583,6 +530,14 @@ ALTER TABLE ONLY public.users
 
 
 --
+-- Name: cv fk7c9mplioa4397rxb4uoryla9a; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cv
+    ADD CONSTRAINT fk7c9mplioa4397rxb4uoryla9a FOREIGN KEY (candidate_id) REFERENCES public.candidate(id);
+
+
+--
 -- Name: jobs fk8iswonhqfsk0uppjop11y0004; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -591,11 +546,11 @@ ALTER TABLE ONLY public.jobs
 
 
 --
--- Name: recruiter fk9rnqhy06sgckkvbqukip27b81; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: recruiter fkb7kn9164x235a632vpsuijqwk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.recruiter
-    ADD CONSTRAINT fk9rnqhy06sgckkvbqukip27b81 FOREIGN KEY (user_id) REFERENCES public.users(id);
+    ADD CONSTRAINT fkb7kn9164x235a632vpsuijqwk FOREIGN KEY (id) REFERENCES public.users(id);
 
 
 --
@@ -612,14 +567,6 @@ ALTER TABLE ONLY public.application
 
 ALTER TABLE ONLY public.application
     ADD CONSTRAINT fkc1nsatrpy31m27gn3bm49kpk2 FOREIGN KEY (cv_id) REFERENCES public.cv(id);
-
-
---
--- Name: candidate fkc23nbdgfce6rnt56ofltvxu71; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.candidate
-    ADD CONSTRAINT fkc23nbdgfce6rnt56ofltvxu71 FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --
@@ -652,6 +599,14 @@ ALTER TABLE ONLY public.application
 
 ALTER TABLE ONLY public.jobs
     ADD CONSTRAINT fkkvqdntcagcst2hudgj1u8x443 FOREIGN KEY (company_id) REFERENCES public.company(id);
+
+
+--
+-- Name: candidate fkoptch312fkujpa59anarcj8tk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.candidate
+    ADD CONSTRAINT fkoptch312fkujpa59anarcj8tk FOREIGN KEY (id) REFERENCES public.users(id);
 
 
 --

@@ -57,7 +57,7 @@ public class Job extends AuditableEntity{
     @Enumerated(EnumType.STRING)
     private JobStatus status = JobStatus.OPEN;
     
-    @Lob
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     private String location;

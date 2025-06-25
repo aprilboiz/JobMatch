@@ -12,8 +12,8 @@ import com.aprilboiz.jobmatch.model.Role;
 import com.aprilboiz.jobmatch.repository.RoleRepository;
 import com.aprilboiz.jobmatch.repository.UserRepository;
 
-@Component
-@Profile("!test")
+// @Component
+// @Profile("!test")
 public class DataSeeder implements CommandLineRunner{
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
