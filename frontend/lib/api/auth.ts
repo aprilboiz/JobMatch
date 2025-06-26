@@ -139,14 +139,20 @@ export const authApi = {
     const accessToken = TokenManager.getAccessToken();
 
     try {
-      if (refreshToken && accessToken) {
+      // Only attempt API logout if we have valid tokens
+      if (refreshToken && accessToken && !TokenManager.isTokenExpired()) {
         await apiClient.post<ApiResponse<void>>("/auth/logout", {
           accessToken,
           refreshToken,
         } as LogoutRequest);
+      } else {
+        console.log("Skipping API logout - no valid tokens available");
       }
+    } catch (error) {
+      // Log error but don't throw - we still want to clear local tokens
+      console.error("Logout API call failed:", error);
     } finally {
-      // Clear tokens regardless of API response
+      // Always clear tokens regardless of API response
       apiClient.clearToken();
     }
   },

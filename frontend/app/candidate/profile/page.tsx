@@ -3,7 +3,6 @@
 import type React from "react";
 
 import { useState, useEffect } from "react";
-import CandidateLayout from "@/components/candidate-layout";
 import {
   Card,
   CardContent,
@@ -357,16 +356,11 @@ export default function CandidateProfile() {
   };
 
   if (error) {
-    return (
-      <CandidateLayout>
-        <ErrorMessage message={error} onRetry={loadCVFiles} />
-      </CandidateLayout>
-    );
+    return <ErrorMessage message={error} onRetry={loadCVFiles} />;
   }
 
   return (
-    <CandidateLayout>
-      <div className="space-y-6">
+    <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
@@ -767,6 +761,5 @@ export default function CandidateProfile() {
           </TabsContent>
         </Tabs>
       </div>
-    </CandidateLayout>
   );
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import CandidateLayout from "@/components/candidate-layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -279,35 +278,26 @@ export default function CandidateApplications() {
   // Show loading while authentication is being checked
   if (authLoading) {
     return (
-      <CandidateLayout>
-        <div className="flex justify-center items-center min-h-[400px]">
-          <LoadingSpinner size="lg" />
-        </div>
-      </CandidateLayout>
+      <div className="flex justify-center items-center min-h-[400px]">
+        <LoadingSpinner size="lg" />
+      </div>
     );
   }
 
   if (loading) {
     return (
-      <CandidateLayout>
-        <div className="flex justify-center items-center min-h-[400px]">
-          <LoadingSpinner size="lg" />
-        </div>
-      </CandidateLayout>
+      <div className="flex justify-center items-center min-h-[400px]">
+        <LoadingSpinner size="lg" />
+      </div>
     );
   }
 
   if (error) {
-    return (
-      <CandidateLayout>
-        <ErrorMessage message={error} onRetry={loadApplications} />
-      </CandidateLayout>
-    );
+    return <ErrorMessage message={error} onRetry={loadApplications} />;
   }
 
   return (
-    <CandidateLayout>
-      <div className="space-y-6">
+    <div className="space-y-6">
         {/* Header */}
         <div>
           <h1 className="text-2xl font-bold text-gray-900">
@@ -421,6 +411,5 @@ export default function CandidateApplications() {
           </TabsContent>
         </Tabs>
       </div>
-    </CandidateLayout>
   );
 }

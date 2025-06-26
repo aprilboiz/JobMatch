@@ -59,7 +59,7 @@ export default function LoginPage() {
       if (userRole.toUpperCase() === "CANDIDATE") {
         router.push("/candidate/profile");
       } else if (userRole.toUpperCase() === "RECRUITER") {
-        router.push("/recruiter/profile");
+        router.push("/recruiter/company");
       } else {
         // Fallback - redirect to home and let the app figure out the role
         console.warn("Unknown user role, redirecting to home:", userRole);

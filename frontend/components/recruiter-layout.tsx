@@ -38,10 +38,12 @@ function LogoutButton() {
     try {
       await logout();
       console.log("Đăng xuất thành công");
-      // router.push("/auth/login");
+      // Always redirect even if logout API fails
       window.location.href = "http://localhost:6789";
     } catch (error) {
       console.error("Lỗi khi đăng xuất:", error);
+      // Still redirect on error since user wants to logout
+      window.location.href = "http://localhost:6789";
     }
   };
 

@@ -15,10 +15,22 @@ class ApiClient {
 
   private loadToken() {
     if (typeof window !== "undefined") {
-      this.token = TokenManager.getAccessToken();
-      console.log("Token loaded:", this.token ? "Present" : "Not found"); // Debug log
+      const storedToken = TokenManager.getAccessToken();
+      
+      // Only set token if it exists and is not expired
+      if (storedToken && !TokenManager.isTokenExpired()) {
+        this.token = storedToken;
+        console.log("Valid token loaded"); // Debug log
+      } else {
+        console.log("No valid token found or token expired"); // Debug log
+        this.token = null;
+        // Clear expired tokens
+        if (storedToken && TokenManager.isTokenExpired()) {
+          TokenManager.clearTokens();
+        }
+      }
 
-      // Check if token is expired
+      // Check if token will expire soon
       this.checkTokenExpiry();
     }
   }
@@ -65,6 +77,11 @@ class ApiClient {
     this.token = null;
     TokenManager.clearTokens();
     console.log("Tokens cleared"); // Debug log
+  }
+
+  // Method to reload token from storage (useful after refresh)
+  reloadToken() {
+    this.loadToken();
   }
   private async request<T>(
     endpoint: string,

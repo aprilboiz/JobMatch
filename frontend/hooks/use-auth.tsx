@@ -30,8 +30,10 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
+    setHydrated(true);
     checkAuth();
   }, []);
 
@@ -138,8 +140,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // }
 
   const logout = async () => {
-    await authApi.logout();
-    setUser(null);
+    try {
+      await authApi.logout();
+    } catch (error) {
+      // Log error but don't throw - logout should always succeed locally
+      console.error("Logout error:", error);
+    } finally {
+      // Always clear user state
+      setUser(null);
+    }
   };
 
   const refreshUser = async () => {
@@ -161,6 +170,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return null;
     }
   };
+
+  // Prevent hydration mismatch by showing loading until hydrated
+  if (!hydrated) {
+    return <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+    </div>;
+  }
 
   return (
     <AuthContext.Provider
