@@ -26,28 +26,29 @@ export const authApi = {
         body: JSON.stringify(data),
       }
     );
+    console.log("Registration response 2:", response);
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error("Register error response:", errorText);
+      console.log("Register error response:", errorText);
 
       let errorData;
       try {
         errorData = JSON.parse(errorText);
+        console.log("Parsed error data:", errorData);
       } catch {
         errorData = { message: errorText || `HTTP ${response.status}` };
       }
 
       // Handle specific register errors
-      if (response.status === 409) {
-        throw new Error("Email đã được sử dụng. Vui lòng chọn email khác.");
-      } else if (response.status === 400) {
-        throw new Error(errorData.message || "Thông tin đăng ký không hợp lệ");
-      }
+      // if (response.status === 409) {
+      //   throw new Error("Email đã được sử dụng. Vui lòng chọn email khác.");
+      // } else if (response.status === 400) {
+      //   throw new Error(errorData.message || "Thông tin đăng ký không hợp lệ");
+      // }
 
-      throw new Error(
-        errorData.message || "Đăng ký thất bại. Vui lòng thử lại."
-      );
+      const allErrors = Object.values(errorData.errors).join(", ");
+      throw new Error(allErrors || "Đăng ký thất bại. Vui lòng thử lại.");
     }
 
     console.log("Register successful");

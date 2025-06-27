@@ -364,7 +364,7 @@ export default function CandidateJobsPage() {
                       <div className="flex items-center gap-4 text-sm text-muted-foreground">
                         <div className="flex items-center gap-1">
                           <BuildingIcon className="h-4 w-4" />
-                          <span>Công ty ID: {job.companyId}</span>
+                          <span>Công ty : {job.companyId}</span>
                         </div>
                         <div className="flex items-center gap-1">
                           <MapPinIcon className="h-4 w-4" />
@@ -401,7 +401,7 @@ export default function CandidateJobsPage() {
 
                   <div className="flex justify-between items-center pt-4">
                     <div className="text-sm text-muted-foreground">
-                      ID: {job.id}
+                      {/* ID: {job.id} */}
                     </div>
                     <div className="flex gap-2">
                       <Button variant="outline" size="sm">

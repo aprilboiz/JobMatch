@@ -109,13 +109,15 @@ export default function RegisterPage() {
 
     try {
       console.log("Submitting registration form...");
-      await register({
+      const response = await register({
         fullName: formData.fullName.trim(),
         email: formData.email.trim(),
         phoneNumber: formData.phoneNumber.trim(),
         password: formData.password,
         role: formData.role,
       });
+
+      console.log("Registration response:", response);
 
       toast({
         title: "Đăng ký thành công",
@@ -125,7 +127,7 @@ export default function RegisterPage() {
       // Redirect to login page
       router.push("/auth/login");
     } catch (error) {
-      console.error("Registration error:", error);
+      console.log("Registration error:", error);
       toast({
         title: "Đăng ký thất bại",
         description:
