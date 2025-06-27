@@ -14,6 +14,7 @@ public interface ApplicationMapper {
     @Mapping(source = "role", target = "role")
     @Mapping(source = "phoneNumber", target = "phoneNumber")
     @Mapping(target = "userType", expression = "java(getUserType(user))")
+    @Mapping(target = "company", expression = "java(getCompanyResponse(user))")
     UserResponse userToUserResponse(User user);
 
     @Mapping(source = "name", target = "roleName")
@@ -72,5 +73,12 @@ public interface ApplicationMapper {
                 .currency(job.getCurrency())
                 .salaryPeriod(job.getSalaryPeriod())
                 .build();
+    }
+    
+    default CompanyResponse getCompanyResponse(User user) {
+        if (user instanceof Recruiter recruiter && recruiter.getCompany() != null) {
+            return companyToCompanyResponse(recruiter.getCompany());
+        }
+        return null;
     }
 }

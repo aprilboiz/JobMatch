@@ -1,11 +1,15 @@
 package com.aprilboiz.jobmatch.service.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import com.aprilboiz.jobmatch.dto.request.CompanyRequest;
 import com.aprilboiz.jobmatch.dto.response.CompanyResponse;
 import com.aprilboiz.jobmatch.exception.NotFoundException;
 import com.aprilboiz.jobmatch.mapper.ApplicationMapper;
 import com.aprilboiz.jobmatch.model.*;
 import com.aprilboiz.jobmatch.repository.CompanyRepository;
+import com.aprilboiz.jobmatch.repository.UserRepository;
 import com.aprilboiz.jobmatch.service.CloudinaryService;
 import com.aprilboiz.jobmatch.service.CompanyService;
 import com.aprilboiz.jobmatch.service.MessageService;
@@ -24,7 +28,8 @@ public class CompanyServiceImpl implements CompanyService {
     private final MessageService messageService;
     private final ApplicationMapper appMapper;
     private final CloudinaryService cloudinaryService;
-
+    private final UserRepository userRepository;
+    
     @Override
     @Transactional(rollbackFor = Exception.class)
     public CompanyResponse updateCompany(Long id, CompanyRequest request) {
@@ -71,5 +76,31 @@ public class CompanyServiceImpl implements CompanyService {
 
         company.setLogoUrl(logoUrl);
         companyRepository.save(company);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public CompanyResponse createCompany(CompanyRequest request) {
+        UserPrincipalAdapter userPrincipalAdapter = (UserPrincipalAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userPrincipalAdapter.getUser();
+        if (!(user instanceof Recruiter recruiter)) {
+            throw new SecurityException(messageService.getMessage("error.authorization.recruiter.required"));
+        }
+        Company company = new Company();
+        company.setName(request.getName());
+        company.setWebsite(request.getWebsite());
+        company.setPhoneNumber(request.getPhoneNumber());
+        company.setEmail(request.getEmail());
+        company.setAddress(request.getAddress());
+        company.setCompanySize(request.getCompanySize());
+        company.setIndustry(request.getIndustry());
+        company.setDescription(request.getDescription());
+        company.setLogoUrl(null);
+        company.setRecruiters(Arrays.asList(recruiter));
+        company.setJobs(new ArrayList<>());
+        Company savedCompany = companyRepository.save(company);
+        recruiter.setCompany(savedCompany);
+        userRepository.save(recruiter);
+        return appMapper.companyToCompanyResponse(savedCompany);
     }
 }

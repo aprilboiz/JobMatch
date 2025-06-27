@@ -40,4 +40,7 @@ public class UserResponse {
     
     @Schema(description = "User type (CANDIDATE, RECRUITER)", example = "CANDIDATE")
     private String userType;
+ 
+    @Schema(description = "User's company information")
+    private CompanyResponse company;
 }

@@ -126,7 +126,11 @@ INSERT INTO jobs (id, title, job_type, salary_type, min_salary, max_salary, curr
 INSERT INTO jobs (id, title, job_type, salary_type, min_salary, max_salary, currency, salary_period, number_of_openings, application_deadline, status, description, location, company_id, recruiter_id, created_at, updated_at) VALUES 
 (25, 'Warehouse Operations Supervisor', 'FULL_TIME', 'FIXED', 60000, NULL, 'USD', 'ANNUAL', 3, '2024-04-10', 'OPEN', 'Supervise warehouse operations, including receiving, storage, and shipping activities. Experience in warehouse management and team leadership is necessary.', 'Multiple Locations', 5, 10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
-ALTER SEQUENCE users_seq RESTART WITH 11;
-ALTER SEQUENCE jobs_seq RESTART WITH 26;
-ALTER SEQUENCE company_seq RESTART WITH 6;
-ALTER SEQUENCE roles_seq RESTART WITH 4;
+
+-- Reset sequences to the correct next values after manual inserts
+-- This ensures that auto-generated IDs don't conflict with manually inserted data
+-- Using COALESCE to handle empty tables gracefully
+SELECT setval('users_seq', COALESCE((SELECT MAX(id) FROM users), 0), true);
+SELECT setval('jobs_seq', COALESCE((SELECT MAX(id) FROM jobs), 0), true);
+SELECT setval('company_seq', COALESCE((SELECT MAX(id) FROM company), 0), true);
+SELECT setval('roles_seq', COALESCE((SELECT MAX(id) FROM roles), 0), true);

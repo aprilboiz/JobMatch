@@ -5,6 +5,7 @@ import com.aprilboiz.jobmatch.dto.response.ApplicationDetailResponse;
 import com.aprilboiz.jobmatch.dto.response.JobResponse;
 import com.aprilboiz.jobmatch.enumerate.ApplicationStatus;
 import com.aprilboiz.jobmatch.exception.ApiResponse;
+import com.aprilboiz.jobmatch.model.Company;
 import com.aprilboiz.jobmatch.model.Recruiter;
 import com.aprilboiz.jobmatch.model.User;
 import com.aprilboiz.jobmatch.model.UserPrincipalAdapter;
@@ -150,7 +151,12 @@ public class RecruiterController {
         if (!(user instanceof Recruiter recruiter)) {
             throw new AccessDeniedException(messageService.getMessage("error.authorization.recruiter.required"));
         }
-        companyService.updateCompany(recruiter.getCompany().getId(), request);
+        Company company = recruiter.getCompany();
+        if (company == null) {
+            companyService.createCompany(request);
+        } else {
+            companyService.updateCompany(company.getId(), request);
+        }
         String successMessage = messageService.getMessage("api.success.recruiter.profile.updated");
         return ResponseEntity.ok(ApiResponse.success(successMessage, null));
     }
