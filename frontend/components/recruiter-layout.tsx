@@ -26,7 +26,7 @@ import { TokenHelp } from "@/components/ui/token-help";
 import { useRouter } from "next/navigation";
 
 const navigation = [
-  { name: "Dashboard", href: "/recruiter/dashboard", icon: Home },
+  // { name: "Dashboard", href: "/recruiter/dashboard", icon: Home },
   { name: "Công ty", href: "/recruiter/company", icon: Building },
   { name: "Việc làm", href: "/recruiter/jobs", icon: Briefcase },
   { name: "Ứng viên", href: "/recruiter/applications", icon: Users },

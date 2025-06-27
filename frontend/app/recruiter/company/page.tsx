@@ -15,6 +15,13 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useAuth } from "@/hooks/use-auth";
 import { recruiterApi } from "@/lib/api/recruiter";
 import { CompanyRequest, UpdateRecruiterProfileRequest } from "@/types/api";
@@ -124,32 +131,63 @@ export default function CompanyProfilePage() {
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
+    // Required fields validation
     if (!formData.name.trim()) {
       newErrors.name = "Tên công ty là bắt buộc";
+    } else if (formData.name.trim().length < 2) {
+      newErrors.name = "Tên công ty phải có ít nhất 2 ký tự";
     }
 
     if (!formData.address.trim()) {
       newErrors.address = "Địa chỉ là bắt buộc";
+    } else if (formData.address.trim().length < 5) {
+      newErrors.address = "Địa chỉ phải có ít nhất 5 ký tự";
     }
 
     if (!formData.companySize.trim()) {
       newErrors.companySize = "Quy mô công ty là bắt buộc";
+    } else {
+      // Validate company size format
+      const validSizes = [
+        "1-10",
+        "10-50",
+        "50-100",
+        "100-500",
+        "500-1000",
+        "1000+",
+      ];
+      if (!validSizes.includes(formData.companySize)) {
+        newErrors.companySize =
+          "Quy mô công ty không hợp lệ (VD: 1-10, 10-50, 50-100, 100-500, 500-1000, 1000+)";
+      }
     }
 
     if (!formData.industry.trim()) {
       newErrors.industry = "Ngành nghề là bắt buộc";
     }
 
+    // Optional fields validation (only if provided)
     if (formData.phoneNumber && !/^[0-9+\-\s()]+$/.test(formData.phoneNumber)) {
-      newErrors.phoneNumber = "Số điện thoại không hợp lệ";
+      newErrors.phoneNumber =
+        "Số điện thoại không hợp lệ (chỉ chứa số, +, -, space, ())";
     }
 
-    if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Email không hợp lệ";
+    if (formData.email) {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+        newErrors.email = "Email không hợp lệ";
+      }
     }
 
-    if (formData.website && !/^https?:\/\/.+/.test(formData.website)) {
-      newErrors.website = "Website phải bắt đầu bằng http:// hoặc https://";
+    if (formData.website) {
+      if (!/^https?:\/\/.+\..+/.test(formData.website)) {
+        newErrors.website =
+          "Website phải có định dạng đúng (VD: https://example.com)";
+      }
+    }
+
+    // Description length validation
+    if (formData.description && formData.description.length > 1000) {
+      newErrors.description = "Mô tả công ty không được vượt quá 1000 ký tự";
     }
 
     setErrors(newErrors);
@@ -407,7 +445,7 @@ export default function CompanyProfilePage() {
                 </div>
 
                 {/* Company ID */}
-                <div className="space-y-2">
+                {/* <div className="space-y-2">
                   <Label
                     htmlFor="companyId"
                     className="flex items-center gap-2"
@@ -434,7 +472,7 @@ export default function CompanyProfilePage() {
                       {profileErrors.companyId}
                     </p>
                   )}
-                </div>
+                </div> */}
               </div>
 
               <div className="flex gap-4">
@@ -490,15 +528,28 @@ export default function CompanyProfilePage() {
                     <Users className="h-4 w-4" />
                     Quy mô công ty *
                   </Label>
-                  <Input
-                    id="companySize"
+                  <Select
                     value={formData.companySize}
-                    onChange={(e) =>
-                      handleInputChange("companySize", e.target.value)
+                    onValueChange={(value) =>
+                      handleInputChange("companySize", value)
                     }
-                    placeholder="VD: 10-50, 50-100, 100-500"
-                    className={errors.companySize ? "border-red-500" : ""}
-                  />
+                  >
+                    <SelectTrigger
+                      className={errors.companySize ? "border-red-500" : ""}
+                    >
+                      <SelectValue placeholder="Chọn quy mô công ty" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1-10">1-10 nhân viên</SelectItem>
+                      <SelectItem value="10-50">10-50 nhân viên</SelectItem>
+                      <SelectItem value="50-100">50-100 nhân viên</SelectItem>
+                      <SelectItem value="100-500">100-500 nhân viên</SelectItem>
+                      <SelectItem value="500-1000">
+                        500-1000 nhân viên
+                      </SelectItem>
+                      <SelectItem value="1000+">1000+ nhân viên</SelectItem>
+                    </SelectContent>
+                  </Select>
                   {errors.companySize && (
                     <p className="text-sm text-red-500">{errors.companySize}</p>
                   )}
@@ -568,15 +619,59 @@ export default function CompanyProfilePage() {
                     <Building2 className="h-4 w-4" />
                     Ngành nghề *
                   </Label>
-                  <Input
-                    id="industry"
+                  <Select
                     value={formData.industry}
-                    onChange={(e) =>
-                      handleInputChange("industry", e.target.value)
+                    onValueChange={(value) =>
+                      handleInputChange("industry", value)
                     }
-                    placeholder="VD: Công nghệ thông tin, Giáo dục, Y tế"
-                    className={errors.industry ? "border-red-500" : ""}
-                  />
+                  >
+                    <SelectTrigger
+                      className={errors.industry ? "border-red-500" : ""}
+                    >
+                      <SelectValue placeholder="Chọn ngành nghề" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Technology">
+                        Công nghệ thông tin
+                      </SelectItem>
+                      <SelectItem value="Finance">
+                        Tài chính - Ngân hàng
+                      </SelectItem>
+                      <SelectItem value="Healthcare">
+                        Y tế - Chăm sóc sức khỏe
+                      </SelectItem>
+                      <SelectItem value="Education">
+                        Giáo dục - Đào tạo
+                      </SelectItem>
+                      <SelectItem value="Manufacturing">
+                        Sản xuất - Chế tạo
+                      </SelectItem>
+                      <SelectItem value="Retail">
+                        Bán lẻ - Thương mại
+                      </SelectItem>
+                      <SelectItem value="Marketing">
+                        Marketing - Quảng cáo
+                      </SelectItem>
+                      <SelectItem value="Construction">
+                        Xây dựng - Kiến trúc
+                      </SelectItem>
+                      <SelectItem value="Logistics">
+                        Logistics - Vận tải
+                      </SelectItem>
+                      <SelectItem value="Tourism">
+                        Du lịch - Khách sạn
+                      </SelectItem>
+                      <SelectItem value="Media">
+                        Truyền thông - Báo chí
+                      </SelectItem>
+                      <SelectItem value="Legal">Pháp lý - Luật</SelectItem>
+                      <SelectItem value="Agriculture">Nông nghiệp</SelectItem>
+                      <SelectItem value="Design">
+                        Thiết kế - Sáng tạo
+                      </SelectItem>
+                      <SelectItem value="Other">Khác</SelectItem>
+                    </SelectContent>
+                  </Select>
                   {errors.industry && (
                     <p className="text-sm text-red-500">{errors.industry}</p>
                   )}

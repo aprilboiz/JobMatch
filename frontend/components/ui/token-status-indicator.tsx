@@ -49,10 +49,10 @@ export function TokenStatusIndicator() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="ghost" size="sm" className="flex items-center gap-2">
+        {/* <Button variant="ghost" size="sm" className="flex items-center gap-2">
           {getStatusIcon()}
           <span className="text-sm">Phiên đăng nhập</span>
-        </Button>
+        </Button> */}
       </PopoverTrigger>
       <PopoverContent className="w-80" align="end">
         <Card className="border-0 shadow-none">

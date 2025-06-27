@@ -61,10 +61,10 @@ window.location.reload();
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
+        {/* <Button variant="outline" size="sm">
           <HelpCircle className="h-4 w-4 mr-2" />
           Hướng dẫn xử lý token
-        </Button>
+        </Button> */}
       </DialogTrigger>
       <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>

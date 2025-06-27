@@ -305,15 +305,15 @@ export default function CandidateJobsPage() {
             <Button variant="outline" onClick={handleClearFilters}>
               Xóa bộ lọc
             </Button>
-            <Button variant="outline" onClick={() => loadJobs(0, false)}>
+            {/* <Button variant="outline" onClick={() => loadJobs(0, false)}>
               🔄 Force Reload
-            </Button>
-            <Button
+            </Button> */}
+            {/* <Button
               variant="outline"
               onClick={() => console.log("Current jobs state:", jobs)}
             >
               🐛 Log Jobs
-            </Button>
+            </Button> */}
           </div>
         </CardContent>
       </Card>

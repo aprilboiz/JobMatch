@@ -220,22 +220,22 @@ export default function LoginPage() {
 
             {/* Debug buttons - remove in production */}
             <div className="grid grid-cols-2 gap-2">
-              <Button
+              {/* <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 onClick={testConnection}
               >
                 Test Server
-              </Button>
-              <Button
+              </Button> */}
+              {/* <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 onClick={testWithSampleCredentials}
               >
                 Sample Login
-              </Button>
+              </Button> */}
             </div>
           </form>
 
@@ -252,7 +252,7 @@ export default function LoginPage() {
           </div>
 
           {/* Debug info */}
-          <div className="mt-4 p-3 bg-gray-100 rounded text-xs text-gray-600">
+          {/* <div className="mt-4 p-3 bg-gray-100 rounded text-xs text-gray-600">
             <div>
               API URL:{" "}
               {process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api"}
@@ -260,7 +260,7 @@ export default function LoginPage() {
             <div>
               Current: {formData.email} / {formData.password}
             </div>
-          </div>
+          </div> */}
         </CardContent>
       </Card>
     </div>
