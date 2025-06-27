@@ -124,13 +124,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     role: "CANDIDATE" | "RECRUITER" | "ADMIN";
   }) => {
     try {
-      console.log("Starting registration process...");
-      await authApi.register(data);
-      console.log("Registration successful");
+      const response = await authApi.register(data);
+
       // Register doesn't return user data, so we don't set user state
       // User will need to login after registration
     } catch (error) {
-      console.error("Registration failed:", error);
+      console.log("Registration failed:", error);
       throw error; // Re-throw to let the component handle it
     }
   };
@@ -173,9 +172,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Prevent hydration mismatch by showing loading until hydrated
   if (!hydrated) {
-    return <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
-    </div>;
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+      </div>
+    );
   }
 
   return (
