@@ -10,7 +10,7 @@ public final class ValidationMessages {
     public static final String SIZE_EXACT = "validation.size.exact";
     public static final String FUTURE = "validation.future";
     public static final String POSITIVE = "generic.positive";
-
+    public static final String URL_INVALID = "validation.invalid.url";
     // Specific field validation keys
     public static final String EMAIL_REQUIRED = "validation.required.email";
     public static final String PASSWORD_REQUIRED = "validation.required.password";
