@@ -28,6 +28,7 @@ public interface JobService {
     Page<JobResponse> searchAndFilterJobs(
             String keyword,
             JobType jobType,
+            Integer jobCategory,
             String location,
             BigDecimal minSalary,
             BigDecimal maxSalary,

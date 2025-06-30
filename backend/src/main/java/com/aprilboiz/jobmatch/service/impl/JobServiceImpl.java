@@ -26,6 +26,7 @@ import com.aprilboiz.jobmatch.mapper.ApplicationMapper;
 import com.aprilboiz.jobmatch.model.Company;
 import com.aprilboiz.jobmatch.model.*;
 import com.aprilboiz.jobmatch.repository.JobRepository;
+import com.aprilboiz.jobmatch.repository.JobCategoryRepository;
 import com.aprilboiz.jobmatch.service.JobService;
 
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JobServiceImpl implements JobService {
     private final JobRepository jobRepository;
+    private final JobCategoryRepository jobCategoryRepository;
     private final ApplicationMapper applicationMapper;
     private final ApplicationService applicationService;
     private final MessageService messageService;
@@ -50,6 +52,9 @@ public class JobServiceImpl implements JobService {
 
         Company ownerCompany = owner.getCompany();
         SalaryDto salaryDto = jobRequest.getSalary();
+        
+        JobCategory jobCategory = jobCategoryRepository.findById(jobRequest.getJobCategory())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid job category ID: " + jobRequest.getJobCategory()));
 
         Job newJob = Job.builder()
                 .title(jobRequest.getTitle())
@@ -61,6 +66,7 @@ public class JobServiceImpl implements JobService {
                 .currency(salaryDto.getCurrency())
                 .salaryPeriod(salaryDto.getSalaryPeriod())
                 .jobType(jobRequest.getJobType())
+                .jobCategory(jobCategory)
                 .numberOfOpenings(jobRequest.getOpenings())
                 .applicationDeadline(jobRequest.getApplicationDeadline())
                 .recruiter(owner)
@@ -102,8 +108,12 @@ public class JobServiceImpl implements JobService {
 
         SalaryDto salaryDto = jobRequest.getSalary();
         
+        JobCategory jobCategory = jobCategoryRepository.findById(jobRequest.getJobCategory())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid job category ID: " + jobRequest.getJobCategory()));
+        
         existingJob.setTitle(jobRequest.getTitle());
         existingJob.setJobType(jobRequest.getJobType());
+        existingJob.setJobCategory(jobCategory);
         existingJob.setSalaryType(salaryDto.getSalaryType());
         existingJob.setMinSalary(calculateMinSalary(salaryDto));
         existingJob.setMaxSalary(calculateMaxSalary(salaryDto));
@@ -177,6 +187,7 @@ public class JobServiceImpl implements JobService {
     public Page<JobResponse> searchAndFilterJobs(
             String keyword,
             JobType jobType,
+            Integer jobCategory,
             String location,
             BigDecimal minSalary,
             BigDecimal maxSalary,
@@ -186,7 +197,7 @@ public class JobServiceImpl implements JobService {
             PageRequest pageRequest) {
         
         Page<Job> jobs = jobRepository.searchAndFilterJobs(
-                keyword, jobType, location, minSalary, maxSalary, 
+                keyword, jobType, jobCategory, location, minSalary, maxSalary, 
                 companyName, status, applicationDeadlineAfter, pageRequest);
         
         List<JobResponse> jobResponses = jobs.getContent().stream()

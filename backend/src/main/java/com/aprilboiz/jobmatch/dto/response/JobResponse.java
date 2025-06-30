@@ -25,6 +25,9 @@ public class JobResponse {
     
     @Schema(description = "Type of employment", example = "FULL_TIME")
     private JobType jobType;
+
+    @Schema(description = "Job category code (1-24)", example = "5")
+    private Integer jobCategory;
     
     @Schema(description = "Detailed job description", example = "We are looking for a Senior Software Engineer...")
     private String description;

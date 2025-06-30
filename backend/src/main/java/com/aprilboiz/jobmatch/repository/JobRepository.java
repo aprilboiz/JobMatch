@@ -3,6 +3,7 @@ package com.aprilboiz.jobmatch.repository;
 import com.aprilboiz.jobmatch.enumerate.JobStatus;
 import com.aprilboiz.jobmatch.enumerate.JobType;
 import com.aprilboiz.jobmatch.model.Company;
+import com.aprilboiz.jobmatch.model.JobCategory;
 import com.aprilboiz.jobmatch.model.Job;
 import com.aprilboiz.jobmatch.model.Recruiter;
 
@@ -29,6 +30,7 @@ public interface JobRepository extends JpaRepository<Job, Long> {
            "LOWER(j.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
            "LOWER(j.company.name) LIKE LOWER(CONCAT('%', :keyword, '%'))) AND " +
            "(:jobType IS NULL OR j.jobType = :jobType) AND " +
+           "(:jobCategory IS NULL OR j.jobCategory.id = :jobCategory) AND " +
            "(:location IS NULL OR :location = '' OR LOWER(j.location) LIKE LOWER(CONCAT('%', :location, '%'))) AND " +
            "(:minSalary IS NULL OR j.minSalary >= :minSalary) AND " +
            "(:maxSalary IS NULL OR j.maxSalary <= :maxSalary) AND " +
@@ -38,6 +40,7 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     Page<Job> searchAndFilterJobs(
             @Param("keyword") String keyword,
             @Param("jobType") JobType jobType,
+            @Param("jobCategory") Integer jobCategory,
             @Param("location") String location,
             @Param("minSalary") BigDecimal minSalary,
             @Param("maxSalary") BigDecimal maxSalary,

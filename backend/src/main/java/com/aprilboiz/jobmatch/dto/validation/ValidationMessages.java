@@ -44,6 +44,7 @@ public final class ValidationMessages {
     public static final String JOB_DESCRIPTION_REQUIRED = "validation.required.job.description";
     public static final String JOB_LOCATION_REQUIRED = "validation.required.job.location";
     public static final String JOB_TYPE_REQUIRED = "validation.required.job.type";
+    public static final String JOB_CATEGORY_REQUIRED = "validation.required.job.category";
     public static final String JOB_SALARY_REQUIRED = "validation.required";
     public static final String JOB_OPENINGS_REQUIRED = "validation.required.job.openings";
     public static final String JOB_DEADLINE_REQUIRED = "validation.required.job.deadline";

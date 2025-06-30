@@ -4,10 +4,15 @@ import java.math.BigDecimal;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.ArrayList;
 
 import com.aprilboiz.jobmatch.dto.response.ApplicationResponse;
 import com.aprilboiz.jobmatch.enumerate.JobStatus;
 import com.aprilboiz.jobmatch.enumerate.JobType;
+import com.aprilboiz.jobmatch.model.JobCategory;
+import com.aprilboiz.jobmatch.service.JobCategoryService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -39,10 +44,12 @@ import jakarta.validation.Valid;
 @Tag(name = "Job Management", description = "Operations for managing job postings including creation, search, filtering, and application management")
 public class JobController {
     private final JobService jobService;
+    private final JobCategoryService jobCategoryService;
     private final MessageService messageService;
 
-    public JobController(JobService jobService, MessageService messageService) {
+    public JobController(JobService jobService, JobCategoryService jobCategoryService, MessageService messageService) {
         this.jobService = jobService;
+        this.jobCategoryService = jobCategoryService;
         this.messageService = messageService;
     }
 
@@ -89,6 +96,9 @@ public class JobController {
             
             @Parameter(description = "Filter by job type")
             @RequestParam(required = false) JobType jobType,
+
+            @Parameter(description = "Filter by job category code (1-24)")
+            @RequestParam(required = false) Integer jobCategory,
             
             @Parameter(description = "Filter by location")
             @RequestParam(required = false) String location,
@@ -117,8 +127,13 @@ public class JobController {
                 pageable.getSortOr(Sort.by(Sort.Direction.DESC, "createdAt"))
         );
         
+        // Validate job category ID if provided
+        if (jobCategory != null && !jobCategoryService.existsById(jobCategory)) {
+            throw new IllegalArgumentException("Invalid job category code: " + jobCategory);
+        }
+        
         Page<JobResponse> jobs = jobService.searchAndFilterJobs(
-                keyword, jobType, location, minSalary, maxSalary, 
+                keyword, jobType, jobCategory, location, minSalary, maxSalary, 
                 companyName, status, applicationDeadlineAfter, pageRequest);
         
         String successMessage = messageService.getMessage("api.success.jobs.retrieved");
@@ -383,6 +398,41 @@ public class JobController {
     public ResponseEntity<ApiResponse<JobType[]>> getJobTypes() {
         String successMessage = messageService.getMessage("operation.completed");
         return ResponseEntity.ok(ApiResponse.success(successMessage, JobType.values()));
+    }
+
+    @Operation(
+            summary = "Get Available Job Categories",
+            description = """
+                    Retrieve all available job categories in the system.
+                    
+                    This endpoint returns an array of job category objects with code and description that can be used for:
+                    - Job creation and filtering
+                    - Search parameters
+                    - Form dropdowns
+                    
+                    Categories include various industries like IT, Marketing, Finance, etc.
+                    """
+    )
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "Job categories retrieved successfully",
+                    content = @Content(schema = @Schema(implementation = ApiResponse.class))
+            )
+    })
+    @GetMapping("/job-categories")
+    public ResponseEntity<ApiResponse<List<Map<String, Object>>>> getJobCategories() {
+        List<Map<String, Object>> categories = new ArrayList<>();
+        List<JobCategory> jobCategories = jobCategoryService.getAllActiveCategories();
+        for (JobCategory category : jobCategories) {
+            Map<String, Object> categoryMap = new HashMap<>();
+            categoryMap.put("code", category.getId());
+            categoryMap.put("name", category.getName());
+            categoryMap.put("description", category.getDescription());
+            categories.add(categoryMap);
+        }
+        String successMessage = messageService.getMessage("operation.completed");
+        return ResponseEntity.ok(ApiResponse.success(successMessage, categories));
     }
 
     @Operation(

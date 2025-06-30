@@ -13,6 +13,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Max;
 import lombok.Builder;
 import lombok.Data;
 
@@ -34,6 +36,15 @@ public class JobRequest {
     )
     @NotNull(message = "{" + ValidationMessages.JOB_TYPE_REQUIRED + "}")
     private JobType jobType;
+
+    @Schema(
+            description = "Job category code (1-12). See /api/jobs/job-categories for available categories",
+            example = "5"
+    )
+    @NotNull(message = "{" + ValidationMessages.JOB_CATEGORY_REQUIRED + "}")
+    @Min(value = 1, message = "Job category code must be between 1 and 12")
+    @Max(value = 12, message = "Job category code must be between 1 and 12")
+    private Integer jobCategory;
     
     @Schema(description = "Salary information including type, range, and currency")
     @NotNull(message = "Salary information is required")

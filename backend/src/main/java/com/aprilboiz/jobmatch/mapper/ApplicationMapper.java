@@ -3,6 +3,7 @@ package com.aprilboiz.jobmatch.mapper;
 import com.aprilboiz.jobmatch.dto.RoleDTO;
 import com.aprilboiz.jobmatch.dto.SalaryDto;
 import com.aprilboiz.jobmatch.dto.response.*;
+import com.aprilboiz.jobmatch.model.JobCategory;
 import com.aprilboiz.jobmatch.model.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -27,6 +28,7 @@ public interface ApplicationMapper {
     @Mapping(source = "company.id", target = "companyId")
     @Mapping(source = "recruiter.id", target = "recruiterId")
     @Mapping(target = "salary", expression = "java(jobToSalaryDto(job))")
+    @Mapping(target = "jobCategory", expression = "java(jobCategoryToCode(job.getJobCategory()))")
     JobResponse jobToJobResponse(Job job);
 
     @Mapping(source = "job.company.name", target = "companyName")
@@ -80,5 +82,9 @@ public interface ApplicationMapper {
             return companyToCompanyResponse(recruiter.getCompany());
         }
         return null;
+    }
+    
+    default Integer jobCategoryToCode(JobCategory jobCategory) {
+        return jobCategory != null ? jobCategory.getId() : null;
     }
 }

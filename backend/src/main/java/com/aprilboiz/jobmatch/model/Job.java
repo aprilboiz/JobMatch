@@ -34,6 +34,12 @@ public class Job extends AuditableEntity{
     @NotNull
     @Enumerated(EnumType.STRING)
     private JobType jobType;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "job_category_id")
+    private JobCategory jobCategory;
+    
     @NotNull
     @Builder.Default
     @Enumerated(EnumType.STRING)
