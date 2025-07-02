@@ -1,0 +1,70 @@
+{
+  "name": "JOSHUA KING",
+  "profile": "Nhân viên marketing năng động với kinh nghiệm trong quản lý thương hiệu và phát triển chiến lược truyền thông. Có khả năng làm việc nhóm tốt.",
+  "contact": {
+    "phone": "+1-202-867-4102",
+    "email": "joshua.king@yahoo.com",
+    "address": "166 First St., Los Angeles",
+    "website": "www.joshuaking.com"
+  },
+  "skills": [
+    "Canva",
+    "SEO",
+    "Campaign Management",
+    "Social Media",
+    "Email Marketing",
+    "Docker",
+    "Machine Learning"
+  ],
+  "languages": [
+    "English (Fluent)",
+    "French (Fluent)",
+    "Russian (Basics)",
+    "Spanish (Intermediate)"
+  ],
+  "education": [
+    {
+      "institution": "Yale University",
+      "degree": "Bachelor of Computer Science",
+      "years": "2015 - PRESENT"
+    },
+    {
+      "institution": "Stanford University",
+      "degree": "Cử nhân Công nghệ Thông tin",
+      "years": "2018 - PRESENT"
+    },
+    {
+      "institution": "Đại học RMIT",
+      "degree": "Bachelor of Business",
+      "years": "2019 - PRESENT"
+    }
+  ],
+  "experience": [
+    {
+      "company": "TechFlow Solutions",
+      "title": "Marketing Manager",
+      "years": "2021 - 2022"
+    },
+    {
+      "company": "DataSoft Corp",
+      "title": "Account Manager",
+      "years": "2023 - 2025"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Angela Martinez",
+      "role": "Team Lead",
+      "company": "Apple Inc.",
+      "phone": "(+84) 93 587 8746",
+      "email": "angela.martinez@hotmail.com"
+    },
+    {
+      "name": "Võ Văn Dũng",
+      "role": "Director",
+      "company": "Future Works",
+      "phone": "+1-947-757-8314",
+      "email": "võ.van.dũng@company.com"
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "name": "NGUYỄN VĂN YOUNG",
+  "profile": "Chuyên gia có kinh nghiệm trong lĩnh vực công nghệ thông tin với khả năng phân tích và giải quyết vấn đề hiệu quả. Đam mê phát triển sản phẩm công nghệ.",
+  "contact": {
+    "phone": "+1 985 910 3140",
+    "email": "nguyễn.van.young@company.com",
+    "address": "763 Second Ave., Los Angeles",
+    "website": "www.nguyễn vănyoung.com"
+  },
+  "skills": [
+    "Brand Management",
+    "Social Media",
+    "Canva",
+    "Facebook Ads",
+    "Analytics",
+    "Budgeting",
+    "Excel",
+    "SAP"
+  ],
+  "languages": [
+    "Russian (Basics)",
+    "Japanese (Basics)"
+  ],
+  "education": [
+    {
+      "institution": "Tech Institute",
+      "degree": "Master of Computer Science",
+      "years": "2015 - 2016"
+    },
+    {
+      "institution": "Đại học FPT",
+      "degree": "Master of Engineering",
+      "years": "2015 - 2020",
+      "gpa": "3.9 / 4.0"
+    },
+    {
+      "institution": "Đại học FPT",
+      "degree": "Master of Business Management",
+      "years": "2019 - 2020",
+      "gpa": "3.1 / 4.0"
+    }
+  ],
+  "experience": [
+    {
+      "company": "TechFlow Solutions",
+      "title": "Project Manager",
+      "years": "2020 - 2024"
+    },
+    {
+      "company": "Vingroup",
+      "title": "Chuyên viên Marketing",
+      "years": "2015 - PRESENT"
+    }
+  ],
+  "reference": [
+    {
+      "name": "John Long",
+      "role": "HR Director",
+      "company": "Google Inc.",
+      "phone": "+1 204 570 1972",
+      "email": "john.long@gmail.com"
+    },
+    {
+      "name": "James Dũng",
+      "role": "Team Lead",
+      "company": "Wardiere Inc.",
+      "phone": "0829-103-8363",
+      "email": "james.dũng@hotmail.com"
+    }
+  ]
+}

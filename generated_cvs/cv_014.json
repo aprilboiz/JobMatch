@@ -1,0 +1,72 @@
+{
+  "name": "JAMES BROWN",
+  "profile": "Chuyên viên tài chính có kinh nghiệm trong phân tích dữ liệu và quản lý rủi ro. Kỹ năng giao tiếp và thuyết trình xuất sắc.",
+  "contact": {
+    "phone": "(907) 737-2355",
+    "email": "james.brown@hotmail.com",
+    "address": "843 Oak Ave., Đà Nẵng",
+    "website": null
+  },
+  "skills": [
+    "Excel",
+    "Accounting",
+    "Risk Management",
+    "Financial Modeling",
+    "QuickBooks",
+    "SAP",
+    "Facebook Ads",
+    "Email Marketing",
+    "Analytics"
+  ],
+  "languages": [
+    "Chinese (Intermediate)",
+    "German (Basics)"
+  ],
+  "education": [
+    {
+      "institution": "Đại học FPT",
+      "degree": "Bachelor of Finance",
+      "years": "2023 - PRESENT"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Tesla Motors",
+      "title": "Data Scientist",
+      "years": "2021 - PRESENT"
+    },
+    {
+      "company": "Future Works",
+      "title": "Project Manager",
+      "years": "2021 - PRESENT"
+    },
+    {
+      "company": "Vingroup",
+      "title": "Product Manager",
+      "years": "2019 - 2024"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Laura Scott",
+      "role": "Manager",
+      "company": "Innovation Labs",
+      "phone": "(+84) 93 795 7241",
+      "email": "laura.scott@hotmail.com"
+    },
+    {
+      "name": "Brian King",
+      "role": "Director",
+      "company": "Apple Inc.",
+      "phone": "(889) 343-7034",
+      "email": "brian.king@company.com"
+    },
+    {
+      "name": "Lý Thị Thomas",
+      "role": "Manager",
+      "company": "Borcelle Studio",
+      "phone": "(550) 797-1992",
+      "email": "lý.thị.thomas@company.com"
+    }
+  ]
+}

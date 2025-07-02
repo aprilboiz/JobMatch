@@ -1,0 +1,63 @@
+{
+  "name": "LAURA ROBINSON",
+  "profile": "Chuyên gia có kinh nghiệm trong lĩnh vực công nghệ thông tin với khả năng phân tích và giải quyết vấn đề hiệu quả. Đam mê phát triển sản phẩm công nghệ.",
+  "contact": {
+    "phone": "(+84) 97 170 6349",
+    "email": "laura.robinson@yahoo.com",
+    "address": "365 Oak Ave., TP.HCM",
+    "website": "www.laurarobinson.com"
+  },
+  "skills": [
+    "Market Research",
+    "Copywriting",
+    "Email Marketing",
+    "CRM",
+    "Lead Generation",
+    "Customer Relationship",
+    "CRM"
+  ],
+  "languages": [
+    "Vietnamese (Native)",
+    "Russian (Basics)",
+    "English (Fluent)"
+  ],
+  "education": [
+    {
+      "institution": "MIT",
+      "degree": "Master of Business Management",
+      "years": "2020 - PRESENT",
+      "gpa": "3.7 / 4.0"
+    },
+    {
+      "institution": "Princeton University",
+      "degree": "Bachelor of Computer Science",
+      "years": "2023 - PRESENT"
+    },
+    {
+      "institution": "Stanford University",
+      "degree": "Cử nhân Công nghệ Thông tin",
+      "years": "2023 - PRESENT"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Innovation Labs",
+      "title": "Team Lead",
+      "years": "2015 - PRESENT"
+    },
+    {
+      "company": "VNG Corporation",
+      "title": "Project Manager",
+      "years": "2021 - 2022"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Bùi Minh Hill",
+      "role": "Director",
+      "company": "Công ty TNHH ABC",
+      "phone": "+1 966 602 6091",
+      "email": "bùi.minh.hill@hotmail.com"
+    }
+  ]
+}

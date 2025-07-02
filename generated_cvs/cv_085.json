@@ -1,0 +1,78 @@
+{
+  "name": "EDWARD LEWIS",
+  "profile": "Dedicated professional with passion for innovation and technology. Strong communication skills and ability to work effectively in fast-paced environments.",
+  "contact": {
+    "phone": "(+84) 90 594 7667",
+    "email": "edward.lewis@company.com",
+    "address": "80 Main St., Chicago",
+    "website": "www.edwardlewis.com"
+  },
+  "skills": [
+    "Customer Relationship",
+    "Negotiation",
+    "Lead Generation",
+    "CRM",
+    "Sales Strategy",
+    "Pipeline Management",
+    "Business Development",
+    "Brand Management",
+    "CRM",
+    "Analytics"
+  ],
+  "languages": [
+    "French (Fluent)",
+    "Korean (Intermediate)",
+    "Vietnamese (Native)"
+  ],
+  "education": [
+    {
+      "institution": "MIT",
+      "degree": "Bachelor of Business",
+      "years": "2015 - PRESENT",
+      "gpa": "2.6 / 4.0"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Vingroup",
+      "title": "UX Designer",
+      "years": "2020 - 2025"
+    },
+    {
+      "company": "Vingroup",
+      "title": "Business Analyst",
+      "years": "2016 - PRESENT"
+    },
+    {
+      "company": "Công ty TNHH ABC",
+      "title": "Team Lead",
+      "years": "2021 - 2022"
+    },
+    {
+      "company": "Netflix Inc.",
+      "title": "Project Manager",
+      "years": "2019 - PRESENT"
+    },
+    {
+      "company": "Amazon Web Services",
+      "title": "Chuyên viên Marketing",
+      "years": "2023 - PRESENT"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Võ Văn Harris",
+      "role": "HR Director",
+      "company": "Vingroup",
+      "phone": "(800) 808-5864",
+      "email": "võ.van.harris@hotmail.com"
+    },
+    {
+      "name": "Jessica Cường",
+      "role": "CEO",
+      "company": "Creative Agency",
+      "phone": "+1-739-948-9860",
+      "email": "jessica.cuờng@yahoo.com"
+    }
+  ]
+}

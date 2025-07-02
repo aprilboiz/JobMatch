@@ -1,0 +1,88 @@
+{
+  "name": "DANIEL LEWIS",
+  "profile": "Results-oriented business professional with expertise in project management and team leadership. Committed to excellence and continuous improvement in all endeavors.",
+  "contact": {
+    "phone": "(+84) 93 718 7049",
+    "email": "daniel.lewis@hotmail.com",
+    "address": "23 Second Ave., Đà Nẵng",
+    "website": null
+  },
+  "skills": [
+    "QuickBooks",
+    "Taxation",
+    "Excel",
+    "Budgeting",
+    "Financial Modeling",
+    "Accounting",
+    "Investment Analysis",
+    "Lead Generation",
+    "Business Development",
+    "Customer Relationship"
+  ],
+  "languages": [
+    "Korean (Intermediate)",
+    "German (Basics)",
+    "Chinese (Intermediate)"
+  ],
+  "education": [
+    {
+      "institution": "Đại học FPT",
+      "degree": "Bachelor of Computer Science",
+      "years": "2018 - 2024"
+    },
+    {
+      "institution": "Princeton University",
+      "degree": "Master of Engineering",
+      "years": "2021 - 2023",
+      "gpa": "2.7 / 4.0"
+    },
+    {
+      "institution": "Harvard University",
+      "degree": "Thạc sĩ Quản trị Kinh doanh",
+      "years": "2020 - 2021"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Shopee Vietnam",
+      "title": "UX Designer",
+      "years": "2023 - PRESENT"
+    },
+    {
+      "company": "Tesla Motors",
+      "title": "DevOps Engineer",
+      "years": "2023 - PRESENT"
+    },
+    {
+      "company": "Google Inc.",
+      "title": "Team Lead",
+      "years": "2017 - 2021"
+    },
+    {
+      "company": "DataSoft Corp",
+      "title": "UX Designer",
+      "years": "2022 - 2024"
+    },
+    {
+      "company": "Tập đoàn XYZ",
+      "title": "Marketing Specialist",
+      "years": "2019 - PRESENT"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Emma Miller",
+      "role": "CEO",
+      "company": "SpaceX Corporation",
+      "phone": "+1-375-458-7528",
+      "email": "emma.miller@gmail.com"
+    },
+    {
+      "name": "Laura Phong",
+      "role": "Team Lead",
+      "company": "Vingroup",
+      "phone": "+1 329 872 9077",
+      "email": "laura.phong@yahoo.com"
+    }
+  ]
+}

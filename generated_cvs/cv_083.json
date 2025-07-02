@@ -1,0 +1,60 @@
+{
+  "name": "RICHARD KHOA",
+  "profile": "Nhân viên marketing năng động với kinh nghiệm trong quản lý thương hiệu và phát triển chiến lược truyền thông. Có khả năng làm việc nhóm tốt.",
+  "contact": {
+    "phone": "+1-569-735-2406",
+    "email": "richard.khoa@gmail.com",
+    "address": "516 Park Rd., Đà Nẵng",
+    "website": "www.richardkhoa.com"
+  },
+  "skills": [
+    "Content Marketing",
+    "Market Research",
+    "Social Media",
+    "CRM",
+    "SEO",
+    "Facebook Ads",
+    "QuickBooks",
+    "Financial Modeling"
+  ],
+  "languages": [
+    "Vietnamese (Native)",
+    "Japanese (Basics)",
+    "English (Fluent)",
+    "German (Basics)"
+  ],
+  "education": [
+    {
+      "institution": "UC Berkeley",
+      "degree": "Master of Computer Science",
+      "years": "2020 - PRESENT"
+    },
+    {
+      "institution": "NYU",
+      "degree": "Master of Engineering",
+      "years": "2018 - PRESENT",
+      "gpa": "3.9 / 4.0"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Wardiere Inc.",
+      "title": "Product Manager",
+      "years": "2020 - PRESENT"
+    },
+    {
+      "company": "Future Works",
+      "title": "Tư vấn Kinh doanh",
+      "years": "2016 - PRESENT"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Sarah Taylor",
+      "role": "Manager",
+      "company": "Creative Agency",
+      "phone": "(+84) 90 423 6481",
+      "email": "sarah.taylor@gmail.com"
+    }
+  ]
+}

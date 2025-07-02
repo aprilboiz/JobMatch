@@ -1,0 +1,86 @@
+{
+  "name": "EDWARD XUÂN",
+  "profile": "Chuyên viên tài chính có kinh nghiệm trong phân tích dữ liệu và quản lý rủi ro. Kỹ năng giao tiếp và thuyết trình xuất sắc.",
+  "contact": {
+    "phone": "+1-334-508-2284",
+    "email": "edward.xuan@yahoo.com",
+    "address": "952 Main St., Hà Nội",
+    "website": "www.edwardxuân.com"
+  },
+  "skills": [
+    "Payroll",
+    "Training & Development",
+    "Recruitment",
+    "Interviewing",
+    "Performance Management",
+    "Employee Relations",
+    "HR Policies",
+    "Talent Acquisition",
+    "Financial Modeling"
+  ],
+  "languages": [
+    "Japanese (Basics)",
+    "Spanish (Intermediate)",
+    "French (Fluent)",
+    "Vietnamese (Native)"
+  ],
+  "education": [
+    {
+      "institution": "Business Academy",
+      "degree": "Master of Business Administration",
+      "years": "2018 - 2022",
+      "gpa": "3.4 / 4.0"
+    },
+    {
+      "institution": "MIT",
+      "degree": "Bachelor of Marketing",
+      "years": "2018 - PRESENT",
+      "gpa": "3.5 / 4.0"
+    },
+    {
+      "institution": "Tech Institute",
+      "degree": "Master of Engineering",
+      "years": "2020 - 2022"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Meta Platforms",
+      "title": "Tư vấn Kinh doanh",
+      "years": "2018 - 2023"
+    },
+    {
+      "company": "NextGen Technologies",
+      "title": "HR Specialist",
+      "years": "2020 - 2024"
+    },
+    {
+      "company": "Fauget Studio",
+      "title": "Quản lý Dự án",
+      "years": "2016 - 2018"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Jessica Xuân",
+      "role": "CEO",
+      "company": "Tập đoàn XYZ",
+      "phone": "+1-544-857-9460",
+      "email": "jessica.xuan@hotmail.com"
+    },
+    {
+      "name": "Đặng Hữu Flores",
+      "role": "Director",
+      "company": "VNG Corporation",
+      "phone": "+33-3-79-133",
+      "email": "dặng.hữu.flores@gmail.com"
+    },
+    {
+      "name": "Bùi Minh Bình",
+      "role": "Manager",
+      "company": "DataSoft Corp",
+      "phone": "+1-875-425-9354",
+      "email": "bùi.minh.bình@company.com"
+    }
+  ]
+}

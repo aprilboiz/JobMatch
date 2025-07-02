@@ -1,0 +1,55 @@
+{
+  "name": "STEVEN SƠN",
+  "profile": "Nhân viên marketing năng động với kinh nghiệm trong quản lý thương hiệu và phát triển chiến lược truyền thông. Có khả năng làm việc nhóm tốt.",
+  "contact": {
+    "phone": "+33-1-54-758",
+    "email": "steven.sơn@hotmail.com",
+    "address": "427 Second Ave., Los Angeles",
+    "website": "www.stevensơn.com"
+  },
+  "skills": [
+    "Excel",
+    "Risk Management",
+    "Financial Modeling",
+    "React"
+  ],
+  "languages": [
+    "Chinese (Intermediate)",
+    "German (Basics)",
+    "English (Fluent)"
+  ],
+  "education": [
+    {
+      "institution": "Đại học Kinh tế Quốc dân",
+      "degree": "Bachelor of Computer Science",
+      "years": "2022 - PRESENT",
+      "gpa": "2.7 / 4.0"
+    },
+    {
+      "institution": "UC Berkeley",
+      "degree": "Cử nhân Công nghệ Thông tin",
+      "years": "2020 - 2023"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Vingroup",
+      "title": "Account Manager",
+      "years": "2022 - 2024"
+    },
+    {
+      "company": "NextGen Technologies",
+      "title": "UX Designer",
+      "years": "2018 - PRESENT"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Lisa Perez",
+      "role": "Director",
+      "company": "FPT Software",
+      "phone": "(265) 430-6062",
+      "email": "lisa.perez@gmail.com"
+    }
+  ]
+}

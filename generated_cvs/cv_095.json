@@ -1,0 +1,73 @@
+{
+  "name": "LISA MARTINEZ",
+  "profile": "Dedicated professional with passion for innovation and technology. Strong communication skills and ability to work effectively in fast-paced environments.",
+  "contact": {
+    "phone": "+1-969-438-9983",
+    "email": "lisa.martinez@yahoo.com",
+    "address": "990 Oak Ave., Houston",
+    "website": null
+  },
+  "skills": [
+    "Google Ads",
+    "Brand Management",
+    "Email Marketing",
+    "Facebook Ads",
+    "Canva",
+    "Excel"
+  ],
+  "languages": [
+    "Korean (Intermediate)",
+    "Spanish (Intermediate)",
+    "English (Fluent)"
+  ],
+  "education": [
+    {
+      "institution": "Đại học Bách Khoa Hà Nội",
+      "degree": "Cử nhân Công nghệ Thông tin",
+      "years": "2017 - PRESENT",
+      "gpa": "3.1 / 4.0"
+    },
+    {
+      "institution": "Columbia University",
+      "degree": "Master of Business Management",
+      "years": "2020 - 2024",
+      "gpa": "2.7 / 4.0"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Borcelle Studio",
+      "title": "Nhân viên IT",
+      "years": "2020 - 2022"
+    },
+    {
+      "company": "DataSoft Corp",
+      "title": "Quản lý Dự án",
+      "years": "2023 - PRESENT"
+    },
+    {
+      "company": "Amazon Web Services",
+      "title": "Operations Manager",
+      "years": "2015 - PRESENT"
+    },
+    {
+      "company": "Meta Platforms",
+      "title": "Marketing Manager",
+      "years": "2018 - PRESENT"
+    },
+    {
+      "company": "Viettel Group",
+      "title": "Senior Developer",
+      "years": "2021 - 2025"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Cao Minh Young",
+      "role": "HR Director",
+      "company": "Vingroup",
+      "phone": "0329-821-3597",
+      "email": "cao.minh.young@company.com"
+    }
+  ]
+}

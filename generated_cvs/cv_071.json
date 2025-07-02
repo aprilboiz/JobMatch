@@ -1,0 +1,67 @@
+{
+  "name": "EMILY KING",
+  "profile": "Nhân viên marketing năng động với kinh nghiệm trong quản lý thương hiệu và phát triển chiến lược truyền thông. Có khả năng làm việc nhóm tốt.",
+  "contact": {
+    "phone": "(907) 705-6916",
+    "email": "emily.king@yahoo.com",
+    "address": "67 Second Ave., Los Angeles",
+    "website": "www.emilyking.com"
+  },
+  "skills": [
+    "Python",
+    "Agile",
+    "Data Analysis",
+    "Java",
+    "Financial Analysis"
+  ],
+  "languages": [
+    "Russian (Basics)",
+    "Vietnamese (Native)",
+    "Spanish (Intermediate)"
+  ],
+  "education": [
+    {
+      "institution": "Business Academy",
+      "degree": "Cử nhân Kinh tế",
+      "years": "2020 - 2023"
+    }
+  ],
+  "experience": [
+    {
+      "company": "TechFlow Solutions",
+      "title": "Operations Manager",
+      "years": "2022 - 2023"
+    },
+    {
+      "company": "Viettel Group",
+      "title": "Financial Analyst",
+      "years": "2017 - 2021"
+    },
+    {
+      "company": "Smart Systems",
+      "title": "DevOps Engineer",
+      "years": "2021 - PRESENT"
+    },
+    {
+      "company": "Tập đoàn XYZ",
+      "title": "Chuyên viên Marketing",
+      "years": "2021 - PRESENT"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Bùi Minh Young",
+      "role": "CEO",
+      "company": "Vingroup",
+      "phone": "+33-4-48-392",
+      "email": "bùi.minh.young@outlook.com"
+    },
+    {
+      "name": "Kevin Jones",
+      "role": "Team Lead",
+      "company": "Wardiere Inc.",
+      "phone": "+1-261-716-8569",
+      "email": "kevin.jones@gmail.com"
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "name": "TRẦN THỊ FLORES",
+  "profile": "Chuyên gia có kinh nghiệm trong lĩnh vực công nghệ thông tin với khả năng phân tích và giải quyết vấn đề hiệu quả. Đam mê phát triển sản phẩm công nghệ.",
+  "contact": {
+    "phone": "+33-5-52-519",
+    "email": "trần.thị.flores@gmail.com",
+    "address": "420 First St., Los Angeles",
+    "website": "www.trần thịflores.com"
+  },
+  "skills": [
+    "Risk Management",
+    "Budgeting",
+    "SAP",
+    "Taxation",
+    "Excel",
+    "Investment Analysis",
+    "Sales Strategy",
+    "Lead Generation",
+    "Pipeline Management"
+  ],
+  "languages": [
+    "Russian (Basics)",
+    "Chinese (Intermediate)"
+  ],
+  "education": [
+    {
+      "institution": "Columbia University",
+      "degree": "Master of Business Management",
+      "years": "2022 - PRESENT"
+    }
+  ],
+  "experience": [
+    {
+      "company": "SpaceX Corporation",
+      "title": "Business Analyst",
+      "years": "2019 - PRESENT"
+    },
+    {
+      "company": "Smart Systems",
+      "title": "HR Specialist",
+      "years": "2017 - 2018"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Laura Quang",
+      "role": "Director",
+      "company": "Innovation Labs",
+      "phone": "(201) 317-7231",
+      "email": "laura.quang@outlook.com"
+    },
+    {
+      "name": "William Miller",
+      "role": "Manager",
+      "company": "Digital Dynamics",
+      "phone": "+1 612 419 9239",
+      "email": "william.miller@yahoo.com"
+    }
+  ]
+}

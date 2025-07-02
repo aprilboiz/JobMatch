@@ -1,0 +1,89 @@
+{
+  "name": "WILLIAM HERNANDEZ",
+  "profile": "Chuyên viên tài chính có kinh nghiệm trong phân tích dữ liệu và quản lý rủi ro. Kỹ năng giao tiếp và thuyết trình xuất sắc.",
+  "contact": {
+    "phone": "0392-470-4765",
+    "email": "william.hernandez@yahoo.com",
+    "address": "40 Park Rd., Los Angeles",
+    "website": null
+  },
+  "skills": [
+    "Interviewing",
+    "Talent Acquisition",
+    "Payroll",
+    "Recruitment",
+    "Taxation"
+  ],
+  "languages": [
+    "Japanese (Basics)",
+    "English (Fluent)"
+  ],
+  "education": [
+    {
+      "institution": "Business Academy",
+      "degree": "Master of Data Science",
+      "years": "2018 - PRESENT"
+    },
+    {
+      "institution": "NYU",
+      "degree": "Cử nhân Công nghệ Thông tin",
+      "years": "2023 - PRESENT",
+      "gpa": "2.6 / 4.0"
+    },
+    {
+      "institution": "Đại học Kinh tế Quốc dân",
+      "degree": "Bachelor of Finance",
+      "years": "2022 - PRESENT"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Innovation Labs",
+      "title": "Marketing Specialist",
+      "years": "2022 - 2023"
+    },
+    {
+      "company": "VNG Corporation",
+      "title": "Marketing Manager",
+      "years": "2021 - PRESENT"
+    },
+    {
+      "company": "VNG Corporation",
+      "title": "Business Analyst",
+      "years": "2018 - PRESENT"
+    },
+    {
+      "company": "TechFlow Solutions",
+      "title": "Project Manager",
+      "years": "2020 - PRESENT"
+    },
+    {
+      "company": "Smart Systems",
+      "title": "Marketing Manager",
+      "years": "2015 - PRESENT"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Phạm Thu Dũng",
+      "role": "HR Director",
+      "company": "Tesla Motors",
+      "phone": "(466) 942-3451",
+      "email": "phạm.thu.dũng@yahoo.com"
+    },
+    {
+      "name": "Kenneth Garcia",
+      "role": "CTO",
+      "company": "Viettel Group",
+      "phone": "0253-171-2557",
+      "email": "kenneth.garcia@hotmail.com"
+    },
+    {
+      "name": "Sarah Walker",
+      "role": "CEO",
+      "company": "Tập đoàn XYZ",
+      "phone": "+1 389 630 9924",
+      "email": "sarah.walker@company.com"
+    }
+  ]
+}

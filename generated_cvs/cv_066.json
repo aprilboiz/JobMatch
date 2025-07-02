@@ -1,0 +1,74 @@
+{
+  "name": "DANIEL TORRES",
+  "profile": "Creative problem solver with strong analytical skills and attention to detail. Experienced in cross-functional collaboration and stakeholder management.",
+  "contact": {
+    "phone": "+1-423-622-4528",
+    "email": "daniel.torres@gmail.com",
+    "address": "406 Park Rd., New York",
+    "website": null
+  },
+  "skills": [
+    "Excel",
+    "Accounting",
+    "Risk Management",
+    "Financial Modeling",
+    "SAP",
+    "Budgeting",
+    "Taxation",
+    "Pipeline Management",
+    "Customer Relationship",
+    "Sales Strategy"
+  ],
+  "languages": [
+    "Chinese (Intermediate)",
+    "Russian (Basics)",
+    "Korean (Intermediate)",
+    "Vietnamese (Native)"
+  ],
+  "education": [
+    {
+      "institution": "Yale University",
+      "degree": "Master of Data Science",
+      "years": "2021 - 2022",
+      "gpa": "2.6 / 4.0"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Viettel Group",
+      "title": "Marketing Manager",
+      "years": "2021 - PRESENT"
+    },
+    {
+      "company": "Tesla Motors",
+      "title": "Account Manager",
+      "years": "2018 - PRESENT"
+    },
+    {
+      "company": "Fauget Studio",
+      "title": "DevOps Engineer",
+      "years": "2021 - 2025"
+    },
+    {
+      "company": "NextGen Technologies",
+      "title": "Business Analyst",
+      "years": "2016 - 2024"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Cao Minh Brown",
+      "role": "Manager",
+      "company": "Digital Dynamics",
+      "phone": "+33-2-81-201",
+      "email": "cao.minh.brown@outlook.com"
+    },
+    {
+      "name": "Maria Taylor",
+      "role": "Manager",
+      "company": "NextGen Technologies",
+      "phone": "+1-250-570-5443",
+      "email": "maria.taylor@company.com"
+    }
+  ]
+}

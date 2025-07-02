@@ -1,0 +1,726 @@
+[
+    {
+        "text": "Sophia Williams",
+        "label": "name"
+    },
+    {
+        "text": "Michael Johnson",
+        "label": "name"
+    },
+    {
+        "text": "Emily Brown",
+        "label": "name"
+    },
+    {
+        "text": "David Lee",
+        "label": "name"
+    },
+    {
+        "text": "Olivia Martinez",
+        "label": "name"
+    },
+    {
+        "text": "A highly motivated data analyst with a passion for uncovering insights from complex datasets.",
+        "label": "profile"
+    },
+    {
+        "text": "Bachelor of Arts in English Literature, University of Oxford, 2012 - 2015",
+        "label": "education"
+    },
+    {
+        "text": "Managed a team of 8 sales representatives at RetailPro, increasing quarterly revenue by 18%.",
+        "label": "experience"
+    },
+    {
+        "text": "Expert in Microsoft Excel, PowerPoint, and Google Analytics.",
+        "label": "skills"
+    },
+    {
+        "text": "Fluent in Italian and conversational in German.",
+        "label": "languages"
+    },
+    {
+        "text": "Phone: +1 555-987-6543 | Email: sophia.williams@email.com",
+        "label": "contact"
+    },
+    {
+        "text": "Mr. Robert King, Senior Consultant, Business Solutions Ltd.",
+        "label": "reference"
+    },
+    {
+        "text": "Certified Public Accountant (CPA), 2020",
+        "label": "certificate"
+    },
+    {
+        "text": "Developed a mobile budgeting app for personal finance management.",
+        "label": "project"
+    },
+    {
+        "text": "Member of the local running club and volunteer at animal rescue events.",
+        "label": "other"
+    },
+    {
+        "text": "Lucas Anderson",
+        "label": "name"
+    },
+    {
+        "text": "Jessica Clark",
+        "label": "name"
+    },
+    {
+        "text": "Benjamin Harris",
+        "label": "name"
+    },
+    {
+        "text": "A results-oriented marketing manager with over 7 years of experience in digital campaigns.",
+        "label": "profile"
+    },
+    {
+        "text": "Master of Science in Mechanical Engineering, Georgia Institute of Technology, 2014 - 2016",
+        "label": "education"
+    },
+    {
+        "text": "Oversaw the launch of a new product line at TechNova, resulting in a 25% market share increase.",
+        "label": "experience"
+    },
+    {
+        "text": "Proficient in Python, R, and SQL for data analysis.",
+        "label": "skills"
+    },
+    {
+        "text": "Native Spanish speaker; advanced English proficiency.",
+        "label": "languages"
+    },
+    {
+        "text": "Email: ben.harris@domain.com | LinkedIn: linkedin.com/in/benharris",
+        "label": "contact"
+    },
+    {
+        "text": "Dr. Susan Miller, Professor of Marketing, NYU Stern School of Business",
+        "label": "reference"
+    },
+    {
+        "text": "Project Management Professional (PMP), 2021",
+        "label": "certificate"
+    },
+    {
+        "text": "Designed and implemented a CRM system for a mid-sized retail company.",
+        "label": "project"
+    },
+    {
+        "text": "Hobbies include landscape photography and chess.",
+        "label": "other"
+    },
+    {
+        "text": "Ava Thompson",
+        "label": "name"
+    },
+    {
+        "text": "Daniel White",
+        "label": "name"
+    },
+    {
+        "text": "Grace Kim",
+        "label": "name"
+    },
+    {
+        "text": "Innovative UX designer with a strong background in user research and prototyping.",
+        "label": "profile"
+    },
+    {
+        "text": "Bachelor of Fine Arts in Graphic Design, School of Visual Arts, 2010 - 2014",
+        "label": "education"
+    },
+    {
+        "text": "Redesigned the company website, improving user engagement by 40%.",
+        "label": "experience"
+    },
+    {
+        "text": "Adobe XD, Figma, and Sketch expertise.",
+        "label": "skills"
+    },
+    {
+        "text": "Fluent in Korean and English.",
+        "label": "languages"
+    },
+    {
+        "text": "Phone: +82 10-1234-5678 | Email: grace.kim@uxdesign.com",
+        "label": "contact"
+    },
+    {
+        "text": "Ms. Linda Park, Creative Director, Visionary Designs",
+        "label": "reference"
+    },
+    {
+        "text": "Certified UX Professional, Nielsen Norman Group, 2019",
+        "label": "certificate"
+    },
+    {
+        "text": "Created a digital portfolio platform for freelance designers.",
+        "label": "project"
+    },
+    {
+        "text": "Volunteer: Local animal shelter web design project.",
+        "label": "other"
+    },
+    {
+        "text": "Matthew Scott",
+        "label": "name"
+    },
+    {
+        "text": "Chloe Evans",
+        "label": "name"
+    },
+    {
+        "text": "Ryan Carter",
+        "label": "name"
+    },
+    {
+        "text": "Dedicated teacher with a focus on student-centered learning and curriculum development.",
+        "label": "profile"
+    },
+    {
+        "text": "Master of Education, University of Toronto, 2015 - 2017",
+        "label": "education"
+    },
+    {
+        "text": "Taught mathematics to high school students, achieving a 95% pass rate.",
+        "label": "experience"
+    },
+    {
+        "text": "Lesson planning, classroom management, and assessment skills.",
+        "label": "skills"
+    },
+    {
+        "text": "Fluent in French and conversational in Mandarin.",
+        "label": "languages"
+    },
+    {
+        "text": "Email: chloe.evans@school.edu | Phone: +1 416-555-7890",
+        "label": "contact"
+    },
+    {
+        "text": "Mr. James Wilson, Principal, Maple Leaf High School",
+        "label": "reference"
+    },
+    {
+        "text": "Ontario Certified Teacher (OCT), 2018",
+        "label": "certificate"
+    },
+    {
+        "text": "Developed an after-school tutoring program for at-risk students.",
+        "label": "project"
+    },
+    {
+        "text": "Member of the local book club and volunteer at food banks.",
+        "label": "other"
+    },
+    {
+        "text": "Lucas Bennett",
+        "label": "name"
+    },
+    {
+        "text": "Natalie Foster",
+        "label": "name"
+    },
+    {
+        "text": "Samuel Reed",
+        "label": "name"
+    },
+    {
+        "text": "A passionate civil engineer with a focus on sustainable infrastructure projects.",
+        "label": "profile"
+    },
+    {
+        "text": "Bachelor of Science in Civil Engineering, University of Illinois, 2011 - 2015",
+        "label": "education"
+    },
+    {
+        "text": "Supervised the construction of a 10-story office building, ensuring all safety standards were met.",
+        "label": "experience"
+    },
+    {
+        "text": "AutoCAD, project scheduling, and site management skills.",
+        "label": "skills"
+    },
+    {
+        "text": "Fluent in Russian and conversational in English.",
+        "label": "languages"
+    },
+    {
+        "text": "Phone: +7 495 123-4567 | Email: lucas.bennett@engineer.com",
+        "label": "contact"
+    },
+    {
+        "text": "Ms. Karen Brooks, Senior Project Manager, BuildRight Inc.",
+        "label": "reference"
+    },
+    {
+        "text": "LEED Accredited Professional, 2016",
+        "label": "certificate"
+    },
+    {
+        "text": "Designed a green rooftop system for urban buildings.",
+        "label": "project"
+    },
+    {
+        "text": "Volunteer: Habitat for Humanity construction projects.",
+        "label": "other"
+    },
+    {
+        "text": "Ella Murphy",
+        "label": "name"
+    },
+    {
+        "text": "Christopher Young",
+        "label": "name"
+    },
+    {
+        "text": "Victoria Adams",
+        "label": "name"
+    },
+    {
+        "text": "Results-driven HR specialist with expertise in employee relations and recruitment.",
+        "label": "profile"
+    },
+    {
+        "text": "Master of Human Resource Management, University of Manchester, 2013 - 2014",
+        "label": "education"
+    },
+    {
+        "text": "Implemented a new onboarding process, reducing turnover by 12%.",
+        "label": "experience"
+    },
+    {
+        "text": "Conflict resolution, talent acquisition, and HRIS skills.",
+        "label": "skills"
+    },
+    {
+        "text": "Fluent in Dutch and English.",
+        "label": "languages"
+    },
+    {
+        "text": "Email: victoria.adams@hrpro.com | Phone: +31 20 123 4567",
+        "label": "contact"
+    },
+    {
+        "text": "Mr. Peter van Dijk, HR Director, PeopleFirst Solutions",
+        "label": "reference"
+    },
+    {
+        "text": "Chartered Institute of Personnel and Development (CIPD), 2015",
+        "label": "certificate"
+    },
+    {
+        "text": "Developed an employee engagement survey platform.",
+        "label": "project"
+    },
+    {
+        "text": "Member of the Society for Human Resource Management.",
+        "label": "other"
+    },
+    {
+        "text": "Jack Turner",
+        "label": "name"
+    },
+    {
+        "text": "Samantha Green",
+        "label": "name"
+    },
+    {
+        "text": "Henry Walker",
+        "label": "name"
+    },
+    {
+        "text": "Creative copywriter with a flair for storytelling and brand messaging.",
+        "label": "profile"
+    },
+    {
+        "text": "Bachelor of Arts in Journalism, University of Melbourne, 2009 - 2012",
+        "label": "education"
+    },
+    {
+        "text": "Wrote advertising copy for over 30 national campaigns at AdWorks.",
+        "label": "experience"
+    },
+    {
+        "text": "SEO, content strategy, and editing skills.",
+        "label": "skills"
+    },
+    {
+        "text": "Fluent in Swedish and English.",
+        "label": "languages"
+    },
+    {
+        "text": "Phone: +46 8 123 4567 | Email: samantha.green@adworks.com",
+        "label": "contact"
+    },
+    {
+        "text": "Ms. Ingrid Nilsson, Creative Director, AdWorks",
+        "label": "reference"
+    },
+    {
+        "text": "Google Ads Certification, 2020",
+        "label": "certificate"
+    },
+    {
+        "text": "Launched a content marketing blog with 10,000+ monthly readers.",
+        "label": "project"
+    },
+    {
+        "text": "Volunteer: Local library reading program.",
+        "label": "other"
+    },
+    {
+        "text": "Megan Phillips",
+        "label": "name"
+    },
+    {
+        "text": "Ethan Wood",
+        "label": "name"
+    },
+    {
+        "text": "Isabella Cooper",
+        "label": "name"
+    },
+    {
+        "text": "Detail-oriented financial analyst with a strong background in risk assessment.",
+        "label": "profile"
+    },
+    {
+        "text": "Master of Finance, University of Hong Kong, 2016 - 2018",
+        "label": "education"
+    },
+    {
+        "text": "Analyzed investment portfolios and provided recommendations to clients at FinServe.",
+        "label": "experience"
+    },
+    {
+        "text": "Financial modeling, data visualization, and Excel skills.",
+        "label": "skills"
+    },
+    {
+        "text": "Fluent in Cantonese and English.",
+        "label": "languages"
+    },
+    {
+        "text": "Email: ethan.wood@finserve.com | Phone: +852 1234 5678",
+        "label": "contact"
+    },
+    {
+        "text": "Mr. Alan Wong, Senior Analyst, FinServe",
+        "label": "reference"
+    },
+    {
+        "text": "Chartered Financial Analyst (CFA) Level I, 2019",
+        "label": "certificate"
+    },
+    {
+        "text": "Built a financial dashboard for real-time portfolio tracking.",
+        "label": "project"
+    },
+    {
+        "text": "Member of the Hong Kong Investment Society.",
+        "label": "other"
+    },
+    {
+        "text": "Owen Parker",
+        "label": "name"
+    },
+    {
+        "text": "Amelia King",
+        "label": "name"
+    },
+    {
+        "text": "Liam Wright",
+        "label": "name"
+    },
+    {
+        "text": "Experienced logistics coordinator with a focus on supply chain optimization.",
+        "label": "profile"
+    },
+    {
+        "text": "Bachelor of Science in Logistics, University of Antwerp, 2012 - 2016",
+        "label": "education"
+    },
+    {
+        "text": "Coordinated international shipments and managed vendor relationships at FastMove Logistics.",
+        "label": "experience"
+    },
+    {
+        "text": "ERP systems, inventory management, and negotiation skills.",
+        "label": "skills"
+    },
+    {
+        "text": "Fluent in Greek and English.",
+        "label": "languages"
+    },
+    {
+        "text": "Phone: +30 21 9876 5432 | Email: amelia.king@fastmove.com",
+        "label": "contact"
+    },
+    {
+        "text": "Mr. Nikos Georgiou, Operations Manager, FastMove Logistics",
+        "label": "reference"
+    },
+    {
+        "text": "Certified Supply Chain Professional (CSCP), 2018",
+        "label": "certificate"
+    },
+    {
+        "text": "Implemented a just-in-time inventory system, reducing costs by 15%.",
+        "label": "project"
+    },
+    {
+        "text": "Volunteer: Local food bank logistics support.",
+        "label": "other"
+    },
+    {
+        "text": "Charlotte Baker",
+        "label": "name"
+    },
+    {
+        "text": "Jacob Hall",
+        "label": "name"
+    },
+    {
+        "text": "Ella Turner",
+        "label": "name"
+    },
+    {
+        "text": "Proactive IT support specialist with expertise in troubleshooting and customer service.",
+        "label": "profile"
+    },
+    {
+        "text": "Bachelor of Information Technology, University of Sydney, 2013 - 2017",
+        "label": "education"
+    },
+    {
+        "text": "Provided technical support for over 300 users at TechAssist.",
+        "label": "experience"
+    },
+    {
+        "text": "Windows, Mac OS, and network troubleshooting skills.",
+        "label": "skills"
+    },
+    {
+        "text": "Fluent in Malay and English.",
+        "label": "languages"
+    },
+    {
+        "text": "Email: jacob.hall@techassist.com | Phone: +61 2 9876 5432",
+        "label": "contact"
+    },
+    {
+        "text": "Mr. Samuel Tan, IT Manager, TechAssist",
+        "label": "reference"
+    },
+    {
+        "text": "CompTIA Network+ Certification, 2019",
+        "label": "certificate"
+    },
+    {
+        "text": "Set up a remote desktop solution for efficient work-from-home arrangements.",
+        "label": "project"
+    },
+    {
+        "text": "Member of the Australian Computer Society.",
+        "label": "other"
+    },
+    {
+        "text": "Mia Harris",
+        "label": "name"
+    },
+    {
+        "text": "William Lewis",
+        "label": "name"
+    },
+    {
+        "text": "Sophie Robinson",
+        "label": "name"
+    },
+    {
+        "text": "Enthusiastic environmental scientist with a commitment to sustainability and research.",
+        "label": "profile"
+    },
+    {
+        "text": "Master of Environmental Science, University of Queensland, 2017 - 2019",
+        "label": "education"
+    },
+    {
+        "text": "Conducted field research on air quality at GreenEarth Institute.",
+        "label": "experience"
+    },
+    {
+        "text": "Environmental monitoring, data analysis, and report writing skills.",
+        "label": "skills"
+    },
+    {
+        "text": "Fluent in Dutch and English.",
+        "label": "languages"
+    },
+    {
+        "text": "Phone: +31 20 987 6543 | Email: sophie.robinson@greenearth.org",
+        "label": "contact"
+    },
+    {
+        "text": "Dr. Eva Janssen, Research Director, GreenEarth Institute",
+        "label": "reference"
+    },
+    {
+        "text": "Certified Environmental Professional (CEP), 2020",
+        "label": "certificate"
+    },
+    {
+        "text": "Published a research paper on renewable energy in a peer-reviewed journal.",
+        "label": "project"
+    },
+    {
+        "text": "Volunteer: Local recycling initiative.",
+        "label": "other"
+    },
+    {
+        "text": "James Edwards",
+        "label": "name"
+    },
+    {
+        "text": "Hannah Moore",
+        "label": "name"
+    },
+    {
+        "text": "Alexander Scott",
+        "label": "name"
+    },
+    {
+        "text": "Motivated customer service representative with a focus on client satisfaction.",
+        "label": "profile"
+    },
+    {
+        "text": "Diploma in Customer Service, City Business School, 2015 - 2016",
+        "label": "education"
+    },
+    {
+        "text": "Handled customer inquiries and resolved complaints at QuickAssist Ltd.",
+        "label": "experience"
+    },
+    {
+        "text": "Conflict resolution, CRM software, and active listening skills.",
+        "label": "skills"
+    },
+    {
+        "text": "Fluent in Turkish and English.",
+        "label": "languages"
+    },
+    {
+        "text": "Email: hannah.moore@quickassist.com | Phone: +90 212 345 6789",
+        "label": "contact"
+    },
+    {
+        "text": "Ms. Aylin Demir, Customer Service Manager, QuickAssist Ltd.",
+        "label": "reference"
+    },
+    {
+        "text": "Customer Service Excellence Certificate, 2017",
+        "label": "certificate"
+    },
+    {
+        "text": "Developed a customer feedback system, improving service quality.",
+        "label": "project"
+    },
+    {
+        "text": "Volunteer: Local animal shelter.",
+        "label": "other"
+    },
+    {
+        "text": "Mason Clark",
+        "label": "name"
+    },
+    {
+        "text": "Lily Walker",
+        "label": "name"
+    },
+    {
+        "text": "Aiden Young",
+        "label": "name"
+    },
+    {
+        "text": "Proactive logistics coordinator with experience in supply chain management.",
+        "label": "profile"
+    },
+    {
+        "text": "Bachelor of Logistics and Supply Chain Management, University of Antwerp, 2012 - 2016",
+        "label": "education"
+    },
+    {
+        "text": "Coordinated shipments and managed inventory at FastTrack Logistics.",
+        "label": "experience"
+    },
+    {
+        "text": "Supply chain optimization, vendor management, and ERP systems skills.",
+        "label": "skills"
+    },
+    {
+        "text": "Fluent in Greek and English.",
+        "label": "languages"
+    },
+    {
+        "text": "Phone: +30 21 1234 5678 | Email: lily.walker@fasttrack.com",
+        "label": "contact"
+    },
+    {
+        "text": "Mr. Nikos Papadopoulos, Operations Manager, FastTrack Logistics",
+        "label": "reference"
+    },
+    {
+        "text": "Certified Supply Chain Professional (CSCP), 2017",
+        "label": "certificate"
+    },
+    {
+        "text": "Implemented a just-in-time inventory system, reducing storage costs.",
+        "label": "project"
+    },
+    {
+        "text": "Member of the Hellenic Logistics Association.",
+        "label": "other"
+    },
+    {
+        "text": "Skilled mechanical engineer with a background in automotive design and manufacturing.",
+        "label": "profile"
+    },
+    {
+        "text": "Bachelor of Mechanical Engineering, Technical University of Denmark, 2007 - 2011",
+        "label": "education"
+    },
+    {
+        "text": "Designed automotive components for electric vehicles at GreenMotors Ltd.",
+        "label": "experience"
+    },
+    {
+        "text": "CAD, SolidWorks, and manufacturing process skills.",
+        "label": "skills"
+    },
+    {
+        "text": "Fluent in Swedish and English.",
+        "label": "languages"
+    },
+    {
+        "text": "Email: mason.clark@greenmotors.com | Phone: +45 12 34 56 78",
+        "label": "contact"
+    },
+    {
+        "text": "Ms. Anna Svensson, Lead Engineer, GreenMotors Ltd.",
+        "label": "reference"
+    },
+    {
+        "text": "Professional Engineer (PE), Denmark, 2012",
+        "label": "certificate"
+    },
+    {
+        "text": "Developed a lightweight chassis, improving vehicle efficiency by 10%.",
+        "label": "project"
+    },
+    {
+        "text": "Volunteer: STEM outreach programs for youth.",
+        "label": "other"
+    }
+]

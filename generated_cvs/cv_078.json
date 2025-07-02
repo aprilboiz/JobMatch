@@ -1,0 +1,77 @@
+{
+  "name": "NGUYỄN VĂN MARTIN",
+  "profile": "Creative problem solver with strong analytical skills and attention to detail. Experienced in cross-functional collaboration and stakeholder management.",
+  "contact": {
+    "phone": "+1 207 420 8303",
+    "email": "nguyễn.van.martin@outlook.com",
+    "address": "507 Park Rd., Hà Nội",
+    "website": null
+  },
+  "skills": [
+    "Canva",
+    "Email Marketing",
+    "Copywriting",
+    "CRM",
+    "Facebook Ads",
+    "Employee Relations",
+    "Talent Acquisition",
+    "HR Policies"
+  ],
+  "languages": [
+    "French (Fluent)",
+    "German (Basics)"
+  ],
+  "education": [
+    {
+      "institution": "Stanford University",
+      "degree": "Thạc sĩ Quản trị Kinh doanh",
+      "years": "2022 - 2025",
+      "gpa": "2.6 / 4.0"
+    },
+    {
+      "institution": "Stanford University",
+      "degree": "Bachelor of Finance",
+      "years": "2015 - 2017",
+      "gpa": "3.1 / 4.0"
+    },
+    {
+      "institution": "Đại học Bách Khoa Hà Nội",
+      "degree": "Master of Engineering",
+      "years": "2015 - 2022",
+      "gpa": "3.9 / 4.0"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Tesla Motors",
+      "title": "Team Lead",
+      "years": "2017 - 2021"
+    },
+    {
+      "company": "TechFlow Solutions",
+      "title": "Business Analyst",
+      "years": "2022 - 2025"
+    },
+    {
+      "company": "Innovation Labs",
+      "title": "Sales Executive",
+      "years": "2019 - 2023"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Cynthia Tùng",
+      "role": "Manager",
+      "company": "SpaceX Corporation",
+      "phone": "0486-192-3320",
+      "email": "cynthia.tùng@gmail.com"
+    },
+    {
+      "name": "Brian Young",
+      "role": "Team Lead",
+      "company": "Microsoft Corporation",
+      "phone": "0161-522-1296",
+      "email": "brian.young@hotmail.com"
+    }
+  ]
+}

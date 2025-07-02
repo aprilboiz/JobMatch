@@ -1,0 +1,87 @@
+{
+  "name": "AMANDA SANCHEZ",
+  "profile": "Results-oriented business professional with expertise in project management and team leadership. Committed to excellence and continuous improvement in all endeavors.",
+  "contact": {
+    "phone": "(+84) 91 518 5342",
+    "email": "amanda.sanchez@yahoo.com",
+    "address": "461 Second Ave., TP.HCM",
+    "website": null
+  },
+  "skills": [
+    "CI/CD",
+    "Git",
+    "Data Analysis",
+    "SQL",
+    "Machine Learning",
+    "Python",
+    "AWS",
+    "JavaScript",
+    "Recruitment",
+    "Talent Acquisition"
+  ],
+  "languages": [
+    "Chinese (Intermediate)",
+    "Japanese (Basics)",
+    "Spanish (Intermediate)",
+    "Russian (Basics)"
+  ],
+  "education": [
+    {
+      "institution": "Columbia University",
+      "degree": "Master of Engineering",
+      "years": "2021 - PRESENT",
+      "gpa": "2.7 / 4.0"
+    },
+    {
+      "institution": "Business Academy",
+      "degree": "Cử nhân Kinh tế",
+      "years": "2019 - 2020",
+      "gpa": "3.6 / 4.0"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Netflix Inc.",
+      "title": "Business Analyst",
+      "years": "2017 - 2025"
+    },
+    {
+      "company": "Meta Platforms",
+      "title": "HR Specialist",
+      "years": "2023 - PRESENT"
+    },
+    {
+      "company": "Viettel Group",
+      "title": "HR Specialist",
+      "years": "2018 - PRESENT"
+    },
+    {
+      "company": "Netflix Inc.",
+      "title": "Software Engineer",
+      "years": "2023 - PRESENT"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Cao Minh Cường",
+      "role": "HR Director",
+      "company": "Innovation Labs",
+      "phone": "+1-482-586-4804",
+      "email": "cao.minh.cuờng@hotmail.com"
+    },
+    {
+      "name": "Amy Hưng",
+      "role": "Manager",
+      "company": "Future Works",
+      "phone": "(783) 459-8585",
+      "email": "amy.hung@gmail.com"
+    },
+    {
+      "name": "Christopher Wilson",
+      "role": "HR Director",
+      "company": "Global Enterprises",
+      "phone": "(751) 525-1812",
+      "email": "christopher.wilson@gmail.com"
+    }
+  ]
+}

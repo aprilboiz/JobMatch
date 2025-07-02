@@ -1,0 +1,1498 @@
+{
+  "total_cvs": 100,
+  "generated_date": "2025-07-02",
+  "cvs": [
+    {
+      "filename": "cv_001.json",
+      "name": "AMANDA SANCHEZ",
+      "email": "amanda.sanchez@yahoo.com",
+      "skills_count": 10,
+      "experience_count": 4,
+      "education_count": 2,
+      "top_skills": [
+        "CI/CD",
+        "Git",
+        "Data Analysis",
+        "SQL",
+        "Machine Learning"
+      ]
+    },
+    {
+      "filename": "cv_002.json",
+      "name": "WILLIAM HERNANDEZ",
+      "email": "william.hernandez@yahoo.com",
+      "skills_count": 5,
+      "experience_count": 5,
+      "education_count": 3,
+      "top_skills": [
+        "Interviewing",
+        "Talent Acquisition",
+        "Payroll",
+        "Recruitment",
+        "Taxation"
+      ]
+    },
+    {
+      "filename": "cv_003.json",
+      "name": "SAMANTHA GARCIA",
+      "email": "samantha.garcia@yahoo.com",
+      "skills_count": 9,
+      "experience_count": 3,
+      "education_count": 3,
+      "top_skills": [
+        "Performance Management",
+        "Talent Acquisition",
+        "Payroll",
+        "Employee Relations",
+        "Interviewing"
+      ]
+    },
+    {
+      "filename": "cv_004.json",
+      "name": "ROBERT BÌNH",
+      "email": "robert.bình@gmail.com",
+      "skills_count": 10,
+      "experience_count": 4,
+      "education_count": 3,
+      "top_skills": [
+        "Campaign Management",
+        "Facebook Ads",
+        "Market Research",
+        "Content Marketing",
+        "Google Ads"
+      ]
+    },
+    {
+      "filename": "cv_005.json",
+      "name": "NGUYỄN VĂN VIỆT",
+      "email": "nguyễn.van.việt@yahoo.com",
+      "skills_count": 11,
+      "experience_count": 4,
+      "education_count": 2,
+      "top_skills": [
+        "Pipeline Management",
+        "CRM",
+        "Sales Strategy",
+        "Negotiation",
+        "Cold Calling"
+      ]
+    },
+    {
+      "filename": "cv_006.json",
+      "name": "EMMA GARCIA",
+      "email": "emma.garcia@hotmail.com",
+      "skills_count": 7,
+      "experience_count": 4,
+      "education_count": 3,
+      "top_skills": [
+        "Social Media",
+        "Content Marketing",
+        "Brand Management",
+        "Analytics",
+        "Google Ads"
+      ]
+    },
+    {
+      "filename": "cv_007.json",
+      "name": "DƯƠNG THỊ ALLEN",
+      "email": "duơng.thị.allen@yahoo.com",
+      "skills_count": 11,
+      "experience_count": 5,
+      "education_count": 3,
+      "top_skills": [
+        "Risk Management",
+        "QuickBooks",
+        "Investment Analysis",
+        "Taxation",
+        "SAP"
+      ]
+    },
+    {
+      "filename": "cv_008.json",
+      "name": "NICOLE CƯỜNG",
+      "email": "nicole.cuờng@outlook.com",
+      "skills_count": 4,
+      "experience_count": 4,
+      "education_count": 2,
+      "top_skills": [
+        "Docker",
+        "AWS",
+        "SQL",
+        "Pipeline Management"
+      ]
+    },
+    {
+      "filename": "cv_009.json",
+      "name": "STEVEN SƠN",
+      "email": "steven.sơn@hotmail.com",
+      "skills_count": 4,
+      "experience_count": 2,
+      "education_count": 2,
+      "top_skills": [
+        "Excel",
+        "Risk Management",
+        "Financial Modeling",
+        "React"
+      ]
+    },
+    {
+      "filename": "cv_010.json",
+      "name": "DANIEL LEWIS",
+      "email": "daniel.lewis@hotmail.com",
+      "skills_count": 10,
+      "experience_count": 5,
+      "education_count": 3,
+      "top_skills": [
+        "QuickBooks",
+        "Taxation",
+        "Excel",
+        "Budgeting",
+        "Financial Modeling"
+      ]
+    },
+    {
+      "filename": "cv_011.json",
+      "name": "KATHLEEN ADAMS",
+      "email": "kathleen.adams@company.com",
+      "skills_count": 7,
+      "experience_count": 2,
+      "education_count": 3,
+      "top_skills": [
+        "AWS",
+        "Agile",
+        "MongoDB",
+        "Python",
+        "Docker"
+      ]
+    },
+    {
+      "filename": "cv_012.json",
+      "name": "DANIEL WILLIAMS",
+      "email": "daniel.williams@yahoo.com",
+      "skills_count": 7,
+      "experience_count": 3,
+      "education_count": 1,
+      "top_skills": [
+        "Talent Acquisition",
+        "Training & Development",
+        "Performance Management",
+        "Employee Relations",
+        "Recruitment"
+      ]
+    },
+    {
+      "filename": "cv_013.json",
+      "name": "NGUYỄN VĂN YOUNG",
+      "email": "nguyễn.van.young@company.com",
+      "skills_count": 8,
+      "experience_count": 2,
+      "education_count": 3,
+      "top_skills": [
+        "Brand Management",
+        "Social Media",
+        "Canva",
+        "Facebook Ads",
+        "Analytics"
+      ]
+    },
+    {
+      "filename": "cv_014.json",
+      "name": "JAMES BROWN",
+      "email": "james.brown@hotmail.com",
+      "skills_count": 9,
+      "experience_count": 3,
+      "education_count": 1,
+      "top_skills": [
+        "Excel",
+        "Accounting",
+        "Risk Management",
+        "Financial Modeling",
+        "QuickBooks"
+      ]
+    },
+    {
+      "filename": "cv_015.json",
+      "name": "STEVEN HARRIS",
+      "email": "steven.harris@company.com",
+      "skills_count": 9,
+      "experience_count": 2,
+      "education_count": 3,
+      "top_skills": [
+        "MongoDB",
+        "Linux",
+        "REST API",
+        "Node.js",
+        "React"
+      ]
+    },
+    {
+      "filename": "cv_016.json",
+      "name": "EDWARD ADAMS",
+      "email": "edward.adams@yahoo.com",
+      "skills_count": 10,
+      "experience_count": 2,
+      "education_count": 1,
+      "top_skills": [
+        "HR Policies",
+        "Interviewing",
+        "Talent Acquisition",
+        "Employee Relations",
+        "Payroll"
+      ]
+    },
+    {
+      "filename": "cv_017.json",
+      "name": "EDWARD XUÂN",
+      "email": "edward.xuan@yahoo.com",
+      "skills_count": 9,
+      "experience_count": 3,
+      "education_count": 3,
+      "top_skills": [
+        "Payroll",
+        "Training & Development",
+        "Recruitment",
+        "Interviewing",
+        "Performance Management"
+      ]
+    },
+    {
+      "filename": "cv_018.json",
+      "name": "EDWARD QUANG",
+      "email": "edward.quang@hotmail.com",
+      "skills_count": 8,
+      "experience_count": 5,
+      "education_count": 1,
+      "top_skills": [
+        "Git",
+        "Java",
+        "MongoDB",
+        "Kubernetes",
+        "Data Analysis"
+      ]
+    },
+    {
+      "filename": "cv_019.json",
+      "name": "LAURA TORRES",
+      "email": "laura.torres@company.com",
+      "skills_count": 6,
+      "experience_count": 3,
+      "education_count": 2,
+      "top_skills": [
+        "Budgeting",
+        "Financial Analysis",
+        "Excel",
+        "SAP",
+        "SEO"
+      ]
+    },
+    {
+      "filename": "cv_020.json",
+      "name": "MARIA DAVIS",
+      "email": "maria.davis@company.com",
+      "skills_count": 6,
+      "experience_count": 2,
+      "education_count": 1,
+      "top_skills": [
+        "Canva",
+        "Analytics",
+        "Facebook Ads",
+        "Campaign Management",
+        "Kubernetes"
+      ]
+    },
+    {
+      "filename": "cv_021.json",
+      "name": "JOSHUA KING",
+      "email": "joshua.king@yahoo.com",
+      "skills_count": 7,
+      "experience_count": 2,
+      "education_count": 3,
+      "top_skills": [
+        "Canva",
+        "SEO",
+        "Campaign Management",
+        "Social Media",
+        "Email Marketing"
+      ]
+    },
+    {
+      "filename": "cv_022.json",
+      "name": "ELIZABETH ALLEN",
+      "email": "elizabeth.allen@hotmail.com",
+      "skills_count": 6,
+      "experience_count": 3,
+      "education_count": 1,
+      "top_skills": [
+        "Cold Calling",
+        "CRM",
+        "Business Development",
+        "Lead Generation",
+        "Scrum"
+      ]
+    },
+    {
+      "filename": "cv_023.json",
+      "name": "MADISON GARCIA",
+      "email": "madison.garcia@company.com",
+      "skills_count": 7,
+      "experience_count": 4,
+      "education_count": 1,
+      "top_skills": [
+        "Investment Analysis",
+        "Budgeting",
+        "Financial Analysis",
+        "Excel",
+        "Financial Modeling"
+      ]
+    },
+    {
+      "filename": "cv_024.json",
+      "name": "BÙI MINH ROBINSON",
+      "email": "bùi.minh.robinson@outlook.com",
+      "skills_count": 4,
+      "experience_count": 3,
+      "education_count": 3,
+      "top_skills": [
+        "Recruitment",
+        "Employee Relations",
+        "Performance Management",
+        "CI/CD"
+      ]
+    },
+    {
+      "filename": "cv_025.json",
+      "name": "REBECCA XUÂN",
+      "email": "rebecca.xuan@outlook.com",
+      "skills_count": 8,
+      "experience_count": 3,
+      "education_count": 1,
+      "top_skills": [
+        "Business Development",
+        "Lead Generation",
+        "Negotiation",
+        "Cold Calling",
+        "Pipeline Management"
+      ]
+    },
+    {
+      "filename": "cv_026.json",
+      "name": "MICHAEL SANCHEZ",
+      "email": "michael.sanchez@gmail.com",
+      "skills_count": 11,
+      "experience_count": 3,
+      "education_count": 2,
+      "top_skills": [
+        "Investment Analysis",
+        "SAP",
+        "Financial Analysis",
+        "Financial Modeling",
+        "Risk Management"
+      ]
+    },
+    {
+      "filename": "cv_027.json",
+      "name": "KENNETH HERNANDEZ",
+      "email": "kenneth.hernandez@yahoo.com",
+      "skills_count": 8,
+      "experience_count": 5,
+      "education_count": 1,
+      "top_skills": [
+        "Node.js",
+        "Machine Learning",
+        "Data Analysis",
+        "Scrum",
+        "Git"
+      ]
+    },
+    {
+      "filename": "cv_028.json",
+      "name": "MADISON MOORE",
+      "email": "madison.moore@yahoo.com",
+      "skills_count": 4,
+      "experience_count": 5,
+      "education_count": 2,
+      "top_skills": [
+        "Kubernetes",
+        "AWS",
+        "JavaScript",
+        "Cold Calling"
+      ]
+    },
+    {
+      "filename": "cv_029.json",
+      "name": "AMANDA PEREZ",
+      "email": "amanda.perez@hotmail.com",
+      "skills_count": 7,
+      "experience_count": 2,
+      "education_count": 3,
+      "top_skills": [
+        "Data Analysis",
+        "SQL",
+        "MongoDB",
+        "Machine Learning",
+        "DevOps"
+      ]
+    },
+    {
+      "filename": "cv_030.json",
+      "name": "LAURA MILLER",
+      "email": "laura.miller@hotmail.com",
+      "skills_count": 6,
+      "experience_count": 3,
+      "education_count": 1,
+      "top_skills": [
+        "Employee Relations",
+        "Talent Acquisition",
+        "Training & Development",
+        "Photoshop",
+        "Market Research"
+      ]
+    },
+    {
+      "filename": "cv_031.json",
+      "name": "EMILY SƠN",
+      "email": "emily.sơn@yahoo.com",
+      "skills_count": 10,
+      "experience_count": 2,
+      "education_count": 1,
+      "top_skills": [
+        "Business Development",
+        "CRM",
+        "Pipeline Management",
+        "Lead Generation",
+        "Cold Calling"
+      ]
+    },
+    {
+      "filename": "cv_032.json",
+      "name": "ĐẶNG HỮU CƯỜNG",
+      "email": "dặng.hữu.cuờng@outlook.com",
+      "skills_count": 7,
+      "experience_count": 2,
+      "education_count": 2,
+      "top_skills": [
+        "Customer Relationship",
+        "Lead Generation",
+        "CRM",
+        "Negotiation",
+        "Pipeline Management"
+      ]
+    },
+    {
+      "filename": "cv_033.json",
+      "name": "JESSICA MARTIN",
+      "email": "jessica.martin@hotmail.com",
+      "skills_count": 4,
+      "experience_count": 4,
+      "education_count": 1,
+      "top_skills": [
+        "CRM",
+        "SEO",
+        "Content Marketing",
+        "Financial Analysis"
+      ]
+    },
+    {
+      "filename": "cv_034.json",
+      "name": "EMILY PEREZ",
+      "email": "emily.perez@gmail.com",
+      "skills_count": 9,
+      "experience_count": 4,
+      "education_count": 1,
+      "top_skills": [
+        "Negotiation",
+        "Business Development",
+        "Lead Generation",
+        "Pipeline Management",
+        "Cold Calling"
+      ]
+    },
+    {
+      "filename": "cv_035.json",
+      "name": "RICHARD SƠN",
+      "email": "richard.sơn@yahoo.com",
+      "skills_count": 10,
+      "experience_count": 2,
+      "education_count": 3,
+      "top_skills": [
+        "Agile",
+        "Data Analysis",
+        "CI/CD",
+        "AWS",
+        "Linux"
+      ]
+    },
+    {
+      "filename": "cv_036.json",
+      "name": "REBECCA THOMAS",
+      "email": "rebecca.thomas@gmail.com",
+      "skills_count": 10,
+      "experience_count": 4,
+      "education_count": 2,
+      "top_skills": [
+        "Interviewing",
+        "Payroll",
+        "Training & Development",
+        "Employee Relations",
+        "Recruitment"
+      ]
+    },
+    {
+      "filename": "cv_037.json",
+      "name": "VŨ THỊ HILL",
+      "email": "vũ.thị.hill@company.com",
+      "skills_count": 7,
+      "experience_count": 5,
+      "education_count": 1,
+      "top_skills": [
+        "Lead Generation",
+        "Negotiation",
+        "CRM",
+        "Sales Strategy",
+        "DevOps"
+      ]
+    },
+    {
+      "filename": "cv_038.json",
+      "name": "KATHLEEN VIỆT",
+      "email": "kathleen.việt@hotmail.com",
+      "skills_count": 6,
+      "experience_count": 3,
+      "education_count": 2,
+      "top_skills": [
+        "Risk Management",
+        "QuickBooks",
+        "Accounting",
+        "Employee Relations",
+        "Payroll"
+      ]
+    },
+    {
+      "filename": "cv_039.json",
+      "name": "MARK SANCHEZ",
+      "email": "mark.sanchez@company.com",
+      "skills_count": 8,
+      "experience_count": 3,
+      "education_count": 3,
+      "top_skills": [
+        "Business Development",
+        "Sales Strategy",
+        "Negotiation",
+        "Cold Calling",
+        "Lead Generation"
+      ]
+    },
+    {
+      "filename": "cv_040.json",
+      "name": "LÊ MINH CƯỜNG",
+      "email": "le.minh.cuờng@yahoo.com",
+      "skills_count": 4,
+      "experience_count": 4,
+      "education_count": 3,
+      "top_skills": [
+        "Linux",
+        "REST API",
+        "Python",
+        "Google Ads"
+      ]
+    },
+    {
+      "filename": "cv_041.json",
+      "name": "DƯƠNG THỊ JOHNSON",
+      "email": "duơng.thị.johnson@yahoo.com",
+      "skills_count": 7,
+      "experience_count": 4,
+      "education_count": 1,
+      "top_skills": [
+        "Photoshop",
+        "Market Research",
+        "Content Marketing",
+        "Facebook Ads",
+        "Lead Generation"
+      ]
+    },
+    {
+      "filename": "cv_042.json",
+      "name": "MARIA MOORE",
+      "email": "maria.moore@gmail.com",
+      "skills_count": 9,
+      "experience_count": 3,
+      "education_count": 1,
+      "top_skills": [
+        "Recruitment",
+        "Talent Acquisition",
+        "Interviewing",
+        "Training & Development",
+        "Performance Management"
+      ]
+    },
+    {
+      "filename": "cv_043.json",
+      "name": "STEPHANIE JOHNSON",
+      "email": "stephanie.johnson@gmail.com",
+      "skills_count": 8,
+      "experience_count": 4,
+      "education_count": 2,
+      "top_skills": [
+        "React",
+        "SQL",
+        "Machine Learning",
+        "Python",
+        "REST API"
+      ]
+    },
+    {
+      "filename": "cv_044.json",
+      "name": "MICHAEL THÀNH",
+      "email": "michael.thành@hotmail.com",
+      "skills_count": 9,
+      "experience_count": 3,
+      "education_count": 2,
+      "top_skills": [
+        "SEO",
+        "Photoshop",
+        "Canva",
+        "Copywriting",
+        "Google Ads"
+      ]
+    },
+    {
+      "filename": "cv_045.json",
+      "name": "KEVIN BROWN",
+      "email": "kevin.brown@company.com",
+      "skills_count": 11,
+      "experience_count": 5,
+      "education_count": 2,
+      "top_skills": [
+        "Social Media",
+        "Market Research",
+        "Email Marketing",
+        "Brand Management",
+        "CRM"
+      ]
+    },
+    {
+      "filename": "cv_046.json",
+      "name": "LÊ MINH NGUYEN",
+      "email": "le.minh.nguyen@outlook.com",
+      "skills_count": 5,
+      "experience_count": 2,
+      "education_count": 1,
+      "top_skills": [
+        "CRM",
+        "Photoshop",
+        "Canva",
+        "Email Marketing",
+        "Financial Modeling"
+      ]
+    },
+    {
+      "filename": "cv_047.json",
+      "name": "MARK HERNANDEZ",
+      "email": "mark.hernandez@company.com",
+      "skills_count": 7,
+      "experience_count": 4,
+      "education_count": 1,
+      "top_skills": [
+        "Cold Calling",
+        "Negotiation",
+        "Pipeline Management",
+        "Business Development",
+        "Sales Strategy"
+      ]
+    },
+    {
+      "filename": "cv_048.json",
+      "name": "STEPHANIE HARRIS",
+      "email": "stephanie.harris@outlook.com",
+      "skills_count": 4,
+      "experience_count": 3,
+      "education_count": 1,
+      "top_skills": [
+        "CI/CD",
+        "DevOps",
+        "Java",
+        "Email Marketing"
+      ]
+    },
+    {
+      "filename": "cv_049.json",
+      "name": "TRẦN THỊ FLORES",
+      "email": "trần.thị.flores@gmail.com",
+      "skills_count": 9,
+      "experience_count": 2,
+      "education_count": 1,
+      "top_skills": [
+        "Risk Management",
+        "Budgeting",
+        "SAP",
+        "Taxation",
+        "Excel"
+      ]
+    },
+    {
+      "filename": "cv_050.json",
+      "name": "JAMES JACKSON",
+      "email": "james.jackson@hotmail.com",
+      "skills_count": 5,
+      "experience_count": 3,
+      "education_count": 1,
+      "top_skills": [
+        "Node.js",
+        "Java",
+        "Kubernetes",
+        "React",
+        "Budgeting"
+      ]
+    },
+    {
+      "filename": "cv_051.json",
+      "name": "AMANDA SCOTT",
+      "email": "amanda.scott@hotmail.com",
+      "skills_count": 6,
+      "experience_count": 4,
+      "education_count": 1,
+      "top_skills": [
+        "Business Development",
+        "Sales Strategy",
+        "CRM",
+        "Facebook Ads",
+        "Brand Management"
+      ]
+    },
+    {
+      "filename": "cv_052.json",
+      "name": "RICHARD WILSON",
+      "email": "richard.wilson@outlook.com",
+      "skills_count": 6,
+      "experience_count": 3,
+      "education_count": 2,
+      "top_skills": [
+        "SQL",
+        "Agile",
+        "Machine Learning",
+        "Linux",
+        "Kubernetes"
+      ]
+    },
+    {
+      "filename": "cv_053.json",
+      "name": "NICOLE WALKER",
+      "email": "nicole.walker@company.com",
+      "skills_count": 5,
+      "experience_count": 2,
+      "education_count": 2,
+      "top_skills": [
+        "Data Analysis",
+        "Kubernetes",
+        "Scrum",
+        "DevOps",
+        "Financial Modeling"
+      ]
+    },
+    {
+      "filename": "cv_054.json",
+      "name": "TRẦN THỊ THOMPSON",
+      "email": "trần.thị.thompson@yahoo.com",
+      "skills_count": 9,
+      "experience_count": 2,
+      "education_count": 3,
+      "top_skills": [
+        "Performance Management",
+        "Employee Relations",
+        "HR Policies",
+        "Training & Development",
+        "Payroll"
+      ]
+    },
+    {
+      "filename": "cv_055.json",
+      "name": "ĐẶNG HỮU GREEN",
+      "email": "dặng.hữu.green@hotmail.com",
+      "skills_count": 5,
+      "experience_count": 5,
+      "education_count": 2,
+      "top_skills": [
+        "Financial Modeling",
+        "SAP",
+        "Accounting",
+        "Recruitment",
+        "Payroll"
+      ]
+    },
+    {
+      "filename": "cv_056.json",
+      "name": "CAO MINH NAM",
+      "email": "cao.minh.nam@yahoo.com",
+      "skills_count": 8,
+      "experience_count": 4,
+      "education_count": 2,
+      "top_skills": [
+        "Business Development",
+        "Lead Generation",
+        "CRM",
+        "Sales Strategy",
+        "Customer Relationship"
+      ]
+    },
+    {
+      "filename": "cv_057.json",
+      "name": "CAO MINH TAYLOR",
+      "email": "cao.minh.taylor@gmail.com",
+      "skills_count": 9,
+      "experience_count": 4,
+      "education_count": 1,
+      "top_skills": [
+        "Sales Strategy",
+        "Cold Calling",
+        "Customer Relationship",
+        "Lead Generation",
+        "Business Development"
+      ]
+    },
+    {
+      "filename": "cv_058.json",
+      "name": "VÕ VĂN WILLIAMS",
+      "email": "võ.van.williams@gmail.com",
+      "skills_count": 9,
+      "experience_count": 2,
+      "education_count": 1,
+      "top_skills": [
+        "Payroll",
+        "HR Policies",
+        "Talent Acquisition",
+        "Performance Management",
+        "Employee Relations"
+      ]
+    },
+    {
+      "filename": "cv_059.json",
+      "name": "EMMA TORRES",
+      "email": "emma.torres@hotmail.com",
+      "skills_count": 9,
+      "experience_count": 4,
+      "education_count": 1,
+      "top_skills": [
+        "Investment Analysis",
+        "QuickBooks",
+        "Risk Management",
+        "Budgeting",
+        "SAP"
+      ]
+    },
+    {
+      "filename": "cv_060.json",
+      "name": "LÝ THỊ FLORES",
+      "email": "lý.thị.flores@company.com",
+      "skills_count": 6,
+      "experience_count": 4,
+      "education_count": 3,
+      "top_skills": [
+        "HR Policies",
+        "Training & Development",
+        "Performance Management",
+        "Talent Acquisition",
+        "Email Marketing"
+      ]
+    },
+    {
+      "filename": "cv_061.json",
+      "name": "JESSICA PHONG",
+      "email": "jessica.phong@company.com",
+      "skills_count": 8,
+      "experience_count": 2,
+      "education_count": 1,
+      "top_skills": [
+        "CI/CD",
+        "Node.js",
+        "MongoDB",
+        "Java",
+        "Linux"
+      ]
+    },
+    {
+      "filename": "cv_062.json",
+      "name": "LÊ MINH JOHNSON",
+      "email": "le.minh.johnson@hotmail.com",
+      "skills_count": 5,
+      "experience_count": 5,
+      "education_count": 3,
+      "top_skills": [
+        "Cold Calling",
+        "Pipeline Management",
+        "Lead Generation",
+        "Customer Relationship",
+        "Talent Acquisition"
+      ]
+    },
+    {
+      "filename": "cv_063.json",
+      "name": "MATTHEW ALLEN",
+      "email": "matthew.allen@gmail.com",
+      "skills_count": 5,
+      "experience_count": 5,
+      "education_count": 3,
+      "top_skills": [
+        "QuickBooks",
+        "Budgeting",
+        "Excel",
+        "MongoDB",
+        "Kubernetes"
+      ]
+    },
+    {
+      "filename": "cv_064.json",
+      "name": "CYNTHIA JACKSON",
+      "email": "cynthia.jackson@company.com",
+      "skills_count": 5,
+      "experience_count": 3,
+      "education_count": 1,
+      "top_skills": [
+        "Financial Modeling",
+        "Financial Analysis",
+        "Accounting",
+        "Photoshop",
+        "Brand Management"
+      ]
+    },
+    {
+      "filename": "cv_065.json",
+      "name": "EDWARD HÀ",
+      "email": "edward.hà@yahoo.com",
+      "skills_count": 5,
+      "experience_count": 5,
+      "education_count": 3,
+      "top_skills": [
+        "Talent Acquisition",
+        "Training & Development",
+        "Performance Management",
+        "Cold Calling",
+        "Pipeline Management"
+      ]
+    },
+    {
+      "filename": "cv_066.json",
+      "name": "DANIEL TORRES",
+      "email": "daniel.torres@gmail.com",
+      "skills_count": 10,
+      "experience_count": 4,
+      "education_count": 1,
+      "top_skills": [
+        "Excel",
+        "Accounting",
+        "Risk Management",
+        "Financial Modeling",
+        "SAP"
+      ]
+    },
+    {
+      "filename": "cv_067.json",
+      "name": "TRẦN THỊ PHONG",
+      "email": "trần.thị.phong@gmail.com",
+      "skills_count": 6,
+      "experience_count": 5,
+      "education_count": 3,
+      "top_skills": [
+        "Excel",
+        "Taxation",
+        "Financial Modeling",
+        "Risk Management",
+        "Talent Acquisition"
+      ]
+    },
+    {
+      "filename": "cv_068.json",
+      "name": "VÕ VĂN AN",
+      "email": "võ.van.an@company.com",
+      "skills_count": 11,
+      "experience_count": 5,
+      "education_count": 2,
+      "top_skills": [
+        "Negotiation",
+        "CRM",
+        "Cold Calling",
+        "Pipeline Management",
+        "Business Development"
+      ]
+    },
+    {
+      "filename": "cv_069.json",
+      "name": "ELIZABETH DAVIS",
+      "email": "elizabeth.davis@hotmail.com",
+      "skills_count": 5,
+      "experience_count": 4,
+      "education_count": 3,
+      "top_skills": [
+        "Content Marketing",
+        "Canva",
+        "Photoshop",
+        "Analytics",
+        "Sales Strategy"
+      ]
+    },
+    {
+      "filename": "cv_070.json",
+      "name": "EMMA GARCIA",
+      "email": "emma.garcia@outlook.com",
+      "skills_count": 9,
+      "experience_count": 3,
+      "education_count": 1,
+      "top_skills": [
+        "Pipeline Management",
+        "Cold Calling",
+        "Lead Generation",
+        "Negotiation",
+        "Business Development"
+      ]
+    },
+    {
+      "filename": "cv_071.json",
+      "name": "EMILY KING",
+      "email": "emily.king@yahoo.com",
+      "skills_count": 5,
+      "experience_count": 4,
+      "education_count": 1,
+      "top_skills": [
+        "Python",
+        "Agile",
+        "Data Analysis",
+        "Java",
+        "Financial Analysis"
+      ]
+    },
+    {
+      "filename": "cv_072.json",
+      "name": "WILLIAM DŨNG",
+      "email": "william.dũng@outlook.com",
+      "skills_count": 6,
+      "experience_count": 2,
+      "education_count": 3,
+      "top_skills": [
+        "QuickBooks",
+        "Accounting",
+        "Financial Modeling",
+        "Risk Management",
+        "Excel"
+      ]
+    },
+    {
+      "filename": "cv_073.json",
+      "name": "MARK DAVIS",
+      "email": "mark.davis@gmail.com",
+      "skills_count": 5,
+      "experience_count": 2,
+      "education_count": 1,
+      "top_skills": [
+        "Excel",
+        "QuickBooks",
+        "Financial Analysis",
+        "Financial Modeling",
+        "Employee Relations"
+      ]
+    },
+    {
+      "filename": "cv_074.json",
+      "name": "PHẠM THU FLORES",
+      "email": "phạm.thu.flores@gmail.com",
+      "skills_count": 5,
+      "experience_count": 5,
+      "education_count": 1,
+      "top_skills": [
+        "Photoshop",
+        "CRM",
+        "Email Marketing",
+        "Talent Acquisition",
+        "HR Policies"
+      ]
+    },
+    {
+      "filename": "cv_075.json",
+      "name": "MATTHEW HARRIS",
+      "email": "matthew.harris@hotmail.com",
+      "skills_count": 7,
+      "experience_count": 3,
+      "education_count": 3,
+      "top_skills": [
+        "Content Marketing",
+        "CRM",
+        "Campaign Management",
+        "Copywriting",
+        "Social Media"
+      ]
+    },
+    {
+      "filename": "cv_076.json",
+      "name": "HOÀNG ĐỨC PEREZ",
+      "email": "hoàng.dức.perez@hotmail.com",
+      "skills_count": 8,
+      "experience_count": 4,
+      "education_count": 1,
+      "top_skills": [
+        "Social Media",
+        "Email Marketing",
+        "Photoshop",
+        "SEO",
+        "Content Marketing"
+      ]
+    },
+    {
+      "filename": "cv_077.json",
+      "name": "VŨ THỊ GONZALEZ",
+      "email": "vũ.thị.gonzalez@gmail.com",
+      "skills_count": 8,
+      "experience_count": 4,
+      "education_count": 1,
+      "top_skills": [
+        "CRM",
+        "Canva",
+        "Google Ads",
+        "Market Research",
+        "Campaign Management"
+      ]
+    },
+    {
+      "filename": "cv_078.json",
+      "name": "NGUYỄN VĂN MARTIN",
+      "email": "nguyễn.van.martin@outlook.com",
+      "skills_count": 8,
+      "experience_count": 3,
+      "education_count": 3,
+      "top_skills": [
+        "Canva",
+        "Email Marketing",
+        "Copywriting",
+        "CRM",
+        "Facebook Ads"
+      ]
+    },
+    {
+      "filename": "cv_079.json",
+      "name": "ANNA VIỆT",
+      "email": "anna.việt@hotmail.com",
+      "skills_count": 6,
+      "experience_count": 2,
+      "education_count": 3,
+      "top_skills": [
+        "Training & Development",
+        "Recruitment",
+        "Payroll",
+        "HR Policies",
+        "CRM"
+      ]
+    },
+    {
+      "filename": "cv_080.json",
+      "name": "STEPHANIE LEWIS",
+      "email": "stephanie.lewis@company.com",
+      "skills_count": 11,
+      "experience_count": 2,
+      "education_count": 2,
+      "top_skills": [
+        "Canva",
+        "Social Media",
+        "SEO",
+        "Copywriting",
+        "CRM"
+      ]
+    },
+    {
+      "filename": "cv_081.json",
+      "name": "MARK HERNANDEZ",
+      "email": "mark.hernandez@outlook.com",
+      "skills_count": 8,
+      "experience_count": 4,
+      "education_count": 3,
+      "top_skills": [
+        "Recruitment",
+        "Talent Acquisition",
+        "Payroll",
+        "Performance Management",
+        "HR Policies"
+      ]
+    },
+    {
+      "filename": "cv_082.json",
+      "name": "EMMA CƯỜNG",
+      "email": "emma.cuờng@yahoo.com",
+      "skills_count": 6,
+      "experience_count": 2,
+      "education_count": 2,
+      "top_skills": [
+        "Node.js",
+        "Kubernetes",
+        "MongoDB",
+        "DevOps",
+        "Excel"
+      ]
+    },
+    {
+      "filename": "cv_083.json",
+      "name": "RICHARD KHOA",
+      "email": "richard.khoa@gmail.com",
+      "skills_count": 8,
+      "experience_count": 2,
+      "education_count": 2,
+      "top_skills": [
+        "Content Marketing",
+        "Market Research",
+        "Social Media",
+        "CRM",
+        "SEO"
+      ]
+    },
+    {
+      "filename": "cv_084.json",
+      "name": "CHRISTOPHER ADAMS",
+      "email": "christopher.adams@gmail.com",
+      "skills_count": 8,
+      "experience_count": 2,
+      "education_count": 1,
+      "top_skills": [
+        "Cold Calling",
+        "Pipeline Management",
+        "Sales Strategy",
+        "Lead Generation",
+        "Business Development"
+      ]
+    },
+    {
+      "filename": "cv_085.json",
+      "name": "EDWARD LEWIS",
+      "email": "edward.lewis@company.com",
+      "skills_count": 10,
+      "experience_count": 5,
+      "education_count": 1,
+      "top_skills": [
+        "Customer Relationship",
+        "Negotiation",
+        "Lead Generation",
+        "CRM",
+        "Sales Strategy"
+      ]
+    },
+    {
+      "filename": "cv_086.json",
+      "name": "SARAH ROBINSON",
+      "email": "sarah.robinson@yahoo.com",
+      "skills_count": 7,
+      "experience_count": 5,
+      "education_count": 3,
+      "top_skills": [
+        "SEO",
+        "Campaign Management",
+        "Brand Management",
+        "Social Media",
+        "Content Marketing"
+      ]
+    },
+    {
+      "filename": "cv_087.json",
+      "name": "LAURA HÀ",
+      "email": "laura.hà@outlook.com",
+      "skills_count": 4,
+      "experience_count": 2,
+      "education_count": 3,
+      "top_skills": [
+        "React",
+        "Scrum",
+        "Node.js",
+        "Performance Management"
+      ]
+    },
+    {
+      "filename": "cv_088.json",
+      "name": "PHẠM THU LEWIS",
+      "email": "phạm.thu.lewis@yahoo.com",
+      "skills_count": 11,
+      "experience_count": 4,
+      "education_count": 1,
+      "top_skills": [
+        "SAP",
+        "Financial Analysis",
+        "Excel",
+        "Taxation",
+        "QuickBooks"
+      ]
+    },
+    {
+      "filename": "cv_089.json",
+      "name": "EMMA GARCIA",
+      "email": "emma.garcia@gmail.com",
+      "skills_count": 6,
+      "experience_count": 2,
+      "education_count": 1,
+      "top_skills": [
+        "REST API",
+        "DevOps",
+        "Agile",
+        "Node.js",
+        "Pipeline Management"
+      ]
+    },
+    {
+      "filename": "cv_090.json",
+      "name": "SARAH ADAMS",
+      "email": "sarah.adams@gmail.com",
+      "skills_count": 5,
+      "experience_count": 2,
+      "education_count": 2,
+      "top_skills": [
+        "Talent Acquisition",
+        "Interviewing",
+        "Training & Development",
+        "SAP",
+        "Budgeting"
+      ]
+    },
+    {
+      "filename": "cv_091.json",
+      "name": "TRẦN THỊ PHONG",
+      "email": "trần.thị.phong@company.com",
+      "skills_count": 7,
+      "experience_count": 4,
+      "education_count": 1,
+      "top_skills": [
+        "Photoshop",
+        "Content Marketing",
+        "Campaign Management",
+        "Social Media",
+        "Copywriting"
+      ]
+    },
+    {
+      "filename": "cv_092.json",
+      "name": "DAVID JOHNSON",
+      "email": "david.johnson@outlook.com",
+      "skills_count": 6,
+      "experience_count": 4,
+      "education_count": 3,
+      "top_skills": [
+        "Negotiation",
+        "Business Development",
+        "Pipeline Management",
+        "Taxation",
+        "SAP"
+      ]
+    },
+    {
+      "filename": "cv_093.json",
+      "name": "PHẠM THU PHONG",
+      "email": "phạm.thu.phong@hotmail.com",
+      "skills_count": 9,
+      "experience_count": 2,
+      "education_count": 1,
+      "top_skills": [
+        "Brand Management",
+        "Content Marketing",
+        "Facebook Ads",
+        "Canva",
+        "Email Marketing"
+      ]
+    },
+    {
+      "filename": "cv_094.json",
+      "name": "NICOLE LONG",
+      "email": "nicole.long@hotmail.com",
+      "skills_count": 6,
+      "experience_count": 3,
+      "education_count": 3,
+      "top_skills": [
+        "CRM",
+        "Content Marketing",
+        "Facebook Ads",
+        "Brand Management",
+        "SEO"
+      ]
+    },
+    {
+      "filename": "cv_095.json",
+      "name": "LISA MARTINEZ",
+      "email": "lisa.martinez@yahoo.com",
+      "skills_count": 6,
+      "experience_count": 5,
+      "education_count": 2,
+      "top_skills": [
+        "Google Ads",
+        "Brand Management",
+        "Email Marketing",
+        "Facebook Ads",
+        "Canva"
+      ]
+    },
+    {
+      "filename": "cv_096.json",
+      "name": "BÙI MINH AN",
+      "email": "bùi.minh.an@hotmail.com",
+      "skills_count": 8,
+      "experience_count": 5,
+      "education_count": 3,
+      "top_skills": [
+        "Interviewing",
+        "Recruitment",
+        "Talent Acquisition",
+        "Employee Relations",
+        "HR Policies"
+      ]
+    },
+    {
+      "filename": "cv_097.json",
+      "name": "WILLIAM TÙNG",
+      "email": "william.tùng@gmail.com",
+      "skills_count": 5,
+      "experience_count": 4,
+      "education_count": 1,
+      "top_skills": [
+        "Accounting",
+        "Risk Management",
+        "Financial Modeling",
+        "QuickBooks",
+        "Campaign Management"
+      ]
+    },
+    {
+      "filename": "cv_098.json",
+      "name": "MARIA THOMAS",
+      "email": "maria.thomas@company.com",
+      "skills_count": 9,
+      "experience_count": 4,
+      "education_count": 2,
+      "top_skills": [
+        "Git",
+        "SQL",
+        "Data Analysis",
+        "Python",
+        "Docker"
+      ]
+    },
+    {
+      "filename": "cv_099.json",
+      "name": "LAURA ROBINSON",
+      "email": "laura.robinson@yahoo.com",
+      "skills_count": 7,
+      "experience_count": 2,
+      "education_count": 3,
+      "top_skills": [
+        "Market Research",
+        "Copywriting",
+        "Email Marketing",
+        "CRM",
+        "Lead Generation"
+      ]
+    },
+    {
+      "filename": "cv_100.json",
+      "name": "JESSICA WILSON",
+      "email": "jessica.wilson@yahoo.com",
+      "skills_count": 7,
+      "experience_count": 3,
+      "education_count": 3,
+      "top_skills": [
+        "Investment Analysis",
+        "QuickBooks",
+        "Taxation",
+        "SAP",
+        "Budgeting"
+      ]
+    }
+  ]
+}

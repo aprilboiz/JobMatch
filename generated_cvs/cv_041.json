@@ -1,0 +1,63 @@
+{
+  "name": "DƯƠNG THỊ JOHNSON",
+  "profile": "Experienced professional with strong background in technology and innovation. Passionate about delivering high-quality solutions and driving business growth through strategic initiatives.",
+  "contact": {
+    "phone": "+33-1-36-662",
+    "email": "duơng.thị.johnson@yahoo.com",
+    "address": "521 Oak Ave., Houston",
+    "website": null
+  },
+  "skills": [
+    "Photoshop",
+    "Market Research",
+    "Content Marketing",
+    "Facebook Ads",
+    "Lead Generation",
+    "Sales Strategy",
+    "Cold Calling"
+  ],
+  "languages": [
+    "Chinese (Intermediate)",
+    "Vietnamese (Native)",
+    "Japanese (Basics)"
+  ],
+  "education": [
+    {
+      "institution": "NYU",
+      "degree": "Master of Business Management",
+      "years": "2022 - 2023",
+      "gpa": "3.4 / 4.0"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Fauget Studio",
+      "title": "Quản lý Dự án",
+      "years": "2015 - 2018"
+    },
+    {
+      "company": "Creative Agency",
+      "title": "Quản lý Dự án",
+      "years": "2019 - 2023"
+    },
+    {
+      "company": "Borcelle Studio",
+      "title": "Product Manager",
+      "years": "2021 - PRESENT"
+    },
+    {
+      "company": "Viettel Group",
+      "title": "Financial Analyst",
+      "years": "2020 - PRESENT"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Laura Wilson",
+      "role": "Team Lead",
+      "company": "Grab Vietnam",
+      "phone": "+1-991-391-4492",
+      "email": "laura.wilson@outlook.com"
+    }
+  ]
+}

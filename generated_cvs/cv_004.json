@@ -1,0 +1,82 @@
+{
+  "name": "ROBERT BÌNH",
+  "profile": "Results-oriented business professional with expertise in project management and team leadership. Committed to excellence and continuous improvement in all endeavors.",
+  "contact": {
+    "phone": "(+84) 95 227 8892",
+    "email": "robert.bình@gmail.com",
+    "address": "473 Second Ave., Houston",
+    "website": null
+  },
+  "skills": [
+    "Campaign Management",
+    "Facebook Ads",
+    "Market Research",
+    "Content Marketing",
+    "Google Ads",
+    "Canva",
+    "Social Media",
+    "CRM",
+    "Linux",
+    "React"
+  ],
+  "languages": [
+    "Russian (Basics)",
+    "German (Basics)"
+  ],
+  "education": [
+    {
+      "institution": "Global University",
+      "degree": "Master of Computer Science",
+      "years": "2021 - 2023",
+      "gpa": "3.9 / 4.0"
+    },
+    {
+      "institution": "Wardiere University",
+      "degree": "Bachelor of Marketing",
+      "years": "2017 - PRESENT"
+    },
+    {
+      "institution": "Đại học Bách Khoa Hà Nội",
+      "degree": "Master of Business Administration",
+      "years": "2020 - 2023"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Công ty TNHH ABC",
+      "title": "Financial Analyst",
+      "years": "2019 - PRESENT"
+    },
+    {
+      "company": "Future Works",
+      "title": "Financial Analyst",
+      "years": "2020 - PRESENT"
+    },
+    {
+      "company": "FPT Software",
+      "title": "Software Engineer",
+      "years": "2018 - 2019"
+    },
+    {
+      "company": "Shopee Vietnam",
+      "title": "Tư vấn Kinh doanh",
+      "years": "2022 - PRESENT"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Lê Minh Thomas",
+      "role": "Manager",
+      "company": "Amazon Web Services",
+      "phone": "(+84) 97 884 7828",
+      "email": "le.minh.thomas@company.com"
+    },
+    {
+      "name": "Đặng Hữu Wright",
+      "role": "HR Director",
+      "company": "Global Enterprises",
+      "phone": "(+84) 94 635 6254",
+      "email": "dặng.hữu.wright@hotmail.com"
+    }
+  ]
+}

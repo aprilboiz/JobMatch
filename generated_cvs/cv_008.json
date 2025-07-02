@@ -1,0 +1,80 @@
+{
+  "name": "NICOLE CƯỜNG",
+  "profile": "Dedicated professional with passion for innovation and technology. Strong communication skills and ability to work effectively in fast-paced environments.",
+  "contact": {
+    "phone": "0243-280-6958",
+    "email": "nicole.cuờng@outlook.com",
+    "address": "95 First St., Houston",
+    "website": null
+  },
+  "skills": [
+    "Docker",
+    "AWS",
+    "SQL",
+    "Pipeline Management"
+  ],
+  "languages": [
+    "French (Fluent)",
+    "English (Fluent)",
+    "Vietnamese (Native)",
+    "Russian (Basics)"
+  ],
+  "education": [
+    {
+      "institution": "Global University",
+      "degree": "Master of Engineering",
+      "years": "2019 - PRESENT",
+      "gpa": "3.2 / 4.0"
+    },
+    {
+      "institution": "Columbia University",
+      "degree": "Bachelor of Finance",
+      "years": "2019 - PRESENT"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Borcelle Studio",
+      "title": "Operations Manager",
+      "years": "2015 - PRESENT"
+    },
+    {
+      "company": "Digital Dynamics",
+      "title": "Operations Manager",
+      "years": "2023 - PRESENT"
+    },
+    {
+      "company": "Tập đoàn XYZ",
+      "title": "Sales Executive",
+      "years": "2016 - PRESENT"
+    },
+    {
+      "company": "Công ty TNHH ABC",
+      "title": "Software Engineer",
+      "years": "2021 - 2022"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Michael Anderson",
+      "role": "Manager",
+      "company": "Apple Inc.",
+      "phone": "+1-733-971-4871",
+      "email": "michael.anderson@outlook.com"
+    },
+    {
+      "name": "William Hà",
+      "role": "Team Lead",
+      "company": "Amazon Web Services",
+      "phone": "0378-153-1026",
+      "email": "william.hà@gmail.com"
+    },
+    {
+      "name": "Michael Xuân",
+      "role": "Team Lead",
+      "company": "Digital Dynamics",
+      "phone": "(+84) 97 850 8862",
+      "email": "michael.xuan@hotmail.com"
+    }
+  ]
+}

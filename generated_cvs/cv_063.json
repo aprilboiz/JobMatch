@@ -1,0 +1,90 @@
+{
+  "name": "MATTHEW ALLEN",
+  "profile": "Results-oriented business professional with expertise in project management and team leadership. Committed to excellence and continuous improvement in all endeavors.",
+  "contact": {
+    "phone": "+33-6-59-945",
+    "email": "matthew.allen@gmail.com",
+    "address": "996 First St., Đà Nẵng",
+    "website": "www.matthewallen.com"
+  },
+  "skills": [
+    "QuickBooks",
+    "Budgeting",
+    "Excel",
+    "MongoDB",
+    "Kubernetes"
+  ],
+  "languages": [
+    "French (Fluent)",
+    "Russian (Basics)",
+    "German (Basics)"
+  ],
+  "education": [
+    {
+      "institution": "Global University",
+      "degree": "Bachelor of Information Technology",
+      "years": "2018 - 2022"
+    },
+    {
+      "institution": "Columbia University",
+      "degree": "Bachelor of Marketing",
+      "years": "2021 - 2024"
+    },
+    {
+      "institution": "Đại học Công nghệ Thông tin",
+      "degree": "Bachelor of Business",
+      "years": "2019 - 2020",
+      "gpa": "2.8 / 4.0"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Viettel Group",
+      "title": "Senior Developer",
+      "years": "2023 - 2025"
+    },
+    {
+      "company": "Công ty TNHH ABC",
+      "title": "Account Manager",
+      "years": "2023 - PRESENT"
+    },
+    {
+      "company": "Google Inc.",
+      "title": "Data Scientist",
+      "years": "2020 - PRESENT"
+    },
+    {
+      "company": "Tập đoàn XYZ",
+      "title": "Senior Developer",
+      "years": "2015 - 2023"
+    },
+    {
+      "company": "Microsoft Corporation",
+      "title": "Senior Developer",
+      "years": "2016 - 2022"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Joshua White",
+      "role": "CTO",
+      "company": "Netflix Inc.",
+      "phone": "(293) 734-6139",
+      "email": "joshua.white@company.com"
+    },
+    {
+      "name": "Trần Thị Allen",
+      "role": "CEO",
+      "company": "TechFlow Solutions",
+      "phone": "+1-916-446-9735",
+      "email": "trần.thị.allen@hotmail.com"
+    },
+    {
+      "name": "Anna Bình",
+      "role": "HR Director",
+      "company": "Công ty TNHH ABC",
+      "phone": "(955) 611-5336",
+      "email": "anna.bình@outlook.com"
+    }
+  ]
+}

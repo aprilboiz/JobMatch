@@ -1,0 +1,67 @@
+{
+  "name": "PHẠM THU LEWIS",
+  "profile": "Dynamic marketing specialist with proven track record in digital campaigns and brand management. Skilled in data-driven decision making and customer engagement strategies.",
+  "contact": {
+    "phone": "(+84) 98 463 9346",
+    "email": "phạm.thu.lewis@yahoo.com",
+    "address": "778 Main St., New York",
+    "website": "www.phạm thulewis.com"
+  },
+  "skills": [
+    "SAP",
+    "Financial Analysis",
+    "Excel",
+    "Taxation",
+    "QuickBooks",
+    "Risk Management",
+    "Accounting",
+    "Budgeting",
+    "Photoshop",
+    "Campaign Management",
+    "SEO"
+  ],
+  "languages": [
+    "German (Basics)",
+    "Russian (Basics)",
+    "Korean (Intermediate)",
+    "Japanese (Basics)"
+  ],
+  "education": [
+    {
+      "institution": "Đại học Quốc gia Hà Nội",
+      "degree": "Master of Business Administration",
+      "years": "2015 - PRESENT"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Fauget Studio",
+      "title": "Marketing Specialist",
+      "years": "2021 - 2025"
+    },
+    {
+      "company": "Fauget Studio",
+      "title": "Product Manager",
+      "years": "2021 - 2025"
+    },
+    {
+      "company": "Grab Vietnam",
+      "title": "Team Lead",
+      "years": "2023 - PRESENT"
+    },
+    {
+      "company": "Viettel Group",
+      "title": "Team Lead",
+      "years": "2015 - PRESENT"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Emma Bình",
+      "role": "Manager",
+      "company": "Future Works",
+      "phone": "(+84) 94 377 6988",
+      "email": "emma.bình@company.com"
+    }
+  ]
+}

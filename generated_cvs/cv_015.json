@@ -1,0 +1,64 @@
+{
+  "name": "STEVEN HARRIS",
+  "profile": "Experienced professional with strong background in technology and innovation. Passionate about delivering high-quality solutions and driving business growth through strategic initiatives.",
+  "contact": {
+    "phone": "+1 305 242 6689",
+    "email": "steven.harris@company.com",
+    "address": "615 Oak Ave., Phoenix",
+    "website": null
+  },
+  "skills": [
+    "MongoDB",
+    "Linux",
+    "REST API",
+    "Node.js",
+    "React",
+    "JavaScript",
+    "Python",
+    "Interviewing",
+    "Performance Management"
+  ],
+  "languages": [
+    "Russian (Basics)",
+    "Vietnamese (Native)"
+  ],
+  "education": [
+    {
+      "institution": "Yale University",
+      "degree": "Bachelor of Marketing",
+      "years": "2022 - PRESENT",
+      "gpa": "3.8 / 4.0"
+    },
+    {
+      "institution": "MIT",
+      "degree": "Thạc sĩ Kỹ thuật",
+      "years": "2017 - PRESENT"
+    },
+    {
+      "institution": "UC Berkeley",
+      "degree": "Cử nhân Kinh tế",
+      "years": "2018 - PRESENT"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Wardiere Inc.",
+      "title": "Quản lý Dự án",
+      "years": "2020 - PRESENT"
+    },
+    {
+      "company": "Tập đoàn XYZ",
+      "title": "Sales Executive",
+      "years": "2015 - 2025"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Lê Minh Cường",
+      "role": "CTO",
+      "company": "VNG Corporation",
+      "phone": "+1-609-963-8988",
+      "email": "le.minh.cuờng@outlook.com"
+    }
+  ]
+}

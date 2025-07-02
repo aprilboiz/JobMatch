@@ -1,0 +1,66 @@
+{
+  "name": "REBECCA XUÂN",
+  "profile": "Creative problem solver with strong analytical skills and attention to detail. Experienced in cross-functional collaboration and stakeholder management.",
+  "contact": {
+    "phone": "+1 917 249 9189",
+    "email": "rebecca.xuan@outlook.com",
+    "address": "655 Oak Ave., Phoenix",
+    "website": null
+  },
+  "skills": [
+    "Business Development",
+    "Lead Generation",
+    "Negotiation",
+    "Cold Calling",
+    "Pipeline Management",
+    "Payroll",
+    "Interviewing",
+    "Employee Relations"
+  ],
+  "languages": [
+    "Japanese (Basics)",
+    "English (Fluent)",
+    "Vietnamese (Native)",
+    "Chinese (Intermediate)"
+  ],
+  "education": [
+    {
+      "institution": "Stanford University",
+      "degree": "Master of Computer Science",
+      "years": "2018 - PRESENT"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Netflix Inc.",
+      "title": "Tư vấn Kinh doanh",
+      "years": "2021 - PRESENT"
+    },
+    {
+      "company": "Tesla Motors",
+      "title": "Project Manager",
+      "years": "2023 - 2024"
+    },
+    {
+      "company": "DataSoft Corp",
+      "title": "Software Engineer",
+      "years": "2017 - PRESENT"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Matthew Nguyen",
+      "role": "Team Lead",
+      "company": "DataSoft Corp",
+      "phone": "(921) 812-2912",
+      "email": "matthew.nguyen@company.com"
+    },
+    {
+      "name": "William Jackson",
+      "role": "Director",
+      "company": "Future Works",
+      "phone": "+1-683-960-1807",
+      "email": "william.jackson@outlook.com"
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "name": "JESSICA WILSON",
+  "profile": "Creative problem solver with strong analytical skills and attention to detail. Experienced in cross-functional collaboration and stakeholder management.",
+  "contact": {
+    "phone": "+33-3-26-694",
+    "email": "jessica.wilson@yahoo.com",
+    "address": "352 Oak Ave., Phoenix",
+    "website": "www.jessicawilson.com"
+  },
+  "skills": [
+    "Investment Analysis",
+    "QuickBooks",
+    "Taxation",
+    "SAP",
+    "Budgeting",
+    "Java",
+    "React"
+  ],
+  "languages": [
+    "French (Fluent)",
+    "Vietnamese (Native)",
+    "Russian (Basics)"
+  ],
+  "education": [
+    {
+      "institution": "Business Academy",
+      "degree": "Bachelor of Information Technology",
+      "years": "2022 - PRESENT",
+      "gpa": "2.9 / 4.0"
+    },
+    {
+      "institution": "Tech Institute",
+      "degree": "Bachelor of Marketing",
+      "years": "2016 - PRESENT",
+      "gpa": "3.1 / 4.0"
+    },
+    {
+      "institution": "Đại học FPT",
+      "degree": "Master of Data Science",
+      "years": "2018 - 2019"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Shopee Vietnam",
+      "title": "HR Specialist",
+      "years": "2022 - PRESENT"
+    },
+    {
+      "company": "Công ty TNHH ABC",
+      "title": "Quản lý Dự án",
+      "years": "2020 - 2023"
+    },
+    {
+      "company": "Borcelle Studio",
+      "title": "Senior Developer",
+      "years": "2018 - 2021"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Joshua Wilson",
+      "role": "HR Director",
+      "company": "Fauget Studio",
+      "phone": "+1 914 929 4488",
+      "email": "joshua.wilson@outlook.com"
+    },
+    {
+      "name": "Jessica Williams",
+      "role": "CTO",
+      "company": "Google Inc.",
+      "phone": "(239) 683-6553",
+      "email": "jessica.williams@yahoo.com"
+    }
+  ]
+}

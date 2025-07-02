@@ -1,0 +1,64 @@
+{
+  "name": "TRẦN THỊ PHONG",
+  "profile": "Creative problem solver with strong analytical skills and attention to detail. Experienced in cross-functional collaboration and stakeholder management.",
+  "contact": {
+    "phone": "0753-992-3100",
+    "email": "trần.thị.phong@company.com",
+    "address": "592 Main St., Chicago",
+    "website": null
+  },
+  "skills": [
+    "Photoshop",
+    "Content Marketing",
+    "Campaign Management",
+    "Social Media",
+    "Copywriting",
+    "Performance Management",
+    "Employee Relations"
+  ],
+  "languages": [
+    "German (Basics)",
+    "Spanish (Intermediate)",
+    "Chinese (Intermediate)",
+    "Korean (Intermediate)"
+  ],
+  "education": [
+    {
+      "institution": "MIT",
+      "degree": "Bachelor of Finance",
+      "years": "2020 - 2023",
+      "gpa": "2.9 / 4.0"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Tesla Motors",
+      "title": "HR Specialist",
+      "years": "2017 - PRESENT"
+    },
+    {
+      "company": "Meta Platforms",
+      "title": "Data Scientist",
+      "years": "2018 - PRESENT"
+    },
+    {
+      "company": "Future Works",
+      "title": "Nhân viên IT",
+      "years": "2015 - PRESENT"
+    },
+    {
+      "company": "Netflix Inc.",
+      "title": "Nhân viên IT",
+      "years": "2016 - PRESENT"
+    }
+  ],
+  "reference": [
+    {
+      "name": "John Garcia",
+      "role": "Manager",
+      "company": "SpaceX Corporation",
+      "phone": "+1-288-881-2632",
+      "email": "john.garcia@yahoo.com"
+    }
+  ]
+}

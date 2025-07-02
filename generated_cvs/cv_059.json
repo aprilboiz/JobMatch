@@ -1,0 +1,73 @@
+{
+  "name": "EMMA TORRES",
+  "profile": "Chuyên gia có kinh nghiệm trong lĩnh vực công nghệ thông tin với khả năng phân tích và giải quyết vấn đề hiệu quả. Đam mê phát triển sản phẩm công nghệ.",
+  "contact": {
+    "phone": "+33-2-65-502",
+    "email": "emma.torres@hotmail.com",
+    "address": "726 First St., Houston",
+    "website": null
+  },
+  "skills": [
+    "Investment Analysis",
+    "QuickBooks",
+    "Risk Management",
+    "Budgeting",
+    "SAP",
+    "Taxation",
+    "Data Analysis",
+    "Java",
+    "REST API"
+  ],
+  "languages": [
+    "Vietnamese (Native)",
+    "German (Basics)",
+    "Chinese (Intermediate)",
+    "Spanish (Intermediate)"
+  ],
+  "education": [
+    {
+      "institution": "Wardiere University",
+      "degree": "Thạc sĩ Quản trị Kinh doanh",
+      "years": "2015 - PRESENT",
+      "gpa": "2.7 / 4.0"
+    }
+  ],
+  "experience": [
+    {
+      "company": "TechFlow Solutions",
+      "title": "Tư vấn Kinh doanh",
+      "years": "2022 - 2024"
+    },
+    {
+      "company": "Smart Systems",
+      "title": "DevOps Engineer",
+      "years": "2023 - PRESENT"
+    },
+    {
+      "company": "Netflix Inc.",
+      "title": "Operations Manager",
+      "years": "2015 - 2019"
+    },
+    {
+      "company": "VNG Corporation",
+      "title": "Operations Manager",
+      "years": "2020 - PRESENT"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Nguyễn Văn Perez",
+      "role": "CTO",
+      "company": "Grab Vietnam",
+      "phone": "+1-629-414-2466",
+      "email": "nguyễn.van.perez@outlook.com"
+    },
+    {
+      "name": "Emily White",
+      "role": "Manager",
+      "company": "Innovation Labs",
+      "phone": "0277-682-7516",
+      "email": "emily.white@gmail.com"
+    }
+  ]
+}

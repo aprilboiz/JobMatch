@@ -1,0 +1,60 @@
+{
+  "name": "MARIA DAVIS",
+  "profile": "Results-oriented business professional with expertise in project management and team leadership. Committed to excellence and continuous improvement in all endeavors.",
+  "contact": {
+    "phone": "+33-3-81-777",
+    "email": "maria.davis@company.com",
+    "address": "964 Second Ave., New York",
+    "website": null
+  },
+  "skills": [
+    "Canva",
+    "Analytics",
+    "Facebook Ads",
+    "Campaign Management",
+    "Kubernetes",
+    "CI/CD"
+  ],
+  "languages": [
+    "Spanish (Intermediate)",
+    "Korean (Intermediate)",
+    "English (Fluent)",
+    "Japanese (Basics)"
+  ],
+  "education": [
+    {
+      "institution": "NYU",
+      "degree": "Thạc sĩ Kỹ thuật",
+      "years": "2016 - PRESENT",
+      "gpa": "3.2 / 4.0"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Apple Inc.",
+      "title": "Operations Manager",
+      "years": "2023 - 2024"
+    },
+    {
+      "company": "TechFlow Solutions",
+      "title": "Product Manager",
+      "years": "2021 - 2023"
+    }
+  ],
+  "reference": [
+    {
+      "name": "David Johnson",
+      "role": "Manager",
+      "company": "Tập đoàn XYZ",
+      "phone": "+1-326-803-3670",
+      "email": "david.johnson@company.com"
+    },
+    {
+      "name": "Bùi Minh Bình",
+      "role": "Team Lead",
+      "company": "VNG Corporation",
+      "phone": "(600) 381-9148",
+      "email": "bùi.minh.bình@hotmail.com"
+    }
+  ]
+}

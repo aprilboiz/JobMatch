@@ -1,0 +1,82 @@
+{
+  "name": "VŨ THỊ HILL",
+  "profile": "Experienced professional with strong background in technology and innovation. Passionate about delivering high-quality solutions and driving business growth through strategic initiatives.",
+  "contact": {
+    "phone": "(+84) 96 549 4284",
+    "email": "vũ.thị.hill@company.com",
+    "address": "708 Second Ave., Đà Nẵng",
+    "website": null
+  },
+  "skills": [
+    "Lead Generation",
+    "Negotiation",
+    "CRM",
+    "Sales Strategy",
+    "DevOps",
+    "MongoDB",
+    "AWS"
+  ],
+  "languages": [
+    "Japanese (Basics)",
+    "Korean (Intermediate)",
+    "Vietnamese (Native)"
+  ],
+  "education": [
+    {
+      "institution": "UC Berkeley",
+      "degree": "Bachelor of Computer Science",
+      "years": "2020 - 2024",
+      "gpa": "4.0 / 4.0"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Công ty TNHH ABC",
+      "title": "Team Lead",
+      "years": "2021 - PRESENT"
+    },
+    {
+      "company": "Công ty TNHH ABC",
+      "title": "Tư vấn Kinh doanh",
+      "years": "2019 - PRESENT"
+    },
+    {
+      "company": "Smart Systems",
+      "title": "Operations Manager",
+      "years": "2021 - PRESENT"
+    },
+    {
+      "company": "NextGen Technologies",
+      "title": "Tư vấn Kinh doanh",
+      "years": "2023 - 2024"
+    },
+    {
+      "company": "Shopee Vietnam",
+      "title": "Software Engineer",
+      "years": "2019 - 2021"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Kathleen Martin",
+      "role": "Director",
+      "company": "Vingroup",
+      "phone": "(+84) 96 285 8871",
+      "email": "kathleen.martin@company.com"
+    },
+    {
+      "name": "Jessica Nam",
+      "role": "Team Lead",
+      "company": "Digital Dynamics",
+      "phone": "0254-190-9485",
+      "email": "jessica.nam@gmail.com"
+    },
+    {
+      "name": "Anthony Jackson",
+      "role": "Team Lead",
+      "company": "Tesla Motors",
+      "phone": "+1 414 695 6370",
+      "email": "anthony.jackson@hotmail.com"
+    }
+  ]
+}

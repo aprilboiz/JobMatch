@@ -1,0 +1,83 @@
+{
+  "name": "DƯƠNG THỊ ALLEN",
+  "profile": "Chuyên gia có kinh nghiệm trong lĩnh vực công nghệ thông tin với khả năng phân tích và giải quyết vấn đề hiệu quả. Đam mê phát triển sản phẩm công nghệ.",
+  "contact": {
+    "phone": "+1 313 688 4364",
+    "email": "duơng.thị.allen@yahoo.com",
+    "address": "843 Second Ave., Phoenix",
+    "website": "www.dương thịallen.com"
+  },
+  "skills": [
+    "Risk Management",
+    "QuickBooks",
+    "Investment Analysis",
+    "Taxation",
+    "SAP",
+    "Accounting",
+    "Financial Analysis",
+    "Excel",
+    "Recruitment",
+    "Training & Development",
+    "Talent Acquisition"
+  ],
+  "languages": [
+    "French (Fluent)",
+    "German (Basics)",
+    "English (Fluent)"
+  ],
+  "education": [
+    {
+      "institution": "Đại học Kinh tế Quốc dân",
+      "degree": "Master of Computer Science",
+      "years": "2018 - PRESENT",
+      "gpa": "2.6 / 4.0"
+    },
+    {
+      "institution": "Đại học Quốc gia Hà Nội",
+      "degree": "Bachelor of Computer Science",
+      "years": "2022 - 2023",
+      "gpa": "3.5 / 4.0"
+    },
+    {
+      "institution": "Princeton University",
+      "degree": "Master of Data Science",
+      "years": "2019 - 2025"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Meta Platforms",
+      "title": "Quản lý Dự án",
+      "years": "2021 - 2025"
+    },
+    {
+      "company": "SpaceX Corporation",
+      "title": "Quản lý Dự án",
+      "years": "2021 - 2024"
+    },
+    {
+      "company": "Vingroup",
+      "title": "Financial Analyst",
+      "years": "2017 - 2021"
+    },
+    {
+      "company": "Google Inc.",
+      "title": "Senior Developer",
+      "years": "2023 - 2025"
+    },
+    {
+      "company": "Wardiere Inc.",
+      "title": "Quản lý Dự án",
+      "years": "2021 - 2024"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Bùi Minh Harris",
+      "role": "Team Lead",
+      "company": "Fauget Studio",
+      "phone": "+1 971 629 5838",
+      "email": "bùi.minh.harris@gmail.com"
+    }
+  ]
+}

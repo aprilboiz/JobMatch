@@ -1,0 +1,71 @@
+{
+  "name": "LAURA TORRES",
+  "profile": "Chuyên viên tài chính có kinh nghiệm trong phân tích dữ liệu và quản lý rủi ro. Kỹ năng giao tiếp và thuyết trình xuất sắc.",
+  "contact": {
+    "phone": "+1 425 920 8812",
+    "email": "laura.torres@company.com",
+    "address": "156 Park Rd., Chicago",
+    "website": null
+  },
+  "skills": [
+    "Budgeting",
+    "Financial Analysis",
+    "Excel",
+    "SAP",
+    "SEO",
+    "Market Research"
+  ],
+  "languages": [
+    "Vietnamese (Native)",
+    "English (Fluent)",
+    "Spanish (Intermediate)",
+    "Japanese (Basics)"
+  ],
+  "education": [
+    {
+      "institution": "Stanford University",
+      "degree": "Master of Computer Science",
+      "years": "2019 - PRESENT",
+      "gpa": "3.4 / 4.0"
+    },
+    {
+      "institution": "Columbia University",
+      "degree": "Master of Business Administration",
+      "years": "2019 - 2020",
+      "gpa": "4.0 / 4.0"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Công ty TNHH ABC",
+      "title": "Financial Analyst",
+      "years": "2016 - 2024"
+    },
+    {
+      "company": "VNG Corporation",
+      "title": "Marketing Specialist",
+      "years": "2023 - 2024"
+    },
+    {
+      "company": "Smart Systems",
+      "title": "Product Manager",
+      "years": "2023 - PRESENT"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Hoàng Đức Anderson",
+      "role": "CEO",
+      "company": "NextGen Technologies",
+      "phone": "(673) 340-9149",
+      "email": "hoàng.dức.anderson@outlook.com"
+    },
+    {
+      "name": "Trần Thị Sanchez",
+      "role": "CEO",
+      "company": "FPT Software",
+      "phone": "0381-874-6259",
+      "email": "trần.thị.sanchez@yahoo.com"
+    }
+  ]
+}

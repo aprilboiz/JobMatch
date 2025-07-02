@@ -1,0 +1,74 @@
+{
+  "name": "MARIA MOORE",
+  "profile": "Dedicated professional with passion for innovation and technology. Strong communication skills and ability to work effectively in fast-paced environments.",
+  "contact": {
+    "phone": "+1-443-961-8652",
+    "email": "maria.moore@gmail.com",
+    "address": "906 First St., Hà Nội",
+    "website": "www.mariamoore.com"
+  },
+  "skills": [
+    "Recruitment",
+    "Talent Acquisition",
+    "Interviewing",
+    "Training & Development",
+    "Performance Management",
+    "Payroll",
+    "SQL",
+    "MongoDB",
+    "REST API"
+  ],
+  "languages": [
+    "Russian (Basics)",
+    "German (Basics)",
+    "French (Fluent)",
+    "English (Fluent)"
+  ],
+  "education": [
+    {
+      "institution": "NYU",
+      "degree": "Bachelor of Finance",
+      "years": "2018 - PRESENT"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Digital Dynamics",
+      "title": "Sales Executive",
+      "years": "2018 - PRESENT"
+    },
+    {
+      "company": "Future Works",
+      "title": "Account Manager",
+      "years": "2016 - 2020"
+    },
+    {
+      "company": "Creative Agency",
+      "title": "Quản lý Dự án",
+      "years": "2015 - 2021"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Richard Miller",
+      "role": "Manager",
+      "company": "Viettel Group",
+      "phone": "+1 893 449 4579",
+      "email": "richard.miller@outlook.com"
+    },
+    {
+      "name": "Bùi Minh Rodriguez",
+      "role": "Team Lead",
+      "company": "Microsoft Corporation",
+      "phone": "+1 355 928 6482",
+      "email": "bùi.minh.rodriguez@gmail.com"
+    },
+    {
+      "name": "Joshua White",
+      "role": "CTO",
+      "company": "SpaceX Corporation",
+      "phone": "+1-745-902-9780",
+      "email": "joshua.white@hotmail.com"
+    }
+  ]
+}

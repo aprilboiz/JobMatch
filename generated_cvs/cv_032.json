@@ -1,0 +1,57 @@
+{
+  "name": "ĐẶNG HỮU CƯỜNG",
+  "profile": "Nhân viên marketing năng động với kinh nghiệm trong quản lý thương hiệu và phát triển chiến lược truyền thông. Có khả năng làm việc nhóm tốt.",
+  "contact": {
+    "phone": "(+84) 90 722 4469",
+    "email": "dặng.hữu.cuờng@outlook.com",
+    "address": "525 Park Rd., Hà Nội",
+    "website": "www.đặng hữucường.com"
+  },
+  "skills": [
+    "Customer Relationship",
+    "Lead Generation",
+    "CRM",
+    "Negotiation",
+    "Pipeline Management",
+    "Sales Strategy",
+    "Payroll"
+  ],
+  "languages": [
+    "French (Fluent)",
+    "Vietnamese (Native)",
+    "Spanish (Intermediate)"
+  ],
+  "education": [
+    {
+      "institution": "Đại học Bách Khoa Hà Nội",
+      "degree": "Master of Engineering",
+      "years": "2018 - PRESENT"
+    },
+    {
+      "institution": "Tech Institute",
+      "degree": "Master of Engineering",
+      "years": "2022 - 2023"
+    }
+  ],
+  "experience": [
+    {
+      "company": "SpaceX Corporation",
+      "title": "Quản lý Dự án",
+      "years": "2022 - PRESENT"
+    },
+    {
+      "company": "Meta Platforms",
+      "title": "Financial Analyst",
+      "years": "2023 - PRESENT"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Amanda Wilson",
+      "role": "CTO",
+      "company": "Shopee Vietnam",
+      "phone": "(+84) 91 320 3321",
+      "email": "amanda.wilson@yahoo.com"
+    }
+  ]
+}

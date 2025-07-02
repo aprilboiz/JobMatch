@@ -1,0 +1,72 @@
+{
+  "name": "BÙI MINH ROBINSON",
+  "profile": "Chuyên gia có kinh nghiệm trong lĩnh vực công nghệ thông tin với khả năng phân tích và giải quyết vấn đề hiệu quả. Đam mê phát triển sản phẩm công nghệ.",
+  "contact": {
+    "phone": "0987-505-1459",
+    "email": "bùi.minh.robinson@outlook.com",
+    "address": "499 First St., TP.HCM",
+    "website": null
+  },
+  "skills": [
+    "Recruitment",
+    "Employee Relations",
+    "Performance Management",
+    "CI/CD"
+  ],
+  "languages": [
+    "Korean (Intermediate)",
+    "English (Fluent)",
+    "Russian (Basics)"
+  ],
+  "education": [
+    {
+      "institution": "Đại học Bách Khoa Hà Nội",
+      "degree": "Master of Business Administration",
+      "years": "2016 - 2019",
+      "gpa": "3.5 / 4.0"
+    },
+    {
+      "institution": "Stanford University",
+      "degree": "Master of Computer Science",
+      "years": "2018 - PRESENT"
+    },
+    {
+      "institution": "Harvard University",
+      "degree": "Master of Data Science",
+      "years": "2017 - PRESENT"
+    }
+  ],
+  "experience": [
+    {
+      "company": "NextGen Technologies",
+      "title": "Business Analyst",
+      "years": "2017 - 2020"
+    },
+    {
+      "company": "Vingroup",
+      "title": "Software Engineer",
+      "years": "2015 - 2019"
+    },
+    {
+      "company": "NextGen Technologies",
+      "title": "Operations Manager",
+      "years": "2017 - PRESENT"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Cao Minh Martinez",
+      "role": "HR Director",
+      "company": "SpaceX Corporation",
+      "phone": "+1 930 996 3790",
+      "email": "cao.minh.martinez@yahoo.com"
+    },
+    {
+      "name": "Maria Scott",
+      "role": "Director",
+      "company": "Creative Agency",
+      "phone": "+1-500-499-1326",
+      "email": "maria.scott@outlook.com"
+    }
+  ]
+}

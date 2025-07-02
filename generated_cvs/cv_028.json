@@ -1,0 +1,69 @@
+{
+  "name": "MADISON MOORE",
+  "profile": "Chuyên gia có kinh nghiệm trong lĩnh vực công nghệ thông tin với khả năng phân tích và giải quyết vấn đề hiệu quả. Đam mê phát triển sản phẩm công nghệ.",
+  "contact": {
+    "phone": "(960) 475-1024",
+    "email": "madison.moore@yahoo.com",
+    "address": "902 First St., Chicago",
+    "website": "www.madisonmoore.com"
+  },
+  "skills": [
+    "Kubernetes",
+    "AWS",
+    "JavaScript",
+    "Cold Calling"
+  ],
+  "languages": [
+    "Japanese (Basics)",
+    "Russian (Basics)"
+  ],
+  "education": [
+    {
+      "institution": "Đại học FPT",
+      "degree": "Bachelor of Information Technology",
+      "years": "2023 - PRESENT",
+      "gpa": "2.7 / 4.0"
+    },
+    {
+      "institution": "Global University",
+      "degree": "Master of Data Science",
+      "years": "2017 - 2024"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Google Inc.",
+      "title": "HR Specialist",
+      "years": "2023 - 2025"
+    },
+    {
+      "company": "Amazon Web Services",
+      "title": "Project Manager",
+      "years": "2020 - PRESENT"
+    },
+    {
+      "company": "Google Inc.",
+      "title": "Chuyên viên Marketing",
+      "years": "2022 - PRESENT"
+    },
+    {
+      "company": "Borcelle Studio",
+      "title": "Account Manager",
+      "years": "2017 - 2021"
+    },
+    {
+      "company": "Meta Platforms",
+      "title": "HR Specialist",
+      "years": "2019 - PRESENT"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Richard Phong",
+      "role": "Director",
+      "company": "Apple Inc.",
+      "phone": "0427-586-6140",
+      "email": "richard.phong@outlook.com"
+    }
+  ]
+}
