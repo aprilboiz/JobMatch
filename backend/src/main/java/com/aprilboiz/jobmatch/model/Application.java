@@ -3,7 +3,7 @@ package com.aprilboiz.jobmatch.model;
 import com.aprilboiz.jobmatch.enumerate.ApplicationStatus;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 
 @EqualsAndHashCode(callSuper = true)
@@ -12,7 +12,7 @@ import org.hibernate.annotations.Where;
 @Data
 @AllArgsConstructor
 @Builder
-@Where(clause = "deleted_at IS NULL")
+@SQLRestriction("deleted_at IS NULL")
 public class Application extends AuditableEntity{
     @Id
     @GeneratedValue
