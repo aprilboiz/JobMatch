@@ -15,6 +15,7 @@ import com.aprilboiz.jobmatch.dto.request.CandidateProfileUpdateRequest;
 import com.aprilboiz.jobmatch.dto.request.RecruiterProfileUpdateRequest;
 import com.aprilboiz.jobmatch.dto.request.RegisterRequest;
 import com.aprilboiz.jobmatch.dto.response.UserResponse;
+import com.aprilboiz.jobmatch.dto.base.BaseProfileUpdateRequest;
 import com.aprilboiz.jobmatch.enumerate.RoleName;
 import com.aprilboiz.jobmatch.exception.DuplicateException;
 import com.aprilboiz.jobmatch.exception.NotFoundException;
@@ -25,9 +26,7 @@ import com.aprilboiz.jobmatch.model.Recruiter;
 import com.aprilboiz.jobmatch.model.Role;
 import com.aprilboiz.jobmatch.model.User;
 import com.aprilboiz.jobmatch.model.UserPrincipalAdapter;
-import com.aprilboiz.jobmatch.repository.CandidateRepository;
 import com.aprilboiz.jobmatch.repository.CompanyRepository;
-import com.aprilboiz.jobmatch.repository.RecruiterRepository;
 import com.aprilboiz.jobmatch.repository.RoleRepository;
 import com.aprilboiz.jobmatch.repository.UserRepository;
 import com.aprilboiz.jobmatch.service.CloudinaryService;
@@ -122,6 +121,30 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.getUserByEmail(email).orElseThrow(() -> 
             new NotFoundException(messageService.getMessage("error.user.email.not.found", email)));
         return userMapper.userToUserResponse(user);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public UserResponse updateProfile(String email, BaseProfileUpdateRequest profileRequest) {
+        User user = userRepository.getUserByEmail(email)
+                .orElseThrow(() -> new NotFoundException(messageService.getMessage("error.not.found.user.email", email)));
+
+        if (user instanceof Candidate) {
+            // Create CandidateProfileUpdateRequest from BaseProfileUpdateRequest
+            CandidateProfileUpdateRequest candidateRequest = new CandidateProfileUpdateRequest();
+            candidateRequest.setFullName(profileRequest.getFullName());
+            candidateRequest.setPhoneNumber(profileRequest.getPhoneNumber());
+            return updateProfile(email, candidateRequest);
+        } else if (user instanceof Recruiter) {
+            // Create RecruiterProfileUpdateRequest from BaseProfileUpdateRequest
+            RecruiterProfileUpdateRequest recruiterRequest = new RecruiterProfileUpdateRequest();
+            recruiterRequest.setFullName(profileRequest.getFullName());
+            recruiterRequest.setPhoneNumber(profileRequest.getPhoneNumber());
+            recruiterRequest.setCompanyId(profileRequest.getCompanyId());
+            return updateProfile(email, recruiterRequest);
+        } else {
+            throw new AuthorizationDeniedException(messageService.getMessage("error.authorization.user.type.invalid"));
+        }
     }
 
     @Override

@@ -11,4 +11,4 @@ public class LogoutRequest {
 
     @NotBlank(message = "{" + ValidationMessages.REFRESH_TOKEN_REQUIRED + "}")
     private String refreshToken;
-} 
+}

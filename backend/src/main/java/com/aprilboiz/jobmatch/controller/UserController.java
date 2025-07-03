@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.aprilboiz.jobmatch.dto.request.CandidateProfileUpdateRequest;
-import com.aprilboiz.jobmatch.dto.request.RecruiterProfileUpdateRequest;
+import com.aprilboiz.jobmatch.dto.base.BaseProfileUpdateRequest;
 import com.aprilboiz.jobmatch.dto.response.UserResponse;
 import com.aprilboiz.jobmatch.exception.ApiResponse;
 import com.aprilboiz.jobmatch.service.impl.UserServiceImpl;
@@ -49,43 +48,29 @@ public class UserController {
     }
 
     @Operation(
-            summary = "Update Candidate Profile",
-            description = "Update the profile information for an authenticated candidate user.",
+            summary = "Update User Profile",
+            description = """
+                    Update the profile information for an authenticated user.
+                    
+                    - For candidates: Updates full name and phone number (companyId is ignored)
+                    - For recruiters: Updates full name, phone number, and optionally company association
+                    
+                    The endpoint automatically determines the user type and processes the request accordingly.
+                    """,
             security = @SecurityRequirement(name = "Bearer Authentication")
     )
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Profile updated successfully"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid request data"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized - Invalid or missing token"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Forbidden - User is not a candidate"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Forbidden - Invalid user type"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "User not found")
     })
-    @PutMapping("/profile/candidate")
-    @PreAuthorize("hasRole('CANDIDATE')")
-    public ResponseEntity<ApiResponse<UserResponse>> updateCandidateProfile(
+    @PutMapping("/profile")
+    @PreAuthorize("hasRole('CANDIDATE') or hasRole('RECRUITER')")
+    public ResponseEntity<ApiResponse<UserResponse>> updateProfile(
             @AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody CandidateProfileUpdateRequest profileRequest) {
-        UserResponse response = userService.updateProfile(userDetails.getUsername(), profileRequest);
-        return ResponseEntity.ok(ApiResponse.success(response));
-    }
-
-    @Operation(
-            summary = "Update Recruiter Profile",
-            description = "Update the profile information for an authenticated recruiter user.",
-            security = @SecurityRequirement(name = "Bearer Authentication")
-    )
-    @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Profile updated successfully"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid request data"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized - Invalid or missing token"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Forbidden - User is not a recruiter"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "User not found")
-    })
-    @PutMapping("/profile/recruiter")
-    @PreAuthorize("hasRole('RECRUITER')")
-    public ResponseEntity<ApiResponse<UserResponse>> updateRecruiterProfile(
-            @AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody RecruiterProfileUpdateRequest profileRequest) {
+            @Valid @RequestBody BaseProfileUpdateRequest profileRequest) {
         UserResponse response = userService.updateProfile(userDetails.getUsername(), profileRequest);
         return ResponseEntity.ok(ApiResponse.success(response));
     }

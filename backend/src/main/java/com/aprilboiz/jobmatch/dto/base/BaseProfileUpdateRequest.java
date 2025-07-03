@@ -18,4 +18,7 @@ public abstract class BaseProfileUpdateRequest {
     @NotBlank(message = "{" + ValidationMessages.PHONE_REQUIRED + "}")
     @Size(min = 10, max = 10, message = "{" + ValidationMessages.PHONE_SIZE + "}")
     private String phoneNumber;
+    
+    @Schema(description = "Company ID (required for recruiters, ignored for candidates)", example = "1")
+    private Long companyId;
 } 
