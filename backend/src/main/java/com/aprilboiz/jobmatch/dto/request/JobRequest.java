@@ -1,6 +1,7 @@
 package com.aprilboiz.jobmatch.dto.request;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import com.aprilboiz.jobmatch.dto.SalaryDto;
 import com.aprilboiz.jobmatch.dto.validation.ValidationMessages;
@@ -82,4 +83,12 @@ public class JobRequest {
     @NotEmpty(message = "{" + ValidationMessages.JOB_LOCATION_REQUIRED + "}")
     @Size(max = 100, message = "{" + ValidationMessages.JOB_LOCATION_SIZE + "}")
     private String location;
+    
+    @Schema(
+            description = "List of required skills for the job position",
+            example = "[\"Java\", \"Spring Boot\", \"REST APIs\", \"MySQL\", \"Git\"]"
+    )
+    @Size(max = 20, message = "Maximum 20 skills allowed")
+    private List<@NotBlank(message = "Skill name cannot be blank") 
+                @Size(max = 50, message = "Skill name cannot exceed 50 characters") String> skills;
 }

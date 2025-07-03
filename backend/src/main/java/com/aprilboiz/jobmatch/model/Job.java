@@ -68,6 +68,11 @@ public class Job extends AuditableEntity{
 
     private String location;
 
+    @ElementCollection
+    @CollectionTable(name = "job_skills", joinColumns = @JoinColumn(name = "job_id"))
+    @Column(name = "skill")
+    private List<String> skills;
+
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;

@@ -60,6 +60,7 @@ public class JobServiceImpl implements JobService {
                 .title(jobRequest.getTitle())
                 .description(jobRequest.getDescription())
                 .location(jobRequest.getLocation())
+                .skills(jobRequest.getSkills())
                 .salaryType(salaryDto.getSalaryType())
                 .minSalary(calculateMinSalary(salaryDto))
                 .maxSalary(calculateMaxSalary(salaryDto))
@@ -114,6 +115,7 @@ public class JobServiceImpl implements JobService {
         existingJob.setTitle(jobRequest.getTitle());
         existingJob.setJobType(jobRequest.getJobType());
         existingJob.setJobCategory(jobCategory);
+        existingJob.setSkills(jobRequest.getSkills());
         existingJob.setSalaryType(salaryDto.getSalaryType());
         existingJob.setMinSalary(calculateMinSalary(salaryDto));
         existingJob.setMaxSalary(calculateMaxSalary(salaryDto));

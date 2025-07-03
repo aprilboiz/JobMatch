@@ -1,6 +1,7 @@
 package com.aprilboiz.jobmatch.dto.response;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import com.aprilboiz.jobmatch.dto.SalaryDto;
 import com.aprilboiz.jobmatch.enumerate.JobStatus;
@@ -34,6 +35,9 @@ public class JobResponse {
     
     @Schema(description = "Job location", example = "San Francisco, CA, USA")
     private String location;
+    
+    @Schema(description = "List of required skills for the job position", example = "[\"Java\", \"Spring Boot\", \"REST APIs\", \"MySQL\", \"Git\"]")
+    private List<String> skills;
     
     @Schema(description = "Salary information including type, range, and currency")
     private SalaryDto salary;
