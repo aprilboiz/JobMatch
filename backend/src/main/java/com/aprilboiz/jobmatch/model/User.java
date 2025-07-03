@@ -2,6 +2,7 @@ package com.aprilboiz.jobmatch.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Where;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -11,6 +12,7 @@ import lombok.*;
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "user_type")
 @Table(name = "users")
+@Where(clause = "deleted_at IS NULL")
 public abstract class User extends AuditableEntity {
     @Id
     @GeneratedValue

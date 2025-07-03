@@ -3,6 +3,7 @@ package com.aprilboiz.jobmatch.model;
 import com.aprilboiz.jobmatch.enumerate.ApplicationStatus;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Where;
 
 
 @EqualsAndHashCode(callSuper = true)
@@ -11,6 +12,7 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @Builder
+@Where(clause = "deleted_at IS NULL")
 public class Application extends AuditableEntity{
     @Id
     @GeneratedValue

@@ -12,6 +12,7 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -25,6 +26,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Table(name = "jobs")
+@Where(clause = "deleted_at IS NULL")
 public class Job extends AuditableEntity{
     @Id
     @GeneratedValue

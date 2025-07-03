@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -69,7 +70,8 @@ public class CvServiceImpl implements CvService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteCv(Long cvId) {
-        CV cv = cvRepository.findById(cvId)
+        // Use findByIdAndNotDeleted to ensure we don't soft-delete an already soft-deleted CV
+        CV cv = cvRepository.findByIdAndNotDeleted(cvId)
                 .orElseThrow(() -> new NotFoundException(messageService.getMessage("error.not.found.cv")));
 
         UserPrincipalAdapter userPrincipalAdapter = (UserPrincipalAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -82,9 +84,38 @@ public class CvServiceImpl implements CvService {
             throw new SecurityException(messageService.getMessage("error.authorization.cv.access"));
         }
 
-        // Keep the file in storage for audit/retention purposes
-        // We just delete the record from the database
-        cvRepository.deleteById(cvId);
+        // Perform soft delete by setting deletedAt timestamp
+        // This preserves the file and database record for audit purposes
+        cvRepository.softDeleteById(cvId, LocalDateTime.now());
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void restoreCv(Long cvId) {
+        // Check if CV exists (including soft-deleted ones)
+        CV cv = cvRepository.findByIdAndCandidateIncludeDeleted(cvId, getCurrentCandidate())
+                .orElseThrow(() -> new NotFoundException(messageService.getMessage("error.not.found.cv")));
+
+        // Restore the CV by setting deletedAt to null
+        cvRepository.restoreById(cv.getId());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<CvResponse> getDeletedCv(Candidate candidate) {
+        List<CV> deletedCvs = cvRepository.findAllDeleted().stream()
+                .filter(cv -> cv.getCandidate().getId().equals(candidate.getId()))
+                .toList();
+        return deletedCvs.stream().map(appMapper::cvToCvResponse).collect(Collectors.toList());
+    }
+
+    private Candidate getCurrentCandidate() {
+        UserPrincipalAdapter userPrincipalAdapter = (UserPrincipalAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userPrincipalAdapter.getUser();
+        if (!(user instanceof Candidate candidate)) {
+            throw new SecurityException(messageService.getMessage("error.authorization.candidate.required"));
+        }
+        return candidate;
     }
 
     @Override

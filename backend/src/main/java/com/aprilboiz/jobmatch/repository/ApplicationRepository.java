@@ -6,12 +6,11 @@ import com.aprilboiz.jobmatch.model.Candidate;
 import com.aprilboiz.jobmatch.model.Job;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
 
-public interface ApplicationRepository extends JpaRepository<Application, Long> {
+public interface ApplicationRepository extends SoftDeleteRepository<Application, Long> {
     Page<Application> findAllByCandidate(Candidate candidate, Pageable pageable);
     Page<Application> findAllByJob(Job job, Pageable pageable);
     Page<Application> findAllByJobAndStatus(Job job, ApplicationStatus status, Pageable pageable);

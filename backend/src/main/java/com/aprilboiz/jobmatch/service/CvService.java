@@ -12,5 +12,7 @@ public interface CvService {
     List<CvResponse> getAllCv(Candidate candidate);
     CvResponse getCv(Long id);
     void deleteCv(Long id);
+    void restoreCv(Long id);
+    List<CvResponse> getDeletedCv(Candidate candidate);
     Resource downloadCv(Long id);
 }

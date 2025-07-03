@@ -254,6 +254,89 @@ public class CvController {
     }
 
     @Operation(
+            summary = "Restore Deleted CV",
+            description = """
+                    Restore a previously soft-deleted CV.
+                    
+                    This endpoint allows candidates to restore their soft-deleted CVs.
+                    The CV will become available again for job applications.
+                    
+                    **Requirements:**
+                    - CV must belong to the authenticated candidate
+                    - CV must be currently soft-deleted
+                    """,
+            security = @SecurityRequirement(name = "Bearer Authentication")
+    )
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "CV restored successfully"
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized - Invalid or missing token",
+                    content = @Content(schema = @Schema(implementation = ApiResponse.Error.class))
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden - User is not a candidate or not the CV owner",
+                    content = @Content(schema = @Schema(implementation = ApiResponse.Error.class))
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "404",
+                    description = "CV not found",
+                    content = @Content(schema = @Schema(implementation = ApiResponse.Error.class))
+            )
+    })
+    @PostMapping("/{id}/restore")
+    @PreAuthorize("hasRole('CANDIDATE')")
+    public ResponseEntity<ApiResponse<String>> restoreCv(
+            @Parameter(description = "CV ID to restore", required = true, example = "1")
+            @PathVariable Long id) {
+        cvService.restoreCv(id);
+        String successMessage = messageService.getMessage("api.success.restored", "CV");
+        return ResponseEntity.ok(ApiResponse.success(successMessage, successMessage));
+    }
+
+    @Operation(
+            summary = "Get Deleted CVs",
+            description = """
+                    Retrieve a list of all soft-deleted CVs for the authenticated candidate.
+                    
+                    This endpoint returns all soft-deleted CV records that can be restored.
+                    """,
+            security = @SecurityRequirement(name = "Bearer Authentication")
+    )
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "Deleted CVs retrieved successfully",
+                    content = @Content(schema = @Schema(implementation = ApiResponse.class))
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized - Invalid or missing token",
+                    content = @Content(schema = @Schema(implementation = ApiResponse.Error.class))
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden - User is not a candidate",
+                    content = @Content(schema = @Schema(implementation = ApiResponse.Error.class))
+            )
+    })
+    @GetMapping("/deleted")
+    @PreAuthorize("hasRole('CANDIDATE')")
+    public ResponseEntity<ApiResponse<List<CvResponse>>> getDeletedCvs(@AuthenticationPrincipal UserPrincipalAdapter userDetails) {
+        User user = userDetails.getUser();
+        if (!(user instanceof Candidate candidate)) {
+            throw new AccessDeniedException(messageService.getMessage("error.authorization.candidate.required"));
+        }
+        List<CvResponse> deletedCvs = cvService.getDeletedCv(candidate);
+        String successMessage = messageService.getMessage("api.success.retrieved", "Deleted CVs");
+        return ResponseEntity.ok(ApiResponse.success(successMessage, deletedCvs));
+    }
+
+    @Operation(
             summary = "Download CV File",
             description = """
                     Download the actual CV file in its original format.

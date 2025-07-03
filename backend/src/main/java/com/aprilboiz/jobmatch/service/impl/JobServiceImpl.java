@@ -2,6 +2,7 @@ package com.aprilboiz.jobmatch.service.impl;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.aprilboiz.jobmatch.dto.SalaryDto;
@@ -131,14 +132,15 @@ public class JobServiceImpl implements JobService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteJob(Long id) {
-        Job job = jobRepository.findById(id).orElseThrow(() -> 
+        Job job = jobRepository.findByIdAndNotDeleted(id).orElseThrow(() -> 
             new NotFoundException(messageService.getMessage("error.not.found.job", id)));
 
         if (!isUserCanModifyJob(job)) {
             throw new AccessDeniedException(messageService.getMessage("error.authorization.job.modify"));
         }
 
-        jobRepository.delete(job);
+        // Perform soft delete to preserve job data for audit and application history
+        jobRepository.softDeleteById(id, LocalDateTime.now());
     }
 
     @Override

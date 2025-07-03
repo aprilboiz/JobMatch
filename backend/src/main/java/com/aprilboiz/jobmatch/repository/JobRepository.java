@@ -14,11 +14,10 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface JobRepository extends JpaRepository<Job, Long> {
+public interface JobRepository extends SoftDeleteRepository<Job, Long> {
     Optional<Job> findByTitleIgnoreCase(String title);
     Page<Job> findAllByJobType(JobType jobType, Pageable pageable);
     Page<Job> findAllByLocation(String location, Pageable pageable);
@@ -26,6 +25,7 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     Page<Job> findAllByRecruiter(Recruiter recruiter, Pageable pageable);
     
     @Query("SELECT j FROM Job j WHERE " +
+           "j.deletedAt IS NULL AND " +
            "(:keyword IS NULL OR :keyword = '' OR " +
            "LOWER(j.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
            "LOWER(j.company.name) LIKE LOWER(CONCAT('%', :keyword, '%'))) AND " +
@@ -49,9 +49,9 @@ public interface JobRepository extends JpaRepository<Job, Long> {
             @Param("applicationDeadlineAfter") LocalDate applicationDeadlineAfter,
             Pageable pageable);
     
-    @Query("SELECT DISTINCT j.location FROM Job j WHERE j.location IS NOT NULL AND j.location != '' ORDER BY j.location")
+    @Query("SELECT DISTINCT j.location FROM Job j WHERE j.deletedAt IS NULL AND j.location IS NOT NULL AND j.location != '' ORDER BY j.location")
     List<String> findDistinctLocations();
     
-    @Query("SELECT DISTINCT j.company.name FROM Job j WHERE j.company.name IS NOT NULL ORDER BY j.company.name")
+    @Query("SELECT DISTINCT j.company.name FROM Job j WHERE j.deletedAt IS NULL AND j.company.name IS NOT NULL ORDER BY j.company.name")
     List<String> findDistinctCompanyNames();
 }

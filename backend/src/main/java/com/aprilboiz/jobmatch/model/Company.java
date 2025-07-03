@@ -12,6 +12,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 
 @EqualsAndHashCode(callSuper = true)
@@ -20,6 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Data
+@Where(clause = "deleted_at IS NULL")
 public class Company extends AuditableEntity{
     @Id
     @GeneratedValue
