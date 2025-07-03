@@ -13,4 +13,5 @@ public class CvResponse {
     private String fileType;
     private String updatedAt;
     private String fileUri;
+    private String fileSize;
 }

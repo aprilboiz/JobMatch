@@ -184,7 +184,6 @@ public class CvController {
             )
     })
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('CANDIDATE')")
     public ResponseEntity<ApiResponse<CvResponse>> getCv(
             @Parameter(description = "CV ID", required = true, example = "1")
             @PathVariable Long id) {
@@ -196,9 +195,10 @@ public class CvController {
     @Operation(
             summary = "Delete CV",
             description = """
-                    Delete a CV file and remove it from the candidate's profile.
+                    Delete a CV record from the candidate's profile.
                     
-                    This endpoint permanently removes the CV file from storage and database.
+                    This endpoint removes the CV record from the database while preserving
+                    the actual file in storage for audit and retention purposes.
                     **Warning:** This action cannot be undone.
                     
                     **Deletion Requirements:**
@@ -207,13 +207,14 @@ public class CvController {
                     - User must confirm the deletion action
                     
                     After deletion, any applications referencing this CV will show as "CV deleted" status.
+                    The file remains accessible through direct storage access if needed.
                     """,
             security = @SecurityRequirement(name = "Bearer Authentication")
     )
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
-                    responseCode = "204",
-                    description = "CV deleted successfully"
+                    responseCode = "200",
+                    description = "CV record deleted successfully (file preserved in storage)"
             ),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
                     responseCode = "400",
@@ -310,6 +311,7 @@ public class CvController {
         
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE)
                 .body(resource);
     }
 }

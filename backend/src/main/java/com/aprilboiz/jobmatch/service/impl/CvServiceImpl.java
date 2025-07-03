@@ -82,6 +82,8 @@ public class CvServiceImpl implements CvService {
             throw new SecurityException(messageService.getMessage("error.authorization.cv.access"));
         }
 
+        // Keep the file in storage for audit/retention purposes
+        // We just delete the record from the database
         cvRepository.deleteById(cvId);
     }
 
