@@ -16,9 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -59,25 +57,7 @@ public class AuthController {
     public ResponseEntity<ApiResponse<AuthResponse>> login(@RequestBody @Valid AuthRequest authRequest) {
         AuthResponse response = authService.login(authRequest);
         String successMessage = messageService.getMessage("api.success.login");
-
-        // Set refresh token as HttpOnly cookie
-        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", response.getRefreshToken())
-            .httpOnly(true)
-            .secure(true) // Set to true in production
-            .path("/api/auth/refresh")
-            .maxAge(7 * 24 * 60 * 60) // 7 days
-            .sameSite("Strict")
-            .build();
-
-        // Remove refreshToken from response body
-        AuthResponse filteredResponse = AuthResponse.builder()
-            .token(response.getToken())
-            .expiresIn(response.getExpiresIn())
-            .build();
-
-        return ResponseEntity.ok()
-            .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
-            .body(ApiResponse.success(successMessage, filteredResponse));
+        return ResponseEntity.ok(ApiResponse.success(successMessage, response));
     }
 
     @Operation(
@@ -121,25 +101,7 @@ public class AuthController {
         log.info("Refresh token request received");
         AuthResponse response = authService.refreshToken(refreshTokenRequest);
         String successMessage = messageService.getMessage("api.success.token.refresh");
-
-        // Set new refresh token as HttpOnly cookie
-        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", response.getRefreshToken())
-            .httpOnly(true)
-            .secure(true) // Set to true in production
-            .path("/api/auth/refresh")
-            .maxAge(7 * 24 * 60 * 60) // 7 days
-            .sameSite("Strict")
-            .build();
-
-        // Remove refreshToken from response body
-        AuthResponse filteredResponse = AuthResponse.builder()
-            .token(response.getToken())
-            .expiresIn(response.getExpiresIn())
-            .build();
-
-        return ResponseEntity.ok()
-            .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
-            .body(ApiResponse.success(successMessage, filteredResponse));
+        return ResponseEntity.ok(ApiResponse.success(successMessage, response));
     }
 
     @Operation(
