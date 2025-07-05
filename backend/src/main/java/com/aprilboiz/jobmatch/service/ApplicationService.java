@@ -11,14 +11,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 public interface ApplicationService {
-    Page<ApplicationResponse> getAllApplications(PageRequest pageRequest);
-    Page<ApplicationResponse> getAllApplications(Job job, PageRequest pageRequest);
-    Page<ApplicationResponse> getAllApplications(Candidate candidate, PageRequest pageRequest);
+    Page<ApplicationDetailResponse> getAllApplications(PageRequest pageRequest);
+    Page<ApplicationDetailResponse> getAllApplications(Job job, PageRequest pageRequest);
+    Page<ApplicationDetailResponse> getAllApplications(Candidate candidate, PageRequest pageRequest);
 
-    Page<ApplicationResponse> getApplicationsByStatus(Job job, ApplicationStatus status, PageRequest pageRequest);
+    Page<ApplicationDetailResponse> getApplicationsByStatus(Job job, ApplicationStatus status, PageRequest pageRequest);
 
-    ApplicationDetailResponse createApplication(ApplicationRequest request);
-    ApplicationDetailResponse createApplication(ApplicationRequest request, Candidate candidate);
+    ApplicationResponse createApplication(ApplicationRequest request);
+    ApplicationResponse createApplication(ApplicationRequest request, Candidate candidate);
 
     ApplicationDetailResponse getApplication(Long id);
     ApplicationDetailResponse getApplication(Long id, Candidate candidate);

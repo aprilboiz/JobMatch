@@ -25,26 +25,22 @@ public interface ApplicationMapper {
     @Mapping(target = "fileUri", expression = "java(getFileUri(cv))")
     CvResponse cvToCvResponse(CV cv);
 
-    @Mapping(source = "company.id", target = "companyId")
+    @Mapping(source = "company.id", target = "company.id")
     @Mapping(source = "recruiter.id", target = "recruiterId")
     @Mapping(target = "salary", expression = "java(jobToSalaryDto(job))")
     @Mapping(target = "jobCategory", expression = "java(jobCategoryToCode(job.getJobCategory()))")
     JobResponse jobToJobResponse(Job job);
 
-    @Mapping(source = "job.company.name", target = "companyName")
+    @Mapping(source = "cv.id", target = "cvId")
+    @Mapping(source = "candidate.id", target = "candidateId")
+    @Mapping(source = "createdAt", target = "appliedDate")
     @Mapping(source = "job.id", target = "jobId")
     @Mapping(source = "job.title", target = "jobTitle")
-    @Mapping(source = "createdAt", target = "appliedOn")
+    @Mapping(source = "job.company.name", target = "companyName")
     ApplicationResponse applicationToApplicationResponse(Application application);
 
-    @Mapping(source = "candidate.fullName", target = "candidateName")
-    @Mapping(source = "candidate.email", target = "candidateEmail")
-    @Mapping(source = "candidate.phoneNumber", target = "candidatePhoneNumber")
-    @Mapping(source = "job.company.name", target = "companyName")
-    @Mapping(source = "job.id", target = "jobId")
-    @Mapping(source = "job.title", target = "jobTitle")
-    @Mapping(source = "createdAt", target = "appliedOn")
-    @Mapping(source = "cv.fileName", target = "cvFileName")
+    @Mapping(source = "cv.id", target = "cvId")
+    @Mapping(source = "createdAt", target = "appliedDate")
     ApplicationDetailResponse applicationToApplicationDetailResponse(Application application);
 
     @Mapping(source = "name", target = "name")

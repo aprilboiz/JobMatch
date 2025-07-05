@@ -49,7 +49,7 @@ public class JobResponse {
     private Integer numberOfOpenings;
     
     @Schema(description = "Company identifier", example = "1")
-    private String companyId;
+    private CompanyResponse company;
     
     @Schema(description = "Recruiter identifier", example = "1")
     private String recruiterId;

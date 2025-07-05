@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.aprilboiz.jobmatch.dto.request.JobRequest;
-import com.aprilboiz.jobmatch.dto.response.ApplicationResponse;
+import com.aprilboiz.jobmatch.dto.response.ApplicationDetailResponse;
 import com.aprilboiz.jobmatch.dto.response.JobResponse;
 import com.aprilboiz.jobmatch.exception.NotFoundException;
 import com.aprilboiz.jobmatch.mapper.ApplicationMapper;
@@ -169,7 +169,7 @@ public class JobServiceImpl implements JobService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ApplicationResponse> getJobApplications(Long jobId, PageRequest pageRequest) {
+    public Page<ApplicationDetailResponse> getJobApplications(Long jobId, PageRequest pageRequest) {
         UserPrincipalAdapter userPrincipalAdapter = (UserPrincipalAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userPrincipalAdapter.getUser();
         if (!(user instanceof Recruiter recruiter)) {
@@ -182,7 +182,7 @@ public class JobServiceImpl implements JobService {
             throw new AccessDeniedException(messageService.getMessage("error.authorization.job.view"));
         }
 
-        Page<ApplicationResponse> responses = applicationService.getAllApplications(existingJob, pageRequest);
+        Page<ApplicationDetailResponse> responses = applicationService.getAllApplications(existingJob, pageRequest);
         return new PageImpl<>(responses.getContent(), pageRequest, responses.getTotalElements());
     }
 

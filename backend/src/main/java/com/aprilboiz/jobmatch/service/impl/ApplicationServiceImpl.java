@@ -44,34 +44,34 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ApplicationResponse> getAllApplications(PageRequest pageRequest) {
+    public Page<ApplicationDetailResponse> getAllApplications(PageRequest pageRequest) {
         Page<Application> applications = applicationRepository.findAll(pageRequest);
-        List<ApplicationResponse> responses = applications.getContent().stream()
-                .map(appMapper::applicationToApplicationResponse).toList();
+        List<ApplicationDetailResponse> responses = applications.getContent().stream()
+                .map(appMapper::applicationToApplicationDetailResponse).toList();
         return new PageImpl<>(responses, pageRequest, applications.getTotalElements());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ApplicationResponse> getAllApplications(Job job, PageRequest pageRequest) {
+    public Page<ApplicationDetailResponse> getAllApplications(Job job, PageRequest pageRequest) {
         Page<Application> applications = applicationRepository.findAllByJob(job, pageRequest);
-        List<ApplicationResponse> responses = applications.getContent().stream()
-                .map(appMapper::applicationToApplicationResponse).toList();
+        List<ApplicationDetailResponse> responses = applications.getContent().stream()
+                .map(appMapper::applicationToApplicationDetailResponse).toList();
         return new PageImpl<>(responses, pageRequest, applications.getTotalElements());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ApplicationResponse> getAllApplications(Candidate candidate, PageRequest pageRequest) {
+    public Page<ApplicationDetailResponse> getAllApplications(Candidate candidate, PageRequest pageRequest) {
         Page<Application> applications = applicationRepository.findAllByCandidate(candidate, pageRequest);
-        List<ApplicationResponse> responses = applications.getContent().stream()
-                .map(appMapper::applicationToApplicationResponse).toList();
+        List<ApplicationDetailResponse> responses = applications.getContent().stream()
+                .map(appMapper::applicationToApplicationDetailResponse).toList();
         return new PageImpl<>(responses, pageRequest, applications.getTotalElements());
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ApplicationDetailResponse createApplication(ApplicationRequest request) {
+    public ApplicationResponse createApplication(ApplicationRequest request) {
         UserPrincipalAdapter userPrincipalAdapter = (UserPrincipalAdapter) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal();
         User user = userPrincipalAdapter.getUser();
@@ -83,7 +83,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ApplicationDetailResponse createApplication(ApplicationRequest request, Candidate candidate) {
+    public ApplicationResponse createApplication(ApplicationRequest request, Candidate candidate) {
         Job existingJob = jobRepository.findById(request.getJobId()).orElseThrow(
                 () -> new NotFoundException(messageService.getMessage("error.not.found.job", request.getJobId())));
         
@@ -116,7 +116,7 @@ public class ApplicationServiceImpl implements ApplicationService {
                 .build();
         Application savedApplication = applicationRepository.save(newApplication);
 
-        return appMapper.applicationToApplicationDetailResponse(savedApplication);
+        return appMapper.applicationToApplicationResponse(savedApplication);
     }
 
     @Override
@@ -193,10 +193,10 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ApplicationResponse> getApplicationsByStatus(Job job, ApplicationStatus status, PageRequest pageRequest) {
+    public Page<ApplicationDetailResponse> getApplicationsByStatus(Job job, ApplicationStatus status, PageRequest pageRequest) {
         Page<Application> applications = applicationRepository.findAllByJobAndStatus(job, status, pageRequest);
-        List<ApplicationResponse> responses = applications.getContent().stream()
-                .map(appMapper::applicationToApplicationResponse).toList();
+        List<ApplicationDetailResponse> responses = applications.getContent().stream()
+                .map(appMapper::applicationToApplicationDetailResponse).toList();
         return new PageImpl<>(responses, pageRequest, applications.getTotalElements());
     }
 

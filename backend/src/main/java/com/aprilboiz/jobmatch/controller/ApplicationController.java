@@ -73,7 +73,7 @@ public class ApplicationController {
     })
     @GetMapping
     @PreAuthorize("hasRole('CANDIDATE')")
-    public ResponseEntity<ApiResponse<Page<ApplicationResponse>>> getAllApplications(
+    public ResponseEntity<ApiResponse<Page<ApplicationDetailResponse>>> getAllApplications(
             @Parameter(description = "Pagination parameters") Pageable pageable,
             @AuthenticationPrincipal UserPrincipalAdapter userDetails) {
         User user = userDetails.getUser();
@@ -81,7 +81,7 @@ public class ApplicationController {
             throw new AccessDeniedException(messageService.getMessage("error.authorization.candidate.required"));
         }
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSortOr(Sort.by(Sort.Direction.DESC, "createdAt")));
-        Page<ApplicationResponse> applicationResponses = applicationService.getAllApplications(candidate, pageRequest);
+        Page<ApplicationDetailResponse> applicationResponses = applicationService.getAllApplications(candidate, pageRequest);
         String successMessage = messageService.getMessage("api.success.applications.retrieved");
         return ResponseEntity.ok(ApiResponse.success(successMessage, applicationResponses));
     }
@@ -178,7 +178,7 @@ public class ApplicationController {
     })
     @PostMapping
     @PreAuthorize("hasRole('CANDIDATE')")
-    public ResponseEntity<ApiResponse<ApplicationDetailResponse>> createApplication(
+    public ResponseEntity<ApiResponse<ApplicationResponse>> createApplication(
             @Parameter(description = "Application request data", required = true)
             @RequestBody @Valid ApplicationRequest applicationRequest,
             @AuthenticationPrincipal UserPrincipalAdapter userDetails) {
@@ -186,7 +186,7 @@ public class ApplicationController {
         if (!(user instanceof Candidate candidate)) {
             throw new AccessDeniedException(messageService.getMessage("error.authorization.candidate.required"));
         }
-        ApplicationDetailResponse applicationResponse = applicationService.createApplication(applicationRequest, candidate);
+        ApplicationResponse applicationResponse = applicationService.createApplication(applicationRequest, candidate);
         String successMessage = messageService.getMessage("api.success.created", "Application");
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(successMessage, applicationResponse));
     }
@@ -290,7 +290,7 @@ public class ApplicationController {
                     content = @Content(schema = @Schema(implementation = ApiResponse.Error.class))
             )
     })
-    @PutMapping("/applications/{id}/status")
+    @PutMapping("/{id}/status")
     @PreAuthorize("hasRole('RECRUITER')")
     public ResponseEntity<ApiResponse<ApplicationDetailResponse>> updateApplicationStatus(
             @Parameter(description = "Application ID", required = true, example = "1")

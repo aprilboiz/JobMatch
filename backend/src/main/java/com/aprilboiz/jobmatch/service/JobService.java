@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.aprilboiz.jobmatch.dto.request.JobRequest;
-import com.aprilboiz.jobmatch.dto.response.ApplicationResponse;
+import com.aprilboiz.jobmatch.dto.response.ApplicationDetailResponse;
 import com.aprilboiz.jobmatch.dto.response.JobResponse;
 import com.aprilboiz.jobmatch.enumerate.JobStatus;
 import com.aprilboiz.jobmatch.enumerate.JobType;
@@ -22,7 +22,7 @@ public interface JobService {
     Page<JobResponse> getAllJobs(PageRequest pageRequest);
     Page<JobResponse> getJobsByRecruiter(Recruiter recruiter, PageRequest pageRequest);
     Page<JobResponse> getJobsByCompany(Company company, PageRequest pageRequest);
-    Page<ApplicationResponse> getJobApplications(Long jobId, PageRequest pageRequest);
+    Page<ApplicationDetailResponse> getJobApplications(Long jobId, PageRequest pageRequest);
     
     // Search and filter method
     Page<JobResponse> searchAndFilterJobs(

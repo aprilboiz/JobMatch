@@ -24,4 +24,10 @@ public class ApplicationRequest {
     @NotNull(message = "{" + ValidationMessages.CV_ID_REQUIRED + "}")
     @Positive(message = "{" + ValidationMessages.CV_ID_POSITIVE + "}")
     private Long cvId;
+
+    @Schema(
+            description = "Cover letter",
+            example = "I am a software engineer with 5 years of experience in Java and Spring Boot"
+    )
+    private String coverLetter;
 }

@@ -37,4 +37,7 @@ public class Application extends AuditableEntity{
     @Builder.Default
     @Enumerated(EnumType.STRING)
     private ApplicationStatus status = ApplicationStatus.APPLIED;
+
+    @Column(columnDefinition = "TEXT")
+    private String coverLetter;
 }
