@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Date;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -35,6 +37,12 @@ public class JwtServiceImpl implements JwtService {
     @Value("${jwt.refresh-token-expiration}")
     private Long refreshTokenExpiration; // seconds
 
+    private String getUserRole(UserDetails userDetails) {
+        return userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+    }
+
     @Override
     public String generateAccessToken(UserDetails userDetails) {
         Date now = new Date();
@@ -42,6 +50,8 @@ public class JwtServiceImpl implements JwtService {
 
         return Jwts.builder()
                 .subject(userDetails.getUsername())
+                .claim("scope", getUserRole(userDetails))
+                .claim("token_type", "access")
                 .issuedAt(now)
                 .expiration(expirationDate)
                 .signWith(getSigningKey())
@@ -130,6 +140,7 @@ public class JwtServiceImpl implements JwtService {
 
         return Jwts.builder()
                 .subject(userDetails.getUsername())
+                .claim("token_type", "refresh")
                 .id(jti)
                 .issuedAt(now)
                 .expiration(expirationDate)

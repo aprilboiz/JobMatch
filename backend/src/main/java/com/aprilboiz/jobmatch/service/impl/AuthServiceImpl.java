@@ -1,8 +1,6 @@
 package com.aprilboiz.jobmatch.service.impl;
 
 import com.aprilboiz.jobmatch.dto.request.AuthRequest;
-import com.aprilboiz.jobmatch.dto.request.LogoutRequest;
-import com.aprilboiz.jobmatch.dto.request.RefreshTokenRequest;
 import com.aprilboiz.jobmatch.dto.request.RegisterRequest;
 import com.aprilboiz.jobmatch.dto.response.AuthResponse;
 import com.aprilboiz.jobmatch.model.UserPrincipalAdapter;
@@ -72,10 +70,14 @@ public class AuthServiceImpl implements AuthService {
         userService.createUser(registerRequest);
     }
 
+    /* 
+    * Refresh the access token only using the refresh token.
+    * If the refresh token is not valid, throw a BadCredentialsException.
+    * Force the user to login again.
+    */
     @Override
-    public AuthResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
+    public AuthResponse refreshToken(String refreshToken) {
         try {
-            String refreshToken = refreshTokenRequest.getRefreshToken();
             
             if (tokenBlacklistService.isTokenBlacklisted(refreshToken)) {
                 throw new BadCredentialsException(messageService.getMessage("auth.refresh.invalidated"));
@@ -92,17 +94,13 @@ public class AuthServiceImpl implements AuthService {
                 throw new BadCredentialsException(messageService.getMessage("auth.refresh.invalid"));
             }
             
-            String newAccessToken = jwtService.generateAccessToken(userDetails);
-            String newRefreshToken = jwtService.generateRefreshToken(userDetails);
-            
-            Duration timeToLive = Duration.ofSeconds(jwtService.getRefreshTokenExpirationTime());
-            tokenBlacklistService.blacklistToken(refreshToken, timeToLive);
+            String accessToken = jwtService.generateAccessToken(userDetails);
             
             log.info("Refresh token successful for user: {}", username);
             
             return AuthResponse.builder()
-                    .token(newAccessToken)
-                    .refreshToken(newRefreshToken)
+                    .token(accessToken)
+                    .refreshToken(refreshToken)
                     .expiresIn(jwtService.getExpirationTime())
                     .build();
                     
@@ -113,10 +111,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void logout(LogoutRequest logoutRequest) {
+    public void logout(String accessToken, String refreshToken) {
         try {
-            String accessToken = logoutRequest.getToken();
-            String refreshToken = logoutRequest.getRefreshToken();
             
             Duration accessTokenTtl = Duration.ofSeconds(jwtService.getExpirationTime());
             Duration refreshTokenTtl = Duration.ofSeconds(jwtService.getRefreshTokenExpirationTime());
