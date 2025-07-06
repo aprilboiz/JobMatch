@@ -68,7 +68,7 @@ export function JobApplicationForm({ job, onApplicationSubmitted }: JobApplicati
 
     setIsAnalyzing(true)
     try {
-      const response = await apiClient.getJobMatchScore(job.id, selectedCvId)
+      const response = await apiClient.getJobMatchScore(String(job.id), selectedCvId)
       if (response.success) {
         setMatchScore(response.data)
       } else {
@@ -95,7 +95,7 @@ export function JobApplicationForm({ job, onApplicationSubmitted }: JobApplicati
 
     setIsSubmitting(true)
     try {
-      await apiClient.applyToJob(job.id, selectedCvId, coverLetter)
+      await apiClient.createApplication({ jobId: String(job.id), cvId: selectedCvId, coverLetter: coverLetter })
 
       toast({
         title: "Application submitted!",
@@ -172,7 +172,7 @@ ${user.fullName}`,
             <Badge variant="outline">{job.company.name}</Badge>
           </CardTitle>
           <CardDescription>
-            {job.location} • {job.salary} • {job.type.replace("_", " ")}
+            {job.location} • {job.salary?.formattedSalary || "Negotiable"} • {job.jobType?.replace("_", " ") || "Unknown"}
           </CardDescription>
         </CardHeader>
       </Card>

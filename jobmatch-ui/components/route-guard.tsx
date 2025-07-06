@@ -21,40 +21,36 @@ export function RouteGuard({
   allowedRoles = [],
   fallbackPath = "/login",
 }: RouteGuardProps) {
-  const { user, isLoading, isAuthenticated, checkAuth } = useAuth()
+  const { user, isLoading, isAuthenticated } = useAuth()
   const router = useRouter()
   const pathname = usePathname()
   const [isChecking, setIsChecking] = useState(true)
 
   useEffect(() => {
-    const verifyAuth = async () => {
-      if (requireAuth && !isAuthenticated && !isLoading) {
-        // Store current path for redirect after login
-        localStorage.setItem("redirect_after_login", pathname)
-
-        // Try to check auth one more time
-        const authValid = await checkAuth()
-        if (!authValid) {
-          router.replace(fallbackPath)
-          return
-        }
-      }
-
-      // Check role permissions
-      if (requireAuth && isAuthenticated && allowedRoles.length > 0) {
-        if (!user || !allowedRoles.includes(user.role.roleName)) {
-          router.replace("/unauthorized")
-          return
-        }
-      }
-
-      setIsChecking(false)
+    // Don't check until auth context is fully loaded
+    if (isLoading) {
+      return
     }
 
-    if (!isLoading) {
-      verifyAuth()
+    // If auth is required but user is not authenticated, redirect to login
+    if (requireAuth && !isAuthenticated) {
+      // Store current path for redirect after login
+      localStorage.setItem("redirect_after_login", pathname)
+      router.replace(fallbackPath)
+      return
     }
-  }, [isAuthenticated, isLoading, user, requireAuth, allowedRoles, router, pathname, fallbackPath, checkAuth])
+
+    // Check role permissions if authenticated and roles are specified
+    if (requireAuth && isAuthenticated && allowedRoles.length > 0) {
+      if (!user || !allowedRoles.includes(user.role.roleName)) {
+        router.replace("/unauthorized")
+        return
+      }
+    }
+
+    // All checks passed
+    setIsChecking(false)
+  }, [isAuthenticated, isLoading, user?.role?.roleName, requireAuth, allowedRoles.join(','), pathname, fallbackPath, router])
 
   // Show loading state while checking authentication
   if (isLoading || isChecking) {

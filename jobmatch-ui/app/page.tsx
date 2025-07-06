@@ -61,7 +61,7 @@ export default function HomePage() {
   ]
 
   return (
-    <div className="bg-gradient-to-br from-background via-muted/20 to-muted/40">
+    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-muted/40">
       {/* Hero Section */}
       <section className="container py-20">
         <div className="text-center">
@@ -99,7 +99,7 @@ export default function HomePage() {
                   />
                 </div>
                 <Select value={jobType} onValueChange={setJobType}>
-                  <SelectTrigger className="h-full w-full">
+                  <SelectTrigger className="h-12">
                     <SelectValue placeholder="Job Type" />
                   </SelectTrigger>
                   <SelectContent>
@@ -110,7 +110,7 @@ export default function HomePage() {
                     <SelectItem value="INTERNSHIP">Internship</SelectItem>
                   </SelectContent>
                 </Select>
-                <Button className="h-12" asChild>
+                <Button className="h-12" size="lg" asChild>
                   <Link href="/jobs">Search Jobs</Link>
                 </Button>
               </div>
@@ -142,7 +142,7 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredJobs.map((job) => (
-              <Card key={job.id} className="hover:shadow-lg transition-all duration-300 group hover:cursor-pointer">
+              <Card key={job.id} className="hover:shadow-lg transition-all duration-300 group">
                 <CardHeader className="pb-4">
                   <div className="flex justify-between items-start mb-2">
                     <Badge variant="secondary">{job.type.replace("_", " ")}</Badge>

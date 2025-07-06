@@ -4,7 +4,7 @@ import type React from "react"
 import { createContext, useContext, useEffect, useState } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import { apiClient } from "@/lib/api"
-import { User, RegisterRequest } from "@/lib/types"
+import { User, RegisterRequest, BaseProfileUpdateRequest } from "@/lib/types"
 import { useToast } from "@/hooks/use-toast"
 import Cookies from "js-cookie"
 
@@ -12,10 +12,10 @@ interface AuthContextType {
   user: User | null
   isLoading: boolean
   isAuthenticated: boolean
-  login: (email: string, password: string, rememberMe?: boolean, redirectTo?: string) => Promise<void>
+  login: (email: string, password: string, redirectTo?: string) => Promise<void>
   register: (userData: RegisterRequest, redirectTo?: string) => Promise<void>
   logout: () => Promise<void>
-  updateProfile: (userData: Partial<User>) => Promise<void>
+  updateProfile: (userData: BaseProfileUpdateRequest) => Promise<void>
   checkAuth: () => Promise<boolean>
 }
 
@@ -31,6 +31,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isInitialized, setIsInitialized] = useState(false)
+  const [isInitializing, setIsInitializing] = useState(false)
+  const [isLoggingIn, setIsLoggingIn] = useState(false)
   const { toast } = useToast()
   const router = useRouter()
   const pathname = usePathname()
@@ -40,6 +42,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Initialize authentication state
   useEffect(() => {
     const initAuth = async () => {
+      if (isInitializing || isInitialized) return
+
+      setIsInitializing(true)
       try {
         const token = Cookies.get("auth_token")
         if (token) {
@@ -59,15 +64,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } finally {
         setIsLoading(false)
         setIsInitialized(true)
+        setIsInitializing(false)
       }
     }
 
     initAuth()
-  }, [])
+  }, [isInitializing, isInitialized])
 
   // Handle route protection and redirection
   useEffect(() => {
-    if (!isInitialized) return
+    if (!isInitialized || isLoggingIn) return
 
     console.log('Route protection check:', { pathname, isAuthenticated, user: user?.role?.roleName })
 
@@ -98,9 +104,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       localStorage.removeItem("redirect_after_login")
       router.replace(redirectTo)
     }
-  }, [isAuthenticated, pathname, router, isInitialized, user])
+  }, [isAuthenticated, pathname, router, isInitialized, user, isLoggingIn])
 
   const checkAuth = async (): Promise<boolean> => {
+    if (isInitializing) return false
+
     try {
       const token = Cookies.get("auth_token")
       if (!token) return false
@@ -122,22 +130,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  const login = async (email: string, password: string, rememberMe?: boolean, redirectTo?: string) => {
+  const login = async (email: string, password: string, redirectTo?: string) => {
     try {
       setIsLoading(true)
+      setIsLoggingIn(true)
       console.log('Login attempt with redirectTo:', redirectTo)
       const loginResponse = await apiClient.login({ email, password })
 
-      // Set token and user data
-      apiClient.setToken(loginResponse.data.token)
-      // Set refresh token cookie with or without expiration
-      if (loginResponse.data.refreshToken) {
-        if (rememberMe) {
-          Cookies.set("refresh_token", loginResponse.data.refreshToken, { expires: 7, secure: true, sameSite: "strict" })
-        } else {
-          Cookies.set("refresh_token", loginResponse.data.refreshToken, { secure: true, sameSite: "strict" })
-        }
-      }
+      // Login response only contains token, need to get user data separately
       const currentUserResponse = await apiClient.getCurrentUser()
       if (currentUserResponse.success) {
         setUser(currentUserResponse.data)
@@ -167,9 +167,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Clear stored redirect
       localStorage.removeItem("redirect_after_login")
 
-      // Instead of router.replace(destination):
+      // Use a small delay to ensure state updates are processed
+      setTimeout(() => {
+        router.replace(destination)
+        setIsLoggingIn(false)
+      }, 100)
     } catch (error) {
       console.error("Login error:", error)
+      setIsLoggingIn(false)
       toast({
         variant: "destructive",
         title: "Login failed",
@@ -212,10 +217,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = async () => {
     try {
       setIsLoading(true)
-      await apiClient.logout({
-        token: Cookies.get("auth_token") || "",
-        refreshToken: Cookies.get("refresh_token") || "",
-      })
+      await apiClient.logout()
     } catch (error) {
       console.error("Logout error:", error)
       // Continue with logout even if server request fails
@@ -239,7 +241,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  const updateProfile = async (userData: Partial<User>) => {
+  const updateProfile = async (userData: BaseProfileUpdateRequest) => {
     try {
       const response = await apiClient.updateProfile(userData)
       if (response.success) {

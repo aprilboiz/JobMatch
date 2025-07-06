@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -31,20 +31,11 @@ export default function RegisterPage() {
   const [errors, setErrors] = useState<Record<string, string[]>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const { register, isLoading, isAuthenticated } = useAuth()
+  const { register, isLoading } = useAuth()
   const router = useRouter()
   const searchParams = useSearchParams()
 
   const redirectTo = searchParams.get("redirect") || "/login"
-
-  // Redirect if already authenticated
-  useEffect(() => {
-    if (isAuthenticated && !isLoading) {
-      const destination = localStorage.getItem("redirect_after_login") || redirectTo
-      localStorage.removeItem("redirect_after_login")
-      router.replace(destination)
-    }
-  }, [isAuthenticated, isLoading, router, redirectTo])
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
@@ -107,7 +98,7 @@ export default function RegisterPage() {
   }
 
   // Don't render the form if user is already authenticated
-  if (isAuthenticated) {
+  if (isLoading) {
     return (
       <div className="bg-gradient-to-br from-background via-muted/20 to-muted/40 flex items-center justify-center min-h-96">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>

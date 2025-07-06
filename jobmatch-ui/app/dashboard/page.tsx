@@ -13,6 +13,7 @@ import { RouteGuard } from "@/components/route-guard"
 import { CVManager } from "@/components/cv-manager"
 import { AIJobMatcher } from "@/components/ai-job-matcher"
 import { RecruiterDashboard } from "@/components/recruiter-dashboard"
+import { RecruiterJobsManager } from "@/components/recruiter-jobs-manager"
 import { apiClient } from "@/lib/api"
 import { Application } from "@/lib/types"
 import { useToast } from "@/hooks/use-toast"
@@ -34,7 +35,7 @@ function DashboardContent() {
   const loadDashboardData = async () => {
     try {
       if (user?.role.roleName === "CANDIDATE") {
-        const response = await apiClient.getApplications({ limit: 10 })
+        const response = await apiClient.getApplications({ page: 0, size: 10 })
         if (response.success) {
           setApplications(response.data.content)
         } else {
@@ -119,7 +120,6 @@ function DashboardContent() {
               </>
             ) : (
               <>
-                <TabsTrigger className="hover:cursor-pointer" value="recruiter">Dashboard</TabsTrigger>
                 <TabsTrigger className="hover:cursor-pointer" value="jobs">My Jobs</TabsTrigger>
                 <TabsTrigger className="hover:cursor-pointer" value="analytics">Analytics</TabsTrigger>
               </>
@@ -319,23 +319,8 @@ function DashboardContent() {
             </>
           ) : (
             <>
-              <TabsContent className="hover:cursor-pointer" value="recruiter">
-                <RecruiterDashboard />
-              </TabsContent>
               <TabsContent className="hover:cursor-pointer" value="jobs">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>My Job Postings</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-center py-8">
-                      <Briefcase className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                      <p className="text-muted-foreground">No job postings yet</p>
-                      <p className="text-sm text-muted-foreground">Create your first job posting to get started</p>
-                      <Button className="mt-4" onClick={() => router.push("/jobs/create")}>Post a Job</Button>
-                    </div>
-                  </CardContent>
-                </Card>
+                <RecruiterJobsManager />
               </TabsContent>
               <TabsContent className="hover:cursor-pointer" value="analytics">
                 <Card>
