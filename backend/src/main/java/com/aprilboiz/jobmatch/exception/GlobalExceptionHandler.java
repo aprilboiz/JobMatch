@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({AuthorizationDeniedException.class, AccessDeniedException.class})
     public ResponseEntity<ApiResponse<Void>> handleAccessDeniedException(Exception ex) {
-        String errorMessage = messageService.getMessage("api.error.access.denied");
+        String errorMessage = ex.getMessage() != null ? ex.getMessage() : messageService.getMessage("api.error.access.denied");
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.error(errorMessage));
     }
 

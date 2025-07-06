@@ -11,9 +11,9 @@ spring:
   application:
     name: JobMatch
 
-  # .env Configuration
+  # .env Configuration (optional for Docker)
   config:
-    import: file:.env[.properties]
+    import: optional:file:.env[.properties]
 
   # Internationalization Configuration
   messages:

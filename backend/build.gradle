@@ -55,3 +55,15 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+// Enable layered JARs for Docker optimization
+jar {
+    enabled = false
+    archiveClassifier = ''
+}
+
+tasks.named('bootJar') {
+    layered {
+        enabled = true
+    }
+}

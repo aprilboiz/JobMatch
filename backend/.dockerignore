@@ -1,0 +1,55 @@
+# Build outputs
+build/
+target/
+*.jar
+*.war
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Version control
+.git/
+.gitignore
+.gitattributes
+
+# Logs
+*.log
+logs/
+
+# Runtime directories
+uploads/
+tmp/
+
+# Docker files (except the one we're building)
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Documentation
+*.md
+docs/
+
+# Test files
+src/test/
+
+# Gradle cache
+.gradle/
+# Keep gradle wrapper files - they're needed for the build
+# gradle/wrapper/gradle-wrapper.properties
+
+# Application specific
+backend.log
+tree.txt
+
+# Environment files
+# .env
+# .env.local
+# .env.*.local 
