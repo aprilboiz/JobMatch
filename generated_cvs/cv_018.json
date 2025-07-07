@@ -1,0 +1,76 @@
+{
+  "name": "EDWARD QUANG",
+  "profile": "Dedicated professional with passion for innovation and technology. Strong communication skills and ability to work effectively in fast-paced environments.",
+  "contact": {
+    "phone": "(254) 226-2880",
+    "email": "edward.quang@hotmail.com",
+    "address": "262 Main St., Los Angeles",
+    "website": null
+  },
+  "skills": [
+    "Git",
+    "Java",
+    "MongoDB",
+    "Kubernetes",
+    "Data Analysis",
+    "DevOps",
+    "Photoshop",
+    "SEO"
+  ],
+  "languages": [
+    "Spanish (Intermediate)",
+    "Japanese (Basics)",
+    "English (Fluent)",
+    "Chinese (Intermediate)"
+  ],
+  "education": [
+    {
+      "institution": "Đại học Bách Khoa Hà Nội",
+      "degree": "Thạc sĩ Kỹ thuật",
+      "years": "2019 - PRESENT"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Digital Dynamics",
+      "title": "Marketing Manager",
+      "years": "2015 - PRESENT"
+    },
+    {
+      "company": "Meta Platforms",
+      "title": "Operations Manager",
+      "years": "2021 - 2024"
+    },
+    {
+      "company": "Công ty TNHH ABC",
+      "title": "Marketing Specialist",
+      "years": "2018 - PRESENT"
+    },
+    {
+      "company": "Smart Systems",
+      "title": "Sales Executive",
+      "years": "2020 - PRESENT"
+    },
+    {
+      "company": "Apple Inc.",
+      "title": "Marketing Specialist",
+      "years": "2020 - 2024"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Maria White",
+      "role": "CTO",
+      "company": "NextGen Technologies",
+      "phone": "+33-2-60-477",
+      "email": "maria.white@outlook.com"
+    },
+    {
+      "name": "Laura White",
+      "role": "HR Director",
+      "company": "FPT Software",
+      "phone": "+1 918 664 1304",
+      "email": "laura.white@hotmail.com"
+    }
+  ]
+}

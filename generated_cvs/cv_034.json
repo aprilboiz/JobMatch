@@ -1,0 +1,73 @@
+{
+  "name": "EMILY PEREZ",
+  "profile": "Chuyên viên tài chính có kinh nghiệm trong phân tích dữ liệu và quản lý rủi ro. Kỹ năng giao tiếp và thuyết trình xuất sắc.",
+  "contact": {
+    "phone": "(589) 787-4190",
+    "email": "emily.perez@gmail.com",
+    "address": "30 Main St., Chicago",
+    "website": null
+  },
+  "skills": [
+    "Negotiation",
+    "Business Development",
+    "Lead Generation",
+    "Pipeline Management",
+    "Cold Calling",
+    "Customer Relationship",
+    "Accounting",
+    "SAP",
+    "Financial Analysis"
+  ],
+  "languages": [
+    "Japanese (Basics)",
+    "Chinese (Intermediate)",
+    "Russian (Basics)",
+    "Spanish (Intermediate)"
+  ],
+  "education": [
+    {
+      "institution": "Business Academy",
+      "degree": "Thạc sĩ Quản trị Kinh doanh",
+      "years": "2015 - PRESENT",
+      "gpa": "3.3 / 4.0"
+    }
+  ],
+  "experience": [
+    {
+      "company": "TechFlow Solutions",
+      "title": "Quản lý Dự án",
+      "years": "2021 - 2022"
+    },
+    {
+      "company": "DataSoft Corp",
+      "title": "Sales Executive",
+      "years": "2019 - 2021"
+    },
+    {
+      "company": "Microsoft Corporation",
+      "title": "Team Lead",
+      "years": "2023 - 2025"
+    },
+    {
+      "company": "Google Inc.",
+      "title": "Software Engineer",
+      "years": "2021 - 2025"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Rebecca Sơn",
+      "role": "CTO",
+      "company": "Grab Vietnam",
+      "phone": "(760) 254-1478",
+      "email": "rebecca.sơn@outlook.com"
+    },
+    {
+      "name": "Lý Thị Scott",
+      "role": "CEO",
+      "company": "Meta Platforms",
+      "phone": "+1-266-931-1689",
+      "email": "lý.thị.scott@company.com"
+    }
+  ]
+}

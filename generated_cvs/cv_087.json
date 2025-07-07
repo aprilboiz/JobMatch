@@ -1,0 +1,69 @@
+{
+  "name": "LAURA HÀ",
+  "profile": "Nhân viên marketing năng động với kinh nghiệm trong quản lý thương hiệu và phát triển chiến lược truyền thông. Có khả năng làm việc nhóm tốt.",
+  "contact": {
+    "phone": "+1 731 574 2819",
+    "email": "laura.hà@outlook.com",
+    "address": "731 Park Rd., Houston",
+    "website": "www.laurahà.com"
+  },
+  "skills": [
+    "React",
+    "Scrum",
+    "Node.js",
+    "Performance Management"
+  ],
+  "languages": [
+    "Russian (Basics)",
+    "Japanese (Basics)",
+    "Spanish (Intermediate)",
+    "French (Fluent)"
+  ],
+  "education": [
+    {
+      "institution": "Đại học RMIT",
+      "degree": "Bachelor of Business",
+      "years": "2019 - 2022"
+    },
+    {
+      "institution": "Đại học RMIT",
+      "degree": "Bachelor of Finance",
+      "years": "2017 - PRESENT",
+      "gpa": "3.1 / 4.0"
+    },
+    {
+      "institution": "Đại học Công nghệ Thông tin",
+      "degree": "Cử nhân Công nghệ Thông tin",
+      "years": "2017 - 2024",
+      "gpa": "3.1 / 4.0"
+    }
+  ],
+  "experience": [
+    {
+      "company": "VNG Corporation",
+      "title": "Chuyên viên Marketing",
+      "years": "2019 - PRESENT"
+    },
+    {
+      "company": "Innovation Labs",
+      "title": "Team Lead",
+      "years": "2021 - PRESENT"
+    }
+  ],
+  "reference": [
+    {
+      "name": "George Johnson",
+      "role": "Team Lead",
+      "company": "Fauget Studio",
+      "phone": "+1 356 689 2709",
+      "email": "george.johnson@company.com"
+    },
+    {
+      "name": "Nguyễn Văn Phong",
+      "role": "CTO",
+      "company": "DataSoft Corp",
+      "phone": "(752) 417-9068",
+      "email": "nguyễn.van.phong@gmail.com"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "name": "JESSICA PHONG",
+  "profile": "Results-oriented business professional with expertise in project management and team leadership. Committed to excellence and continuous improvement in all endeavors.",
+  "contact": {
+    "phone": "+1 428 707 1772",
+    "email": "jessica.phong@company.com",
+    "address": "887 Park Rd., Đà Nẵng",
+    "website": null
+  },
+  "skills": [
+    "CI/CD",
+    "Node.js",
+    "MongoDB",
+    "Java",
+    "Linux",
+    "AWS",
+    "Interviewing",
+    "Performance Management"
+  ],
+  "languages": [
+    "Chinese (Intermediate)",
+    "Spanish (Intermediate)",
+    "Vietnamese (Native)"
+  ],
+  "education": [
+    {
+      "institution": "Yale University",
+      "degree": "Bachelor of Business",
+      "years": "2020 - PRESENT",
+      "gpa": "2.5 / 4.0"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Netflix Inc.",
+      "title": "Data Scientist",
+      "years": "2017 - PRESENT"
+    },
+    {
+      "company": "DataSoft Corp",
+      "title": "Tư vấn Kinh doanh",
+      "years": "2023 - 2024"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Anthony Xuân",
+      "role": "Director",
+      "company": "TechFlow Solutions",
+      "phone": "(+84) 97 821 8944",
+      "email": "anthony.xuan@hotmail.com"
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "name": "RICHARD SƠN",
+  "profile": "Dedicated professional with passion for innovation and technology. Strong communication skills and ability to work effectively in fast-paced environments.",
+  "contact": {
+    "phone": "+1 475 339 9146",
+    "email": "richard.sơn@yahoo.com",
+    "address": "285 Second Ave., Hà Nội",
+    "website": null
+  },
+  "skills": [
+    "Agile",
+    "Data Analysis",
+    "CI/CD",
+    "AWS",
+    "Linux",
+    "Docker",
+    "React",
+    "Performance Management",
+    "HR Policies",
+    "Training & Development"
+  ],
+  "languages": [
+    "English (Fluent)",
+    "Vietnamese (Native)",
+    "Korean (Intermediate)"
+  ],
+  "education": [
+    {
+      "institution": "Đại học Công nghệ Thông tin",
+      "degree": "Cử nhân Kinh tế",
+      "years": "2022 - 2024",
+      "gpa": "2.8 / 4.0"
+    },
+    {
+      "institution": "Đại học RMIT",
+      "degree": "Cử nhân Công nghệ Thông tin",
+      "years": "2020 - PRESENT",
+      "gpa": "3.0 / 4.0"
+    },
+    {
+      "institution": "Harvard University",
+      "degree": "Cử nhân Công nghệ Thông tin",
+      "years": "2018 - PRESENT",
+      "gpa": "2.8 / 4.0"
+    }
+  ],
+  "experience": [
+    {
+      "company": "TechFlow Solutions",
+      "title": "Product Manager",
+      "years": "2021 - PRESENT"
+    },
+    {
+      "company": "VNG Corporation",
+      "title": "DevOps Engineer",
+      "years": "2017 - 2024"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Brian Garcia",
+      "role": "CTO",
+      "company": "Shopee Vietnam",
+      "phone": "(676) 763-9408",
+      "email": "brian.garcia@outlook.com"
+    },
+    {
+      "name": "Emma Walker",
+      "role": "CEO",
+      "company": "Creative Agency",
+      "phone": "0111-741-3302",
+      "email": "emma.walker@gmail.com"
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "name": "REBECCA THOMAS",
+  "profile": "Dynamic marketing specialist with proven track record in digital campaigns and brand management. Skilled in data-driven decision making and customer engagement strategies.",
+  "contact": {
+    "phone": "(820) 415-9056",
+    "email": "rebecca.thomas@gmail.com",
+    "address": "22 Main St., TP.HCM",
+    "website": "www.rebeccathomas.com"
+  },
+  "skills": [
+    "Interviewing",
+    "Payroll",
+    "Training & Development",
+    "Employee Relations",
+    "Recruitment",
+    "HR Policies",
+    "Talent Acquisition",
+    "Lead Generation",
+    "Negotiation",
+    "Pipeline Management"
+  ],
+  "languages": [
+    "English (Fluent)",
+    "Russian (Basics)"
+  ],
+  "education": [
+    {
+      "institution": "Princeton University",
+      "degree": "Bachelor of Marketing",
+      "years": "2021 - PRESENT",
+      "gpa": "2.6 / 4.0"
+    },
+    {
+      "institution": "MIT",
+      "degree": "Bachelor of Information Technology",
+      "years": "2017 - 2018",
+      "gpa": "2.7 / 4.0"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Apple Inc.",
+      "title": "DevOps Engineer",
+      "years": "2020 - 2024"
+    },
+    {
+      "company": "Viettel Group",
+      "title": "Nhân viên IT",
+      "years": "2018 - PRESENT"
+    },
+    {
+      "company": "Shopee Vietnam",
+      "title": "Data Scientist",
+      "years": "2019 - PRESENT"
+    },
+    {
+      "company": "Innovation Labs",
+      "title": "Tư vấn Kinh doanh",
+      "years": "2016 - 2025"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Steven Long",
+      "role": "Team Lead",
+      "company": "Borcelle Studio",
+      "phone": "(971) 884-8989",
+      "email": "steven.long@hotmail.com"
+    },
+    {
+      "name": "Brian Bình",
+      "role": "CTO",
+      "company": "Shopee Vietnam",
+      "phone": "0829-345-6654",
+      "email": "brian.bình@yahoo.com"
+    },
+    {
+      "name": "Emma Khoa",
+      "role": "Director",
+      "company": "Netflix Inc.",
+      "phone": "0920-225-4270",
+      "email": "emma.khoa@gmail.com"
+    }
+  ]
+}

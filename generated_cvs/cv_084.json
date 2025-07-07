@@ -1,0 +1,54 @@
+{
+  "name": "CHRISTOPHER ADAMS",
+  "profile": "Creative problem solver with strong analytical skills and attention to detail. Experienced in cross-functional collaboration and stakeholder management.",
+  "contact": {
+    "phone": "(+84) 99 356 1843",
+    "email": "christopher.adams@gmail.com",
+    "address": "494 Main St., Hà Nội",
+    "website": null
+  },
+  "skills": [
+    "Cold Calling",
+    "Pipeline Management",
+    "Sales Strategy",
+    "Lead Generation",
+    "Business Development",
+    "CRM",
+    "JavaScript",
+    "Linux"
+  ],
+  "languages": [
+    "French (Fluent)",
+    "Japanese (Basics)",
+    "English (Fluent)"
+  ],
+  "education": [
+    {
+      "institution": "Đại học Quốc gia Hà Nội",
+      "degree": "Master of Data Science",
+      "years": "2016 - 2025",
+      "gpa": "3.7 / 4.0"
+    }
+  ],
+  "experience": [
+    {
+      "company": "NextGen Technologies",
+      "title": "Software Engineer",
+      "years": "2019 - 2020"
+    },
+    {
+      "company": "FPT Software",
+      "title": "DevOps Engineer",
+      "years": "2017 - PRESENT"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Richard Clark",
+      "role": "Director",
+      "company": "Vingroup",
+      "phone": "+33-8-28-230",
+      "email": "richard.clark@yahoo.com"
+    }
+  ]
+}

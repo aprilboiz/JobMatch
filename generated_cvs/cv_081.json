@@ -1,0 +1,88 @@
+{
+  "name": "MARK HERNANDEZ",
+  "profile": "Dynamic marketing specialist with proven track record in digital campaigns and brand management. Skilled in data-driven decision making and customer engagement strategies.",
+  "contact": {
+    "phone": "(+84) 96 964 6139",
+    "email": "mark.hernandez@outlook.com",
+    "address": "7 Main St., Chicago",
+    "website": "www.markhernandez.com"
+  },
+  "skills": [
+    "Recruitment",
+    "Talent Acquisition",
+    "Payroll",
+    "Performance Management",
+    "HR Policies",
+    "Interviewing",
+    "Linux",
+    "Docker"
+  ],
+  "languages": [
+    "Russian (Basics)",
+    "Spanish (Intermediate)"
+  ],
+  "education": [
+    {
+      "institution": "Yale University",
+      "degree": "Master of Business Management",
+      "years": "2023 - 2025"
+    },
+    {
+      "institution": "Business Academy",
+      "degree": "Master of Data Science",
+      "years": "2016 - 2022",
+      "gpa": "3.7 / 4.0"
+    },
+    {
+      "institution": "Đại học Quốc gia Hà Nội",
+      "degree": "Master of Business Management",
+      "years": "2016 - PRESENT",
+      "gpa": "3.3 / 4.0"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Smart Systems",
+      "title": "Tư vấn Kinh doanh",
+      "years": "2016 - PRESENT"
+    },
+    {
+      "company": "Vingroup",
+      "title": "Quản lý Dự án",
+      "years": "2022 - 2025"
+    },
+    {
+      "company": "Future Works",
+      "title": "UX Designer",
+      "years": "2020 - PRESENT"
+    },
+    {
+      "company": "Smart Systems",
+      "title": "Marketing Specialist",
+      "years": "2016 - 2018"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Amy White",
+      "role": "Team Lead",
+      "company": "Netflix Inc.",
+      "phone": "(832) 287-7139",
+      "email": "amy.white@outlook.com"
+    },
+    {
+      "name": "Lisa Nguyen",
+      "role": "CEO",
+      "company": "DataSoft Corp",
+      "phone": "(+84) 95 295 6873",
+      "email": "lisa.nguyen@hotmail.com"
+    },
+    {
+      "name": "John Young",
+      "role": "Team Lead",
+      "company": "NextGen Technologies",
+      "phone": "+1 840 493 7937",
+      "email": "john.young@company.com"
+    }
+  ]
+}

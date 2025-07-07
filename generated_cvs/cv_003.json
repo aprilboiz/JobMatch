@@ -1,0 +1,73 @@
+{
+  "name": "SAMANTHA GARCIA",
+  "profile": "Chuyên viên tài chính có kinh nghiệm trong phân tích dữ liệu và quản lý rủi ro. Kỹ năng giao tiếp và thuyết trình xuất sắc.",
+  "contact": {
+    "phone": "0130-628-1572",
+    "email": "samantha.garcia@yahoo.com",
+    "address": "869 Second Ave., Hà Nội",
+    "website": null
+  },
+  "skills": [
+    "Performance Management",
+    "Talent Acquisition",
+    "Payroll",
+    "Employee Relations",
+    "Interviewing",
+    "HR Policies",
+    "Brand Management",
+    "Canva",
+    "Email Marketing"
+  ],
+  "languages": [
+    "Russian (Basics)",
+    "French (Fluent)",
+    "Japanese (Basics)",
+    "German (Basics)"
+  ],
+  "education": [
+    {
+      "institution": "Columbia University",
+      "degree": "Master of Engineering",
+      "years": "2020 - PRESENT",
+      "gpa": "2.7 / 4.0"
+    },
+    {
+      "institution": "Business Academy",
+      "degree": "Master of Computer Science",
+      "years": "2023 - 2024",
+      "gpa": "2.6 / 4.0"
+    },
+    {
+      "institution": "Đại học RMIT",
+      "degree": "Bachelor of Marketing",
+      "years": "2020 - PRESENT",
+      "gpa": "3.1 / 4.0"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Borcelle Studio",
+      "title": "Project Manager",
+      "years": "2019 - 2020"
+    },
+    {
+      "company": "NextGen Technologies",
+      "title": "Marketing Manager",
+      "years": "2017 - 2022"
+    },
+    {
+      "company": "Meta Platforms",
+      "title": "Sales Executive",
+      "years": "2015 - PRESENT"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Anna Robinson",
+      "role": "HR Director",
+      "company": "TechFlow Solutions",
+      "phone": "+1-355-497-6983",
+      "email": "anna.robinson@outlook.com"
+    }
+  ]
+}

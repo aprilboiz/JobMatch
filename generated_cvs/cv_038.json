@@ -1,0 +1,61 @@
+{
+  "name": "KATHLEEN VIỆT",
+  "profile": "Results-oriented business professional with expertise in project management and team leadership. Committed to excellence and continuous improvement in all endeavors.",
+  "contact": {
+    "phone": "(+84) 94 339 6117",
+    "email": "kathleen.việt@hotmail.com",
+    "address": "730 First St., Hà Nội",
+    "website": null
+  },
+  "skills": [
+    "Risk Management",
+    "QuickBooks",
+    "Accounting",
+    "Employee Relations",
+    "Payroll",
+    "Training & Development"
+  ],
+  "languages": [
+    "Vietnamese (Native)",
+    "Korean (Intermediate)",
+    "French (Fluent)"
+  ],
+  "education": [
+    {
+      "institution": "Tech Institute",
+      "degree": "Bachelor of Finance",
+      "years": "2018 - PRESENT"
+    },
+    {
+      "institution": "NYU",
+      "degree": "Thạc sĩ Kỹ thuật",
+      "years": "2015 - 2022"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Creative Agency",
+      "title": "Software Engineer",
+      "years": "2021 - PRESENT"
+    },
+    {
+      "company": "Borcelle Studio",
+      "title": "DevOps Engineer",
+      "years": "2018 - 2024"
+    },
+    {
+      "company": "Meta Platforms",
+      "title": "Business Analyst",
+      "years": "2018 - PRESENT"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Lý Thị Johnson",
+      "role": "Manager",
+      "company": "Amazon Web Services",
+      "phone": "0489-719-6203",
+      "email": "lý.thị.johnson@hotmail.com"
+    }
+  ]
+}

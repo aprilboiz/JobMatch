@@ -1,0 +1,85 @@
+{
+  "name": "NGUYỄN VĂN VIỆT",
+  "profile": "Creative problem solver with strong analytical skills and attention to detail. Experienced in cross-functional collaboration and stakeholder management.",
+  "contact": {
+    "phone": "0972-477-1516",
+    "email": "nguyễn.van.việt@yahoo.com",
+    "address": "12 Park Rd., Los Angeles",
+    "website": "www.nguyễn vănviệt.com"
+  },
+  "skills": [
+    "Pipeline Management",
+    "CRM",
+    "Sales Strategy",
+    "Negotiation",
+    "Cold Calling",
+    "Customer Relationship",
+    "Lead Generation",
+    "Business Development",
+    "Agile",
+    "Git",
+    "JavaScript"
+  ],
+  "languages": [
+    "Russian (Basics)",
+    "Vietnamese (Native)",
+    "English (Fluent)"
+  ],
+  "education": [
+    {
+      "institution": "Đại học Công nghệ Thông tin",
+      "degree": "Master of Computer Science",
+      "years": "2017 - PRESENT"
+    },
+    {
+      "institution": "UC Berkeley",
+      "degree": "Master of Business Administration",
+      "years": "2020 - PRESENT"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Innovation Labs",
+      "title": "Project Manager",
+      "years": "2018 - PRESENT"
+    },
+    {
+      "company": "Fauget Studio",
+      "title": "Project Manager",
+      "years": "2023 - PRESENT"
+    },
+    {
+      "company": "Shopee Vietnam",
+      "title": "Operations Manager",
+      "years": "2016 - PRESENT"
+    },
+    {
+      "company": "Global Enterprises",
+      "title": "Business Analyst",
+      "years": "2017 - PRESENT"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Cao Minh Nam",
+      "role": "HR Director",
+      "company": "Innovation Labs",
+      "phone": "+1 834 285 8122",
+      "email": "cao.minh.nam@gmail.com"
+    },
+    {
+      "name": "Hoàng Đức Tùng",
+      "role": "Director",
+      "company": "Amazon Web Services",
+      "phone": "+1 262 467 6116",
+      "email": "hoàng.dức.tùng@yahoo.com"
+    },
+    {
+      "name": "Nicole Thành",
+      "role": "Director",
+      "company": "Tập đoàn XYZ",
+      "phone": "0473-134-5792",
+      "email": "nicole.thành@gmail.com"
+    }
+  ]
+}

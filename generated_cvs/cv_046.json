@@ -1,0 +1,63 @@
+{
+  "name": "LÊ MINH NGUYEN",
+  "profile": "Creative problem solver with strong analytical skills and attention to detail. Experienced in cross-functional collaboration and stakeholder management.",
+  "contact": {
+    "phone": "+1 224 715 8197",
+    "email": "le.minh.nguyen@outlook.com",
+    "address": "557 Second Ave., Phoenix",
+    "website": "www.lê minhnguyen.com"
+  },
+  "skills": [
+    "CRM",
+    "Photoshop",
+    "Canva",
+    "Email Marketing",
+    "Financial Modeling"
+  ],
+  "languages": [
+    "French (Fluent)",
+    "Chinese (Intermediate)"
+  ],
+  "education": [
+    {
+      "institution": "Đại học Bách Khoa Hà Nội",
+      "degree": "Thạc sĩ Kỹ thuật",
+      "years": "2019 - 2021"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Công ty TNHH ABC",
+      "title": "UX Designer",
+      "years": "2017 - PRESENT"
+    },
+    {
+      "company": "Vingroup",
+      "title": "UX Designer",
+      "years": "2022 - 2025"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Christopher Scott",
+      "role": "CTO",
+      "company": "Microsoft Corporation",
+      "phone": "(259) 837-8402",
+      "email": "christopher.scott@gmail.com"
+    },
+    {
+      "name": "Emma Xuân",
+      "role": "Team Lead",
+      "company": "Netflix Inc.",
+      "phone": "+1-846-992-3070",
+      "email": "emma.xuan@hotmail.com"
+    },
+    {
+      "name": "Stephanie Young",
+      "role": "Manager",
+      "company": "Google Inc.",
+      "phone": "+1 905 679 5164",
+      "email": "stephanie.young@hotmail.com"
+    }
+  ]
+}

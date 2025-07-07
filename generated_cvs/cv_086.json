@@ -1,0 +1,92 @@
+{
+  "name": "SARAH ROBINSON",
+  "profile": "Chuyên gia có kinh nghiệm trong lĩnh vực công nghệ thông tin với khả năng phân tích và giải quyết vấn đề hiệu quả. Đam mê phát triển sản phẩm công nghệ.",
+  "contact": {
+    "phone": "+33-3-43-638",
+    "email": "sarah.robinson@yahoo.com",
+    "address": "120 First St., Chicago",
+    "website": null
+  },
+  "skills": [
+    "SEO",
+    "Campaign Management",
+    "Brand Management",
+    "Social Media",
+    "Content Marketing",
+    "Photoshop",
+    "Training & Development"
+  ],
+  "languages": [
+    "Russian (Basics)",
+    "Japanese (Basics)"
+  ],
+  "education": [
+    {
+      "institution": "Đại học Bách Khoa Hà Nội",
+      "degree": "Master of Computer Science",
+      "years": "2015 - PRESENT"
+    },
+    {
+      "institution": "NYU",
+      "degree": "Thạc sĩ Kỹ thuật",
+      "years": "2021 - PRESENT",
+      "gpa": "3.5 / 4.0"
+    },
+    {
+      "institution": "Đại học Bách Khoa Hà Nội",
+      "degree": "Bachelor of Computer Science",
+      "years": "2020 - PRESENT",
+      "gpa": "3.2 / 4.0"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Tập đoàn XYZ",
+      "title": "Quản lý Dự án",
+      "years": "2023 - 2024"
+    },
+    {
+      "company": "Borcelle Studio",
+      "title": "Product Manager",
+      "years": "2022 - PRESENT"
+    },
+    {
+      "company": "Wardiere Inc.",
+      "title": "Financial Analyst",
+      "years": "2015 - 2023"
+    },
+    {
+      "company": "Meta Platforms",
+      "title": "Account Manager",
+      "years": "2021 - 2025"
+    },
+    {
+      "company": "Smart Systems",
+      "title": "DevOps Engineer",
+      "years": "2020 - PRESENT"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Emily Xuân",
+      "role": "CEO",
+      "company": "Amazon Web Services",
+      "phone": "(+84) 95 558 7154",
+      "email": "emily.xuan@outlook.com"
+    },
+    {
+      "name": "Richard Hà",
+      "role": "Team Lead",
+      "company": "Tesla Motors",
+      "phone": "(250) 371-3789",
+      "email": "richard.hà@hotmail.com"
+    },
+    {
+      "name": "Maria Thomas",
+      "role": "CEO",
+      "company": "Viettel Group",
+      "phone": "0995-880-7006",
+      "email": "maria.thomas@yahoo.com"
+    }
+  ]
+}

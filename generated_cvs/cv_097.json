@@ -1,0 +1,74 @@
+{
+  "name": "WILLIAM TÙNG",
+  "profile": "Dedicated professional with passion for innovation and technology. Strong communication skills and ability to work effectively in fast-paced environments.",
+  "contact": {
+    "phone": "+1 984 888 6888",
+    "email": "william.tùng@gmail.com",
+    "address": "446 First St., TP.HCM",
+    "website": "www.williamtùng.com"
+  },
+  "skills": [
+    "Accounting",
+    "Risk Management",
+    "Financial Modeling",
+    "QuickBooks",
+    "Campaign Management"
+  ],
+  "languages": [
+    "German (Basics)",
+    "Korean (Intermediate)",
+    "Spanish (Intermediate)"
+  ],
+  "education": [
+    {
+      "institution": "Yale University",
+      "degree": "Master of Business Management",
+      "years": "2021 - PRESENT"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Tập đoàn XYZ",
+      "title": "HR Specialist",
+      "years": "2020 - PRESENT"
+    },
+    {
+      "company": "Smart Systems",
+      "title": "Product Manager",
+      "years": "2023 - PRESENT"
+    },
+    {
+      "company": "Borcelle Studio",
+      "title": "Marketing Manager",
+      "years": "2022 - 2023"
+    },
+    {
+      "company": "Innovation Labs",
+      "title": "HR Specialist",
+      "years": "2020 - 2025"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Paul King",
+      "role": "CTO",
+      "company": "Global Enterprises",
+      "phone": "+1 535 869 6182",
+      "email": "paul.king@yahoo.com"
+    },
+    {
+      "name": "Brian Garcia",
+      "role": "Director",
+      "company": "Meta Platforms",
+      "phone": "(802) 930-6919",
+      "email": "brian.garcia@gmail.com"
+    },
+    {
+      "name": "Võ Văn Walker",
+      "role": "CTO",
+      "company": "Grab Vietnam",
+      "phone": "(+84) 90 435 7415",
+      "email": "võ.van.walker@gmail.com"
+    }
+  ]
+}

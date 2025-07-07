@@ -1,0 +1,68 @@
+{
+  "name": "STEPHANIE HARRIS",
+  "profile": "Chuyên viên tài chính có kinh nghiệm trong phân tích dữ liệu và quản lý rủi ro. Kỹ năng giao tiếp và thuyết trình xuất sắc.",
+  "contact": {
+    "phone": "0174-785-6321",
+    "email": "stephanie.harris@outlook.com",
+    "address": "620 Second Ave., Los Angeles",
+    "website": "www.stephanieharris.com"
+  },
+  "skills": [
+    "CI/CD",
+    "DevOps",
+    "Java",
+    "Email Marketing"
+  ],
+  "languages": [
+    "Chinese (Intermediate)",
+    "Korean (Intermediate)",
+    "French (Fluent)"
+  ],
+  "education": [
+    {
+      "institution": "Đại học Công nghệ Thông tin",
+      "degree": "Bachelor of Business",
+      "years": "2015 - 2023"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Tesla Motors",
+      "title": "Operations Manager",
+      "years": "2021 - 2023"
+    },
+    {
+      "company": "Vingroup",
+      "title": "Product Manager",
+      "years": "2016 - 2025"
+    },
+    {
+      "company": "Borcelle Studio",
+      "title": "Data Scientist",
+      "years": "2019 - PRESENT"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Rebecca Anderson",
+      "role": "Director",
+      "company": "Global Enterprises",
+      "phone": "+1-888-365-3280",
+      "email": "rebecca.anderson@outlook.com"
+    },
+    {
+      "name": "Jessica Walker",
+      "role": "CEO",
+      "company": "Tesla Motors",
+      "phone": "+1-978-992-1116",
+      "email": "jessica.walker@hotmail.com"
+    },
+    {
+      "name": "Madison Dũng",
+      "role": "Director",
+      "company": "VNG Corporation",
+      "phone": "(+84) 94 734 7123",
+      "email": "madison.dũng@yahoo.com"
+    }
+  ]
+}

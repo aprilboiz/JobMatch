@@ -1,0 +1,75 @@
+{
+  "name": "WILLIAM DŨNG",
+  "profile": "Chuyên gia có kinh nghiệm trong lĩnh vực công nghệ thông tin với khả năng phân tích và giải quyết vấn đề hiệu quả. Đam mê phát triển sản phẩm công nghệ.",
+  "contact": {
+    "phone": "(+84) 93 774 3274",
+    "email": "william.dũng@outlook.com",
+    "address": "901 Main St., Đà Nẵng",
+    "website": "www.williamdũng.com"
+  },
+  "skills": [
+    "QuickBooks",
+    "Accounting",
+    "Financial Modeling",
+    "Risk Management",
+    "Excel",
+    "Sales Strategy"
+  ],
+  "languages": [
+    "Chinese (Intermediate)",
+    "German (Basics)"
+  ],
+  "education": [
+    {
+      "institution": "Đại học RMIT",
+      "degree": "Bachelor of Finance",
+      "years": "2021 - PRESENT",
+      "gpa": "2.7 / 4.0"
+    },
+    {
+      "institution": "Đại học Kinh tế Quốc dân",
+      "degree": "Master of Business Management",
+      "years": "2018 - PRESENT"
+    },
+    {
+      "institution": "Princeton University",
+      "degree": "Cử nhân Công nghệ Thông tin",
+      "years": "2019 - 2022"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Viettel Group",
+      "title": "UX Designer",
+      "years": "2015 - 2021"
+    },
+    {
+      "company": "Grab Vietnam",
+      "title": "Tư vấn Kinh doanh",
+      "years": "2023 - 2025"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Vũ Thị Martin",
+      "role": "Manager",
+      "company": "SpaceX Corporation",
+      "phone": "+1 654 663 4028",
+      "email": "vũ.thị.martin@company.com"
+    },
+    {
+      "name": "Stephanie An",
+      "role": "Manager",
+      "company": "NextGen Technologies",
+      "phone": "+1-855-927-1811",
+      "email": "stephanie.an@hotmail.com"
+    },
+    {
+      "name": "Dương Thị Martin",
+      "role": "CTO",
+      "company": "Tập đoàn XYZ",
+      "phone": "0799-557-1172",
+      "email": "duơng.thị.martin@yahoo.com"
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "name": "DANIEL WILLIAMS",
+  "profile": "Dynamic marketing specialist with proven track record in digital campaigns and brand management. Skilled in data-driven decision making and customer engagement strategies.",
+  "contact": {
+    "phone": "+1-794-789-7898",
+    "email": "daniel.williams@yahoo.com",
+    "address": "288 Main St., New York",
+    "website": "www.danielwilliams.com"
+  },
+  "skills": [
+    "Talent Acquisition",
+    "Training & Development",
+    "Performance Management",
+    "Employee Relations",
+    "Recruitment",
+    "Interviewing",
+    "Java"
+  ],
+  "languages": [
+    "Japanese (Basics)",
+    "Chinese (Intermediate)",
+    "English (Fluent)"
+  ],
+  "education": [
+    {
+      "institution": "Đại học FPT",
+      "degree": "Thạc sĩ Quản trị Kinh doanh",
+      "years": "2022 - 2023"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Creative Agency",
+      "title": "Product Manager",
+      "years": "2016 - PRESENT"
+    },
+    {
+      "company": "Tập đoàn XYZ",
+      "title": "Operations Manager",
+      "years": "2023 - PRESENT"
+    },
+    {
+      "company": "Shopee Vietnam",
+      "title": "DevOps Engineer",
+      "years": "2019 - 2023"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Bùi Minh Gonzalez",
+      "role": "HR Director",
+      "company": "Innovation Labs",
+      "phone": "(531) 323-4269",
+      "email": "bùi.minh.gonzalez@outlook.com"
+    },
+    {
+      "name": "Laura Flores",
+      "role": "HR Director",
+      "company": "Viettel Group",
+      "phone": "+33-1-87-725",
+      "email": "laura.flores@gmail.com"
+    },
+    {
+      "name": "Cynthia Bình",
+      "role": "CTO",
+      "company": "SpaceX Corporation",
+      "phone": "(+84) 93 235 4344",
+      "email": "cynthia.bình@company.com"
+    }
+  ]
+}

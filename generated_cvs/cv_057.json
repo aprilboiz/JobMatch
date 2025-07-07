@@ -1,0 +1,64 @@
+{
+  "name": "CAO MINH TAYLOR",
+  "profile": "Dynamic marketing specialist with proven track record in digital campaigns and brand management. Skilled in data-driven decision making and customer engagement strategies.",
+  "contact": {
+    "phone": "0619-575-2782",
+    "email": "cao.minh.taylor@gmail.com",
+    "address": "336 Oak Ave., Phoenix",
+    "website": null
+  },
+  "skills": [
+    "Sales Strategy",
+    "Cold Calling",
+    "Customer Relationship",
+    "Lead Generation",
+    "Business Development",
+    "CRM",
+    "Recruitment",
+    "Training & Development",
+    "Interviewing"
+  ],
+  "languages": [
+    "German (Basics)",
+    "Japanese (Basics)",
+    "French (Fluent)"
+  ],
+  "education": [
+    {
+      "institution": "Wardiere University",
+      "degree": "Bachelor of Computer Science",
+      "years": "2018 - PRESENT"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Công ty TNHH ABC",
+      "title": "Financial Analyst",
+      "years": "2019 - 2020"
+    },
+    {
+      "company": "Google Inc.",
+      "title": "Product Manager",
+      "years": "2021 - 2023"
+    },
+    {
+      "company": "SpaceX Corporation",
+      "title": "Account Manager",
+      "years": "2020 - PRESENT"
+    },
+    {
+      "company": "Fauget Studio",
+      "title": "Operations Manager",
+      "years": "2023 - 2024"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Trần Thị Allen",
+      "role": "CTO",
+      "company": "Creative Agency",
+      "phone": "0976-291-7807",
+      "email": "trần.thị.allen@gmail.com"
+    }
+  ]
+}

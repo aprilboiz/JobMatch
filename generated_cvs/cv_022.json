@@ -1,0 +1,70 @@
+{
+  "name": "ELIZABETH ALLEN",
+  "profile": "Experienced professional with strong background in technology and innovation. Passionate about delivering high-quality solutions and driving business growth through strategic initiatives.",
+  "contact": {
+    "phone": "(+84) 98 558 3193",
+    "email": "elizabeth.allen@hotmail.com",
+    "address": "908 Second Ave., Phoenix",
+    "website": null
+  },
+  "skills": [
+    "Cold Calling",
+    "CRM",
+    "Business Development",
+    "Lead Generation",
+    "Scrum",
+    "SQL"
+  ],
+  "languages": [
+    "Korean (Intermediate)",
+    "Spanish (Intermediate)"
+  ],
+  "education": [
+    {
+      "institution": "UC Berkeley",
+      "degree": "Cử nhân Kinh tế",
+      "years": "2022 - PRESENT",
+      "gpa": "3.3 / 4.0"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Vingroup",
+      "title": "Project Manager",
+      "years": "2016 - 2017"
+    },
+    {
+      "company": "Fauget Studio",
+      "title": "Account Manager",
+      "years": "2018 - PRESENT"
+    },
+    {
+      "company": "Google Inc.",
+      "title": "Account Manager",
+      "years": "2015 - PRESENT"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Nguyễn Văn Allen",
+      "role": "Manager",
+      "company": "DataSoft Corp",
+      "phone": "+1 980 463 6515",
+      "email": "nguyễn.van.allen@gmail.com"
+    },
+    {
+      "name": "Mark White",
+      "role": "Director",
+      "company": "Global Enterprises",
+      "phone": "(+84) 91 312 7578",
+      "email": "mark.white@company.com"
+    },
+    {
+      "name": "Matthew Thomas",
+      "role": "Manager",
+      "company": "Vingroup",
+      "phone": "+1 397 305 8561",
+      "email": "matthew.thomas@gmail.com"
+    }
+  ]
+}

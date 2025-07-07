@@ -1,0 +1,55 @@
+{
+  "name": "VÕ VĂN WILLIAMS",
+  "profile": "Chuyên gia có kinh nghiệm trong lĩnh vực công nghệ thông tin với khả năng phân tích và giải quyết vấn đề hiệu quả. Đam mê phát triển sản phẩm công nghệ.",
+  "contact": {
+    "phone": "+1-774-920-7625",
+    "email": "võ.van.williams@gmail.com",
+    "address": "893 First St., TP.HCM",
+    "website": null
+  },
+  "skills": [
+    "Payroll",
+    "HR Policies",
+    "Talent Acquisition",
+    "Performance Management",
+    "Employee Relations",
+    "Recruitment",
+    "Training & Development",
+    "Interviewing",
+    "Kubernetes"
+  ],
+  "languages": [
+    "Spanish (Intermediate)",
+    "Japanese (Basics)",
+    "German (Basics)",
+    "French (Fluent)"
+  ],
+  "education": [
+    {
+      "institution": "Đại học FPT",
+      "degree": "Master of Data Science",
+      "years": "2021 - PRESENT"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Global Enterprises",
+      "title": "Chuyên viên Marketing",
+      "years": "2017 - PRESENT"
+    },
+    {
+      "company": "SpaceX Corporation",
+      "title": "UX Designer",
+      "years": "2020 - 2022"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Lê Minh Thành",
+      "role": "Manager",
+      "company": "NextGen Technologies",
+      "phone": "+1-796-629-9885",
+      "email": "le.minh.thành@outlook.com"
+    }
+  ]
+}

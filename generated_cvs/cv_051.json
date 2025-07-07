@@ -1,0 +1,69 @@
+{
+  "name": "AMANDA SCOTT",
+  "profile": "Chuyên gia có kinh nghiệm trong lĩnh vực công nghệ thông tin với khả năng phân tích và giải quyết vấn đề hiệu quả. Đam mê phát triển sản phẩm công nghệ.",
+  "contact": {
+    "phone": "(+84) 96 123 4773",
+    "email": "amanda.scott@hotmail.com",
+    "address": "103 Oak Ave., TP.HCM",
+    "website": null
+  },
+  "skills": [
+    "Business Development",
+    "Sales Strategy",
+    "CRM",
+    "Facebook Ads",
+    "Brand Management",
+    "Copywriting"
+  ],
+  "languages": [
+    "Japanese (Basics)",
+    "Russian (Basics)",
+    "Chinese (Intermediate)"
+  ],
+  "education": [
+    {
+      "institution": "Yale University",
+      "degree": "Master of Computer Science",
+      "years": "2018 - PRESENT",
+      "gpa": "3.6 / 4.0"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Meta Platforms",
+      "title": "Financial Analyst",
+      "years": "2016 - PRESENT"
+    },
+    {
+      "company": "DataSoft Corp",
+      "title": "UX Designer",
+      "years": "2020 - PRESENT"
+    },
+    {
+      "company": "Fauget Studio",
+      "title": "Marketing Manager",
+      "years": "2020 - PRESENT"
+    },
+    {
+      "company": "Smart Systems",
+      "title": "Financial Analyst",
+      "years": "2017 - 2023"
+    }
+  ],
+  "reference": [
+    {
+      "name": "James King",
+      "role": "Director",
+      "company": "Tập đoàn XYZ",
+      "phone": "+1 977 862 1229",
+      "email": "james.king@hotmail.com"
+    },
+    {
+      "name": "Mark Lopez",
+      "role": "Manager",
+      "company": "Tập đoàn XYZ",
+      "phone": "+33-8-88-536",
+      "email": "mark.lopez@company.com"
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "name": "LÝ THỊ FLORES",
+  "profile": "Nhân viên marketing năng động với kinh nghiệm trong quản lý thương hiệu và phát triển chiến lược truyền thông. Có khả năng làm việc nhóm tốt.",
+  "contact": {
+    "phone": "+33-1-45-185",
+    "email": "lý.thị.flores@company.com",
+    "address": "107 Second Ave., New York",
+    "website": "www.lý thịflores.com"
+  },
+  "skills": [
+    "HR Policies",
+    "Training & Development",
+    "Performance Management",
+    "Talent Acquisition",
+    "Email Marketing",
+    "Google Ads"
+  ],
+  "languages": [
+    "Korean (Intermediate)",
+    "Spanish (Intermediate)"
+  ],
+  "education": [
+    {
+      "institution": "MIT",
+      "degree": "Thạc sĩ Quản trị Kinh doanh",
+      "years": "2015 - 2019",
+      "gpa": "2.9 / 4.0"
+    },
+    {
+      "institution": "MIT",
+      "degree": "Thạc sĩ Quản trị Kinh doanh",
+      "years": "2016 - 2021",
+      "gpa": "3.3 / 4.0"
+    },
+    {
+      "institution": "NYU",
+      "degree": "Bachelor of Business",
+      "years": "2023 - 2025",
+      "gpa": "2.7 / 4.0"
+    }
+  ],
+  "experience": [
+    {
+      "company": "VNG Corporation",
+      "title": "Marketing Manager",
+      "years": "2018 - PRESENT"
+    },
+    {
+      "company": "Apple Inc.",
+      "title": "Account Manager",
+      "years": "2017 - PRESENT"
+    },
+    {
+      "company": "NextGen Technologies",
+      "title": "Business Analyst",
+      "years": "2022 - PRESENT"
+    },
+    {
+      "company": "Wardiere Inc.",
+      "title": "Sales Executive",
+      "years": "2020 - PRESENT"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Kenneth Jackson",
+      "role": "HR Director",
+      "company": "TechFlow Solutions",
+      "phone": "(+84) 90 517 3468",
+      "email": "kenneth.jackson@hotmail.com"
+    },
+    {
+      "name": "Cynthia Johnson",
+      "role": "Team Lead",
+      "company": "Apple Inc.",
+      "phone": "+33-2-80-580",
+      "email": "cynthia.johnson@yahoo.com"
+    }
+  ]
+}

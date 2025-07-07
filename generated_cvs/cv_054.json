@@ -1,0 +1,79 @@
+{
+  "name": "TRẦN THỊ THOMPSON",
+  "profile": "Dedicated professional with passion for innovation and technology. Strong communication skills and ability to work effectively in fast-paced environments.",
+  "contact": {
+    "phone": "(824) 620-4375",
+    "email": "trần.thị.thompson@yahoo.com",
+    "address": "996 First St., Houston",
+    "website": "www.trần thịthompson.com"
+  },
+  "skills": [
+    "Performance Management",
+    "Employee Relations",
+    "HR Policies",
+    "Training & Development",
+    "Payroll",
+    "Talent Acquisition",
+    "Recruitment",
+    "Cold Calling",
+    "Pipeline Management"
+  ],
+  "languages": [
+    "Japanese (Basics)",
+    "French (Fluent)",
+    "Korean (Intermediate)"
+  ],
+  "education": [
+    {
+      "institution": "Business Academy",
+      "degree": "Master of Business Management",
+      "years": "2023 - 2025"
+    },
+    {
+      "institution": "Đại học FPT",
+      "degree": "Bachelor of Business",
+      "years": "2022 - 2023",
+      "gpa": "3.1 / 4.0"
+    },
+    {
+      "institution": "MIT",
+      "degree": "Thạc sĩ Quản trị Kinh doanh",
+      "years": "2019 - PRESENT"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Meta Platforms",
+      "title": "Marketing Manager",
+      "years": "2017 - PRESENT"
+    },
+    {
+      "company": "Global Enterprises",
+      "title": "Quản lý Dự án",
+      "years": "2018 - 2021"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Paul Clark",
+      "role": "Team Lead",
+      "company": "Netflix Inc.",
+      "phone": "+1-306-618-4711",
+      "email": "paul.clark@company.com"
+    },
+    {
+      "name": "Christopher Wright",
+      "role": "Manager",
+      "company": "VNG Corporation",
+      "phone": "0123-735-3226",
+      "email": "christopher.wright@yahoo.com"
+    },
+    {
+      "name": "Christopher Scott",
+      "role": "Director",
+      "company": "TechFlow Solutions",
+      "phone": "0775-715-7426",
+      "email": "christopher.scott@gmail.com"
+    }
+  ]
+}

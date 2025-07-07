@@ -1,0 +1,79 @@
+{
+  "name": "KATHLEEN ADAMS",
+  "profile": "Chuyên gia có kinh nghiệm trong lĩnh vực công nghệ thông tin với khả năng phân tích và giải quyết vấn đề hiệu quả. Đam mê phát triển sản phẩm công nghệ.",
+  "contact": {
+    "phone": "0590-767-9042",
+    "email": "kathleen.adams@company.com",
+    "address": "464 First St., Phoenix",
+    "website": "www.kathleenadams.com"
+  },
+  "skills": [
+    "AWS",
+    "Agile",
+    "MongoDB",
+    "Python",
+    "Docker",
+    "JavaScript",
+    "Customer Relationship"
+  ],
+  "languages": [
+    "Chinese (Intermediate)",
+    "Japanese (Basics)",
+    "English (Fluent)",
+    "Korean (Intermediate)"
+  ],
+  "education": [
+    {
+      "institution": "Global University",
+      "degree": "Master of Data Science",
+      "years": "2019 - 2021",
+      "gpa": "3.7 / 4.0"
+    },
+    {
+      "institution": "UC Berkeley",
+      "degree": "Cử nhân Kinh tế",
+      "years": "2020 - 2023"
+    },
+    {
+      "institution": "Đại học Kinh tế Quốc dân",
+      "degree": "Master of Computer Science",
+      "years": "2021 - PRESENT",
+      "gpa": "3.8 / 4.0"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Innovation Labs",
+      "title": "Business Analyst",
+      "years": "2016 - PRESENT"
+    },
+    {
+      "company": "Digital Dynamics",
+      "title": "Software Engineer",
+      "years": "2015 - PRESENT"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Nguyễn Văn Sanchez",
+      "role": "Team Lead",
+      "company": "Smart Systems",
+      "phone": "+1-302-315-3429",
+      "email": "nguyễn.van.sanchez@company.com"
+    },
+    {
+      "name": "Stephanie Bình",
+      "role": "HR Director",
+      "company": "Borcelle Studio",
+      "phone": "0166-446-4256",
+      "email": "stephanie.bình@hotmail.com"
+    },
+    {
+      "name": "Steven Hưng",
+      "role": "Manager",
+      "company": "TechFlow Solutions",
+      "phone": "+1-665-861-4645",
+      "email": "steven.hung@yahoo.com"
+    }
+  ]
+}

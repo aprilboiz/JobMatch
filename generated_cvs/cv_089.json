@@ -1,0 +1,65 @@
+{
+  "name": "EMMA GARCIA",
+  "profile": "Results-oriented business professional with expertise in project management and team leadership. Committed to excellence and continuous improvement in all endeavors.",
+  "contact": {
+    "phone": "(851) 522-7040",
+    "email": "emma.garcia@gmail.com",
+    "address": "714 Main St., Đà Nẵng",
+    "website": null
+  },
+  "skills": [
+    "REST API",
+    "DevOps",
+    "Agile",
+    "Node.js",
+    "Pipeline Management",
+    "Customer Relationship"
+  ],
+  "languages": [
+    "Russian (Basics)",
+    "French (Fluent)",
+    "Spanish (Intermediate)"
+  ],
+  "education": [
+    {
+      "institution": "Stanford University",
+      "degree": "Bachelor of Marketing",
+      "years": "2017 - PRESENT"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Creative Agency",
+      "title": "Marketing Manager",
+      "years": "2022 - PRESENT"
+    },
+    {
+      "company": "Amazon Web Services",
+      "title": "Account Manager",
+      "years": "2018 - PRESENT"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Matthew Clark",
+      "role": "Director",
+      "company": "Netflix Inc.",
+      "phone": "(+84) 90 984 2266",
+      "email": "matthew.clark@outlook.com"
+    },
+    {
+      "name": "Paul Thành",
+      "role": "Team Lead",
+      "company": "DataSoft Corp",
+      "phone": "+33-6-71-401",
+      "email": "paul.thành@outlook.com"
+    },
+    {
+      "name": "Brian Wilson",
+      "role": "HR Director",
+      "company": "Netflix Inc.",
+      "phone": "+1-731-802-9754",
+      "email": "brian.wilson@company.com"
+    }
+  ]
+}

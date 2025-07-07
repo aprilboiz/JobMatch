@@ -1,0 +1,78 @@
+{
+  "name": "MICHAEL THÀNH",
+  "profile": "Experienced professional with strong background in technology and innovation. Passionate about delivering high-quality solutions and driving business growth through strategic initiatives.",
+  "contact": {
+    "phone": "+33-9-46-886",
+    "email": "michael.thành@hotmail.com",
+    "address": "548 Second Ave., New York",
+    "website": "www.michaelthành.com"
+  },
+  "skills": [
+    "SEO",
+    "Photoshop",
+    "Canva",
+    "Copywriting",
+    "Google Ads",
+    "Analytics",
+    "Risk Management",
+    "Taxation",
+    "Accounting"
+  ],
+  "languages": [
+    "French (Fluent)",
+    "English (Fluent)",
+    "Russian (Basics)"
+  ],
+  "education": [
+    {
+      "institution": "MIT",
+      "degree": "Cử nhân Kinh tế",
+      "years": "2023 - PRESENT"
+    },
+    {
+      "institution": "NYU",
+      "degree": "Master of Business Administration",
+      "years": "2020 - PRESENT"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Innovation Labs",
+      "title": "Nhân viên IT",
+      "years": "2021 - 2022"
+    },
+    {
+      "company": "Vingroup",
+      "title": "Marketing Specialist",
+      "years": "2017 - PRESENT"
+    },
+    {
+      "company": "Creative Agency",
+      "title": "Quản lý Dự án",
+      "years": "2017 - PRESENT"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Lê Minh Thành",
+      "role": "Director",
+      "company": "Fauget Studio",
+      "phone": "+1-709-900-8699",
+      "email": "le.minh.thành@yahoo.com"
+    },
+    {
+      "name": "Lý Thị Wright",
+      "role": "CEO",
+      "company": "Amazon Web Services",
+      "phone": "+1-770-890-5369",
+      "email": "lý.thị.wright@gmail.com"
+    },
+    {
+      "name": "Emily Wright",
+      "role": "Director",
+      "company": "NextGen Technologies",
+      "phone": "(+84) 96 974 1435",
+      "email": "emily.wright@yahoo.com"
+    }
+  ]
+}

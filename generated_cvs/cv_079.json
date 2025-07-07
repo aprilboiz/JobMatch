@@ -1,0 +1,63 @@
+{
+  "name": "ANNA VIỆT",
+  "profile": "Dynamic marketing specialist with proven track record in digital campaigns and brand management. Skilled in data-driven decision making and customer engagement strategies.",
+  "contact": {
+    "phone": "+1-528-625-1528",
+    "email": "anna.việt@hotmail.com",
+    "address": "940 Second Ave., Phoenix",
+    "website": null
+  },
+  "skills": [
+    "Training & Development",
+    "Recruitment",
+    "Payroll",
+    "HR Policies",
+    "CRM",
+    "Customer Relationship"
+  ],
+  "languages": [
+    "Vietnamese (Native)",
+    "Korean (Intermediate)",
+    "Russian (Basics)",
+    "Japanese (Basics)"
+  ],
+  "education": [
+    {
+      "institution": "Harvard University",
+      "degree": "Bachelor of Marketing",
+      "years": "2017 - 2024",
+      "gpa": "3.3 / 4.0"
+    },
+    {
+      "institution": "MIT",
+      "degree": "Master of Computer Science",
+      "years": "2022 - PRESENT"
+    },
+    {
+      "institution": "NYU",
+      "degree": "Cử nhân Công nghệ Thông tin",
+      "years": "2017 - PRESENT"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Vingroup",
+      "title": "UX Designer",
+      "years": "2021 - 2023"
+    },
+    {
+      "company": "Creative Agency",
+      "title": "Account Manager",
+      "years": "2019 - 2023"
+    }
+  ],
+  "reference": [
+    {
+      "name": "Matthew Việt",
+      "role": "Manager",
+      "company": "NextGen Technologies",
+      "phone": "(999) 437-7176",
+      "email": "matthew.việt@company.com"
+    }
+  ]
+}
