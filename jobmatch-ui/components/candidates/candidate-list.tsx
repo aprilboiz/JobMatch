@@ -433,6 +433,8 @@ export function CandidateList({ jobId, locale, dictionary }: CandidateListProps)
                         setPendingStatusChange({ applicationId, newStatus })
                         setIsStatusDialogOpen(true)
                     }}
+                    locale={locale}
+                    dictionary={dictionary}
                 />
             )}
             <Dialog open={isStatusDialogOpen} onOpenChange={setIsStatusDialogOpen}>

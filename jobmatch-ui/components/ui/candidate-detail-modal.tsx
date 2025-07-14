@@ -37,9 +37,10 @@ import {
     validatePhoneNumber,
 } from "@/lib/candidate-utils"
 import type { ApplicationStatus } from "@/lib/types"
-import { CandidateWithApplication } from "@/lib/types"
+import { CandidateWithApplication, Dictionary } from "@/lib/types"
 import { ApiError } from "@/lib/api"
 import { useState } from "react"
+import { t } from "@/lib/i18n-client"
 
 
 
@@ -48,6 +49,8 @@ interface CandidateDetailModalProps {
     onClose: () => void
     candidate: CandidateWithApplication | null
     onStatusUpdate?: (applicationId: string, newStatus: ApplicationStatus) => Promise<void>
+    locale: string
+    dictionary: Dictionary
 }
 
 const STATUS_ICONS = {
@@ -58,7 +61,7 @@ const STATUS_ICONS = {
     X,
 }
 
-export function CandidateDetailModal({ isOpen, onClose, candidate, onStatusUpdate }: CandidateDetailModalProps) {
+export function CandidateDetailModal({ isOpen, onClose, candidate, onStatusUpdate, locale, dictionary }: CandidateDetailModalProps) {
     const {
         isUpdating,
         error,
@@ -101,7 +104,7 @@ export function CandidateDetailModal({ isOpen, onClose, candidate, onStatusUpdat
                 <DialogContent className="sm:max-w-md">
                     <Alert variant="destructive">
                         <AlertCircle className="h-4 w-4" />
-                        <AlertDescription>No candidate data available. Please try again.</AlertDescription>
+                        <AlertDescription>{t(dictionary, "candidateModal.noCandidateData")}</AlertDescription>
                     </Alert>
                 </DialogContent>
             </Dialog>
@@ -120,24 +123,24 @@ export function CandidateDetailModal({ isOpen, onClose, candidate, onStatusUpdat
             <Dialog open={isStatusDialogOpen} onOpenChange={setIsStatusDialogOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Confirm Status Change</DialogTitle>
+                        <DialogTitle>{t(dictionary, "candidateModal.confirmStatusChange")}</DialogTitle>
                         <DialogDescription>
-                            Changing the application status is <b>one-way</b> and cannot be undone.<br />
+                            {t(dictionary, "candidateModal.statusChangeWarning")}<br />
                             <span>
-                                <b>Current status:</b> {candidate?.status.replace('_', ' ')}<br />
-                                <b>Destination status:</b> {pendingStatus?.replace('_', ' ')}
+                                <b>{t(dictionary, "candidateModal.currentStatus")}:</b> {candidate?.status.replace('_', ' ')}<br />
+                                <b>{t(dictionary, "candidateModal.destinationStatus")}:</b> {pendingStatus?.replace('_', ' ')}
                             </span>
-                            <br />Are you sure you want to proceed?
+                            <br />{t(dictionary, "candidateModal.confirmProceed")}
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
-                        <Button variant="outline" onClick={() => { setIsStatusDialogOpen(false); setPendingStatus(null) }}>Cancel</Button>
+                        <Button variant="outline" onClick={() => { setIsStatusDialogOpen(false); setPendingStatus(null) }}>{t(dictionary, "button.cancel")}</Button>
                         <Button
                             variant="destructive"
                             onClick={confirmStatusChange}
                             disabled={isUpdating}
                         >
-                            Yes, Change Status
+                            {t(dictionary, "candidateModal.yesChangeStatus")}
                         </Button>
                     </DialogFooter>
                 </DialogContent>
@@ -165,12 +168,12 @@ export function CandidateDetailModal({ isOpen, onClose, candidate, onStatusUpdat
                                         {statusConfig.label}
                                     </Badge>
                                     <span className="text-sm text-muted-foreground">
-                                        Applied {formatApplicationDate(candidate.appliedDate)}
+                                        {t(dictionary, "candidateModal.applied")} {formatApplicationDate(candidate.appliedDate)}
                                     </span>
                                     {candidate.analysis?.score && scoreMetrics && (
                                         <Badge variant="outline" className={`${scoreMetrics.color} border-current`}>
                                             <Brain className="w-3 h-3 mr-1" />
-                                            {Math.round(candidate.analysis.score)}% Match
+                                            {Math.round(candidate.analysis.score)}% {t(dictionary, "candidateModal.match")}
                                         </Badge>
                                     )}
                                 </div>
@@ -189,7 +192,7 @@ export function CandidateDetailModal({ isOpen, onClose, candidate, onStatusUpdat
                                 <CardHeader>
                                     <CardTitle className="flex items-center text-lg">
                                         <User className="w-5 h-5 mr-2" />
-                                        Contact Information
+                                        {t(dictionary, "candidateModal.contactInformation")}
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent className="space-y-4">
@@ -199,11 +202,11 @@ export function CandidateDetailModal({ isOpen, onClose, candidate, onStatusUpdat
                                                 <Mail className="w-5 h-5 text-blue-600" />
                                             </div>
                                             <div className="min-w-0 flex-1">
-                                                <p className="text-sm font-medium">Email</p>
+                                                <p className="text-sm font-medium">{t(dictionary, "candidateModal.email")}</p>
                                                 <p className={`text-sm truncate ${isValidEmail ? "text-gray-600" : "text-red-500"}`}>
                                                     {candidate.candidate.email}
                                                 </p>
-                                                {!isValidEmail && <p className="text-xs text-red-500">Invalid email format</p>}
+                                                {!isValidEmail && <p className="text-xs text-red-500">{t(dictionary, "candidateModal.invalidEmailFormat")}</p>}
                                             </div>
                                         </div>
                                         <Button
@@ -214,7 +217,7 @@ export function CandidateDetailModal({ isOpen, onClose, candidate, onStatusUpdat
                                             className="flex-shrink-0 bg-transparent"
                                         >
                                             <Mail className="w-4 h-4 mr-1" />
-                                            Email
+                                            {t(dictionary, "candidateModal.email")}
                                         </Button>
                                     </div>
 
@@ -225,11 +228,11 @@ export function CandidateDetailModal({ isOpen, onClose, candidate, onStatusUpdat
                                                     <Phone className="w-5 h-5 text-green-600" />
                                                 </div>
                                                 <div className="min-w-0 flex-1">
-                                                    <p className="text-sm font-medium">Phone</p>
+                                                    <p className="text-sm font-medium">{t(dictionary, "candidateModal.phone")}</p>
                                                     <p className={`text-sm ${isValidPhone ? "text-gray-600" : "text-red-500"}`}>
                                                         {candidate.candidate.phoneNumber}
                                                     </p>
-                                                    {!isValidPhone && <p className="text-xs text-red-500">Invalid phone format</p>}
+                                                    {!isValidPhone && <p className="text-xs text-red-500">{t(dictionary, "candidateModal.invalidPhoneFormat")}</p>}
                                                 </div>
                                             </div>
                                             <Button
@@ -240,7 +243,7 @@ export function CandidateDetailModal({ isOpen, onClose, candidate, onStatusUpdat
                                                 className="flex-shrink-0 bg-transparent"
                                             >
                                                 <Phone className="w-4 h-4 mr-1" />
-                                                Call
+                                                {t(dictionary, "candidateModal.call")}
                                             </Button>
                                         </div>
                                     )}
@@ -253,7 +256,7 @@ export function CandidateDetailModal({ isOpen, onClose, candidate, onStatusUpdat
                                     <CardHeader>
                                         <CardTitle className="flex items-center text-lg">
                                             <FileText className="w-5 h-5 mr-2" />
-                                            Resume/CV
+                                            {t(dictionary, "candidateModal.resumeCV")}
                                         </CardTitle>
                                     </CardHeader>
                                     <CardContent>
@@ -266,14 +269,14 @@ export function CandidateDetailModal({ isOpen, onClose, candidate, onStatusUpdat
                                                     <p className="font-medium text-sm truncate">
                                                         {candidate.candidate.fullName}'s CV
                                                     </p>
-                                                    <p className="text-xs text-gray-500">Resume Document</p>
+                                                    <p className="text-xs text-gray-500">{t(dictionary, "candidateModal.resumeDocument")}</p>
                                                 </div>
                                             </div>
 
                                             <div className="space-y-2">
                                                 <Button className="w-full" onClick={() => handleCVAction("download")}>
                                                     <Download className="w-4 h-4 mr-2" />
-                                                    Download CV
+                                                    {t(dictionary, "candidateModal.downloadCV")}
                                                 </Button>
                                                 <Button
                                                     variant="outline"
@@ -281,7 +284,7 @@ export function CandidateDetailModal({ isOpen, onClose, candidate, onStatusUpdat
                                                     onClick={() => handleCVAction("view")}
                                                 >
                                                     <ExternalLink className="w-4 h-4 mr-2" />
-                                                    View CV
+                                                    {t(dictionary, "candidateModal.viewCV")}
                                                 </Button>
                                             </div>
                                         </div>
@@ -292,12 +295,12 @@ export function CandidateDetailModal({ isOpen, onClose, candidate, onStatusUpdat
                                     <CardHeader>
                                         <CardTitle className="flex items-center text-lg">
                                             <FileText className="w-5 h-5 mr-2" />
-                                            Resume/CV
+                                            {t(dictionary, "candidateModal.resumeCV")}
                                         </CardTitle>
                                     </CardHeader>
                                     <CardContent>
                                         <div className="p-4 bg-gray-50 rounded-lg">
-                                            <p className="text-sm text-muted-foreground text-center">No CV uploaded by this candidate.</p>
+                                            <p className="text-sm text-muted-foreground text-center">{t(dictionary, "candidateModal.noCVUploaded")}</p>
                                         </div>
                                     </CardContent>
                                 </Card>
@@ -309,7 +312,7 @@ export function CandidateDetailModal({ isOpen, onClose, candidate, onStatusUpdat
                                     <CardHeader>
                                         <CardTitle className="flex items-center text-lg">
                                             <FileText className="w-5 h-5 mr-2" />
-                                            Cover Letter
+                                            {t(dictionary, "candidateModal.coverLetter")}
                                         </CardTitle>
                                     </CardHeader>
                                     <CardContent>
@@ -329,13 +332,13 @@ export function CandidateDetailModal({ isOpen, onClose, candidate, onStatusUpdat
                                     <CardHeader>
                                         <CardTitle className="flex items-center text-lg">
                                             <Target className="w-5 h-5 mr-2" />
-                                            Job Match Score
+                                            {t(dictionary, "candidateModal.jobMatchScore")}
                                         </CardTitle>
                                     </CardHeader>
                                     <CardContent>
                                         <div className="flex flex-col space-y-3">
                                             <div className="flex items-center justify-between">
-                                                <span className="text-sm text-muted-foreground">Overall Match</span>
+                                                <span className="text-sm text-muted-foreground">{t(dictionary, "candidateModal.overallMatch")}</span>
                                                 <div className="flex items-center gap-2">
                                                     <Badge variant="outline" className={scoreMetrics.color}>
                                                         {scoreMetrics.label}
@@ -347,9 +350,72 @@ export function CandidateDetailModal({ isOpen, onClose, candidate, onStatusUpdat
                                             </div>
                                             <Progress value={candidate.analysis.score} className="h-3 mb-3" />
                                             <p className="text-sm text-muted-foreground">
-                                                This candidate matches {Math.round(candidate.analysis.score)}% of job requirements
+                                                {t(dictionary, "candidateModal.matchPercentage").replace("{percentage}", Math.round(candidate.analysis.score).toString())}
                                             </p>
                                         </div>
+                                    </CardContent>
+                                </Card>
+                            )}
+
+                            {/* Detailed Match Analysis */}
+                            {candidate.analysis && (candidate.analysis.matchSkills || candidate.analysis.missingSkills) && (
+                                <Card>
+                                    <CardHeader>
+                                        <CardTitle className="flex items-center text-lg">
+                                            <Brain className="w-5 h-5 mr-2" />
+                                            {t(dictionary, "candidateModal.matchAnalysisDetails")}
+                                        </CardTitle>
+                                    </CardHeader>
+                                    <CardContent className="space-y-4">
+                                        {/* Matching Skills */}
+                                        {candidate.analysis.matchSkills && (
+                                            <div>
+                                                <div className="flex items-center gap-2 mb-2">
+                                                    <CheckCircle className="w-4 h-4 text-green-600" />
+                                                    <h5 className="font-medium text-green-700">{t(dictionary, "candidateModal.matchingSkills")}</h5>
+                                                </div>
+                                                <div className="p-3 bg-green-50 rounded-lg border border-green-200">
+                                                    <p className="text-sm text-green-800 leading-relaxed">
+                                                        {candidate.analysis.matchSkills}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Missing Skills */}
+                                        {candidate.analysis.missingSkills && (
+                                            <div>
+                                                <div className="flex items-center gap-2 mb-2">
+                                                    <X className="w-4 h-4 text-amber-600" />
+                                                    <h5 className="font-medium text-amber-700">{t(dictionary, "candidateModal.areasForImprovement")}</h5>
+                                                </div>
+                                                <div className="p-3 bg-amber-50 rounded-lg border border-amber-200">
+                                                    <p className="text-sm text-amber-800 leading-relaxed">
+                                                        {candidate.analysis.missingSkills}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Analysis Summary */}
+                                        {candidate.analysis.score && (
+                                            <div className="pt-2 border-t">
+                                                <div className="flex items-start gap-2">
+                                                    <TrendingUp className="w-4 h-4 text-blue-600 mt-0.5" />
+                                                    <div>
+                                                        <h5 className="font-medium text-blue-700 mb-1">{t(dictionary, "candidateModal.aiAssessment")}</h5>
+                                                        <p className="text-sm text-blue-800">
+                                                            {candidate.analysis.score >= 80
+                                                                ? t(dictionary, "candidateModal.excellentAlignment")
+                                                                : candidate.analysis.score >= 60
+                                                                    ? t(dictionary, "candidateModal.goodPotential")
+                                                                    : t(dictionary, "candidateModal.significantTraining")
+                                                            }
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
                                     </CardContent>
                                 </Card>
                             )}
@@ -359,7 +425,7 @@ export function CandidateDetailModal({ isOpen, onClose, candidate, onStatusUpdat
                                 <CardHeader>
                                     <CardTitle className="flex items-center text-lg">
                                         <Calendar className="w-5 h-5 mr-2" />
-                                        Application Status
+                                        {t(dictionary, "candidateModal.applicationStatus")}
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent className="space-y-4">
@@ -372,7 +438,7 @@ export function CandidateDetailModal({ isOpen, onClose, candidate, onStatusUpdat
                                             </Badge>
                                         </div>
                                         <p className="text-sm text-gray-600">
-                                            Applied on {formatApplicationDate(candidate.appliedDate)}
+                                            {t(dictionary, "candidateModal.appliedOn")} {formatApplicationDate(candidate.appliedDate)}
                                         </p>
                                     </div>
 
@@ -383,7 +449,7 @@ export function CandidateDetailModal({ isOpen, onClose, candidate, onStatusUpdat
                                             <AlertDescription className="flex items-center justify-between">
                                                 <span>{error}</span>
                                                 <Button variant="ghost" size="sm" onClick={clearError} className="h-auto p-1 text-xs">
-                                                    Dismiss
+                                                    {t(dictionary, "candidateModal.dismiss")}
                                                 </Button>
                                             </AlertDescription>
                                         </Alert>
@@ -394,7 +460,7 @@ export function CandidateDetailModal({ isOpen, onClose, candidate, onStatusUpdat
                                         <>
                                             <Separator />
                                             <div>
-                                                <h4 className="text-sm font-medium mb-3">Update Status</h4>
+                                                <h4 className="text-sm font-medium mb-3">{t(dictionary, "candidateModal.updateStatus")}</h4>
                                                 <div className="grid grid-cols-1 gap-2">
                                                     {availableStatusUpdates.map((newStatus) => {
                                                         const config = STATUS_CONFIG[newStatus]
@@ -410,7 +476,7 @@ export function CandidateDetailModal({ isOpen, onClose, candidate, onStatusUpdat
                                                                 className="justify-start"
                                                             >
                                                                 <Icon className="w-4 h-4 mr-2" />
-                                                                {isUpdating ? "Updating..." : `Move to ${config.label}`}
+                                                                {isUpdating ? t(dictionary, "candidateModal.updating") : `${t(dictionary, "candidateModal.moveTo")} ${config.label}`}
                                                             </Button>
                                                         )
                                                     })}
