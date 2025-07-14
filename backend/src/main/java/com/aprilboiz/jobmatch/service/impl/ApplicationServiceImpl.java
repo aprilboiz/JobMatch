@@ -1,5 +1,6 @@
 package com.aprilboiz.jobmatch.service.impl;
 
+import com.aprilboiz.jobmatch.dto.AnalysisDTO;
 import com.aprilboiz.jobmatch.dto.request.ApplicationRequest;
 import com.aprilboiz.jobmatch.dto.response.ApplicationDetailResponse;
 import com.aprilboiz.jobmatch.dto.response.ApplicationResponse;
@@ -11,8 +12,10 @@ import com.aprilboiz.jobmatch.mapper.ApplicationMapper;
 import com.aprilboiz.jobmatch.model.*;
 import com.aprilboiz.jobmatch.repository.ApplicationRepository;
 import com.aprilboiz.jobmatch.repository.CvRepository;
+import com.aprilboiz.jobmatch.repository.AnalysisRepository;
 import com.aprilboiz.jobmatch.repository.JobRepository;
 import com.aprilboiz.jobmatch.service.ApplicationService;
+import com.aprilboiz.jobmatch.service.AnalysisService;
 import com.aprilboiz.jobmatch.service.MessageService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -25,22 +28,23 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
+@RequiredArgsConstructor
 public class ApplicationServiceImpl implements ApplicationService {
+    private static final Logger logger = LoggerFactory.getLogger(ApplicationServiceImpl.class);
     private final ApplicationRepository applicationRepository;
+    private final AnalysisRepository analysisRepository;
     private final JobRepository jobRepository;
     private final CvRepository cvRepository;
     private final ApplicationMapper appMapper;
     private final MessageService messageService;
+    private final AnalysisService analysisService;
 
-    public ApplicationServiceImpl(ApplicationRepository applicationRepository, JobRepository jobRepository,
-            CvRepository cvRepository, ApplicationMapper appMapper, MessageService messageService) {
-        this.applicationRepository = applicationRepository;
-        this.jobRepository = jobRepository;
-        this.cvRepository = cvRepository;
-        this.appMapper = appMapper;
-        this.messageService = messageService;
-    }
 
     @Override
     @Transactional(readOnly = true)
@@ -109,10 +113,20 @@ public class ApplicationServiceImpl implements ApplicationService {
         CV existingCv = cvRepository.findByIdAndCandidate(request.getCvId(), candidate)
                 .orElseThrow(() -> new NotFoundException(messageService.getMessage("error.not.found.cv")));
 
+        AnalysisDTO analysisResponse = analysisService.analyzeJobMatch(existingJob, existingCv);
+        Analysis analysis = Analysis.builder()
+                .score(analysisResponse.getSimilarityScore())
+                .matchSkills(extractMatchingSkills(analysisResponse, existingJob))
+                .missingSkills(extractMissingSkills(analysisResponse, existingJob))
+                .build();
+        analysis = analysisRepository.save(analysis);
+        
+
         Application newApplication = Application.builder()
                 .job(existingJob)
                 .cv(existingCv)
                 .candidate(candidate)
+                .analysis(analysis)
                 .build();
         Application savedApplication = applicationRepository.save(newApplication);
 
@@ -209,47 +223,96 @@ public class ApplicationServiceImpl implements ApplicationService {
     @Override
     @Transactional(readOnly = true)
     public boolean canWithdrawApplication(Long applicationId, Candidate candidate) {
-        Application application = applicationRepository.findByIdAndCandidate(applicationId, candidate)
-                .orElse(null);
-        
-        if (application == null) {
-            return false;
-        }
-        
-        // Can only withdraw if the status is APPLIED or IN_REVIEW
-        return application.getStatus() == ApplicationStatus.APPLIED || 
-               application.getStatus() == ApplicationStatus.IN_REVIEW;
+        return applicationRepository.findByIdAndCandidate(applicationId, candidate)
+                .map(application -> {
+                    // Can only withdraw if application is in APPLIED or IN_REVIEW status
+                    return application.getStatus() == ApplicationStatus.APPLIED ||
+                           application.getStatus() == ApplicationStatus.IN_REVIEW;
+                })
+                .orElse(false);
     }
 
     @Override
     @Transactional(readOnly = true)
     public boolean canUpdateApplicationStatus(Long applicationId, ApplicationStatus newStatus, Recruiter recruiter) {
-        Application application = applicationRepository.findById(applicationId).orElse(null);
-        
-        if (application == null) {
-            return false;
+        return applicationRepository.findById(applicationId)
+                .map(application -> {
+                    // Only job owner can update status
+                    if (!application.getJob().getRecruiter().getId().equals(recruiter.getId())) {
+                        return false;
+                    }
+                    
+                    // Check valid status transitions
+                    ApplicationStatus currentStatus = application.getStatus();
+                    return isValidStatusTransition(currentStatus, newStatus);
+                })
+                .orElse(false);
+    }
+    
+    /**
+     * Helper method to extract matching skills from AI analysis response
+     * Uses the skills analysis from AI service when available, otherwise falls back to job-based analysis
+     */
+    private String extractMatchingSkills(AnalysisDTO analysisResponse, Job job) {
+        try {
+            // Use AI service skills analysis if available
+            if (analysisResponse.getMatchSkills() != null && !analysisResponse.getMatchSkills().trim().isEmpty()) {
+                return analysisResponse.getMatchSkills();
+            }
+            
+            // Fallback logic for backward compatibility
+            if (analysisResponse.getSimilarityScore() != null && analysisResponse.getSimilarityScore() > 70) {
+                return job.getSkills() != null ? String.join(", ", job.getSkills()) : "General skills match detected";
+            } else if (analysisResponse.getSimilarityScore() != null && analysisResponse.getSimilarityScore() > 50) {
+                return job.getSkills() != null && !job.getSkills().isEmpty() 
+                    ? "Partial match: " + String.join(", ", job.getSkills().subList(0, Math.min(job.getSkills().size() / 2, job.getSkills().size())))
+                    : "Some relevant skills detected";
+            }
+            return "Limited skill matches found";
+        } catch (Exception e) {
+            logger.warn("Failed to extract matching skills: {}", e.getMessage());
+            return "Skills analysis unavailable";
         }
-        
-        // Check if the recruiter can access this application
-        if (!application.getJob().getRecruiter().getId().equals(recruiter.getId()) && 
-            !application.getJob().getCompany().getId().equals(recruiter.getCompany().getId())) {
-            return false;
+    }
+    
+    /**
+     * Helper method to extract missing skills from AI analysis response  
+     * Uses the skills analysis from AI service when available, otherwise falls back to job-based analysis
+     */
+    private String extractMissingSkills(AnalysisDTO analysisResponse, Job job) {
+        try {
+            // Use AI service skills analysis if available
+            if (analysisResponse.getMissingSkills() != null && !analysisResponse.getMissingSkills().trim().isEmpty()) {
+                return analysisResponse.getMissingSkills();
+            }
+            
+            // Fallback logic for backward compatibility
+            if (analysisResponse.getSimilarityScore() != null && analysisResponse.getSimilarityScore() < 50) {
+                return job.getSkills() != null && !job.getSkills().isEmpty()
+                    ? "Consider developing: " + String.join(", ", job.getSkills())
+                    : "Review job requirements for skill gaps";
+            } else if (analysisResponse.getSimilarityScore() != null && analysisResponse.getSimilarityScore() < 70) {
+                return job.getSkills() != null && !job.getSkills().isEmpty()
+                    ? "Potential improvements in: " + String.join(", ", job.getSkills().subList(Math.min(job.getSkills().size() / 2, job.getSkills().size()), job.getSkills().size()))
+                    : "Some skill enhancement opportunities";
+            }
+            return "No significant skill gaps identified";
+        } catch (Exception e) {
+            logger.warn("Failed to extract missing skills: {}", e.getMessage());
+            return "Skills gap analysis unavailable";
         }
-        
-        ApplicationStatus currentStatus = application.getStatus();
-        
-        // Cannot update withdrawn applications
-        if (currentStatus == ApplicationStatus.WITHDRAWN) {
-            return false;
-        }
-        
-        // Define valid status transitions
+    }
+
+    /**
+     * Validates if a status transition is allowed
+     */
+    private boolean isValidStatusTransition(ApplicationStatus currentStatus, ApplicationStatus newStatus) {
         return switch (currentStatus) {
             case APPLIED -> newStatus == ApplicationStatus.IN_REVIEW || newStatus == ApplicationStatus.REJECTED;
             case IN_REVIEW -> newStatus == ApplicationStatus.INTERVIEW || newStatus == ApplicationStatus.REJECTED;
             case INTERVIEW -> newStatus == ApplicationStatus.OFFERED || newStatus == ApplicationStatus.REJECTED;
             case OFFERED, REJECTED -> false; // Final states
-            default -> false;
+            default -> false; // Any unknown status
         };
     }
 }

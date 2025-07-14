@@ -86,3 +86,9 @@ cloudinary:
 
 server:
   port: 8080
+
+ai-service:
+  base-url: ${AI_SERVICE_URL:http://localhost:8000}
+  timeout:
+    connect: ${AI_SERVICE_CONNECT_TIMEOUT:10}  # seconds
+    read: ${AI_SERVICE_READ_TIMEOUT:30}        # seconds

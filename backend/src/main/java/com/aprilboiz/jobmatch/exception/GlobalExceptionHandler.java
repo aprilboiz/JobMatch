@@ -19,16 +19,23 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @ControllerAdvice
 @RequiredArgsConstructor
+@RestControllerAdvice
 public class GlobalExceptionHandler {
-    
+
+    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
     private final MessageService messageService;
 
-    @ExceptionHandler({AuthorizationDeniedException.class, AccessDeniedException.class})
+    @ExceptionHandler({ AuthorizationDeniedException.class, AccessDeniedException.class })
     public ResponseEntity<ApiResponse<Void>> handleAccessDeniedException(Exception ex) {
-        String errorMessage = ex.getMessage() != null ? ex.getMessage() : messageService.getMessage("api.error.access.denied");
+        String errorMessage = ex.getMessage() != null ? ex.getMessage()
+                : messageService.getMessage("api.error.access.denied");
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.error(errorMessage));
     }
 
@@ -56,8 +63,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(ApiResponse.error(errorMessage));
     }
-
-
 
     @ExceptionHandler(DuplicateException.class)
     public ResponseEntity<ApiResponse<Void>> handleDuplicateException(DuplicateException ex) {
@@ -166,4 +171,33 @@ public class GlobalExceptionHandler {
     // return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
     // }
 
+    @ExceptionHandler(AIServiceException.AIServiceUnavailableException.class)
+    public ResponseEntity<ApiResponse<Void>> handleAIServiceUnavailable(
+            AIServiceException.AIServiceUnavailableException e) {
+        logger.error("AI Service unavailable: {}", e.getMessage());
+        String errorMessage = "The AI analysis service is currently unavailable. Please try again later.";
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(ApiResponse.error(errorMessage));
+    }
+
+    @ExceptionHandler(AIServiceException.AIServiceTimeoutException.class)
+    public ResponseEntity<ApiResponse<Void>> handleAIServiceTimeout(AIServiceException.AIServiceTimeoutException e) {
+        logger.error("AI Service timeout: {}", e.getMessage());
+        String errorMessage = "The AI analysis service is taking too long to respond. Please try again later.";
+        return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).body(ApiResponse.error(errorMessage));
+    }
+
+    @ExceptionHandler(AIServiceException.AIServiceBadRequestException.class)
+    public ResponseEntity<ApiResponse<Void>> handleAIServiceBadRequest(
+            AIServiceException.AIServiceBadRequestException e) {
+        logger.error("AI Service bad request: {}", e.getMessage());
+        String errorMessage = "Invalid request parameters for AI analysis.";
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.error(errorMessage));
+    }
+
+    @ExceptionHandler(AIServiceException.class)
+    public ResponseEntity<ApiResponse<Void>> handleGeneralAIServiceException(AIServiceException e) {
+        logger.error("AI Service error: {}", e.getMessage());
+        String errorMessage = "An error occurred while processing the AI analysis request.";
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.error(errorMessage));
+    }
 }

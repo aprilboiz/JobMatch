@@ -12,6 +12,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Mapper(componentModel = "spring")
 public interface ApplicationMapper {
 
+    @Mapping(source = "score", target = "score")
+    AnalysisResponse analysisToAnalysisResponse(Analysis analysis);
+
     @Mapping(source = "role", target = "role")
     @Mapping(source = "phoneNumber", target = "phoneNumber")
     @Mapping(target = "userType", expression = "java(getUserType(user))")
@@ -41,6 +44,7 @@ public interface ApplicationMapper {
 
     @Mapping(source = "cv.id", target = "cvId")
     @Mapping(source = "createdAt", target = "appliedDate")
+    @Mapping(source = "analysis", target = "analysis")
     ApplicationDetailResponse applicationToApplicationDetailResponse(Application application);
 
     @Mapping(source = "name", target = "name")

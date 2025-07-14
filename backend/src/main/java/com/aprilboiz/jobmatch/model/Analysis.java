@@ -24,7 +24,7 @@ public class Analysis {
     @GeneratedValue
     private Long id;
     @NotNull
-    private Float score;
+    private Double score;
     private String matchSkills;
     private String missingSkills;
 

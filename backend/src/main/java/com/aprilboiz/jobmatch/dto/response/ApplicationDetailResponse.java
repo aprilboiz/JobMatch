@@ -19,4 +19,5 @@ public class ApplicationDetailResponse{
     private ApplicationStatus status;
     private LocalDate appliedDate;
     private String coverLetter;
+    private AnalysisResponse analysis;
 }
