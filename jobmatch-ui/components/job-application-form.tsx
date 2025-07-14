@@ -17,13 +17,20 @@ import { apiClient } from "@/lib/api"
 import { Job, CV, JobMatchScore } from "@/lib/types"
 import { useToast } from "@/hooks/use-toast"
 import { useAuth } from "@/contexts/auth-context"
+import { t } from '@/lib/i18n-client'
+
+type Dictionary = {
+  [key: string]: string;
+};
 
 interface JobApplicationFormProps {
   job: Job
+  locale: string
+  dictionary: Dictionary
   onApplicationSubmitted?: () => void
 }
 
-export function JobApplicationForm({ job, onApplicationSubmitted }: JobApplicationFormProps) {
+export function JobApplicationForm({ job, locale, dictionary, onApplicationSubmitted }: JobApplicationFormProps) {
   const [cvs, setCvs] = useState<CV[]>([])
   const [selectedCvId, setSelectedCvId] = useState("")
   const [coverLetter, setCoverLetter] = useState("")
@@ -49,7 +56,7 @@ export function JobApplicationForm({ job, onApplicationSubmitted }: JobApplicati
       if (response.success) {
         setCvs(response.data)
         if (response.data.length > 0) {
-          setSelectedCvId(response.data[0].id)
+          setSelectedCvId(String(response.data[0].id))
         }
       } else {
         throw new Error(response.message)
@@ -57,8 +64,8 @@ export function JobApplicationForm({ job, onApplicationSubmitted }: JobApplicati
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "Failed to load CVs",
+        title: t(dictionary, "error.title"),
+        description: t(dictionary, "cv.loadError"),
       })
     }
   }
@@ -87,8 +94,8 @@ export function JobApplicationForm({ job, onApplicationSubmitted }: JobApplicati
     if (!selectedCvId) {
       toast({
         variant: "destructive",
-        title: "CV Required",
-        description: "Please select a CV to submit with your application",
+        title: t(dictionary, "application.cvRequired"),
+        description: t(dictionary, "application.cvRequiredDesc"),
       })
       return
     }
@@ -98,16 +105,16 @@ export function JobApplicationForm({ job, onApplicationSubmitted }: JobApplicati
       await apiClient.createApplication({ jobId: String(job.id), cvId: selectedCvId, coverLetter: coverLetter })
 
       toast({
-        title: "Application submitted!",
-        description: "Your application has been sent to the employer",
+        title: t(dictionary, "application.success"),
+        description: t(dictionary, "application.successDesc"),
       })
 
       onApplicationSubmitted?.()
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "Application failed",
-        description: error instanceof Error ? error.message : "Failed to submit application",
+        title: t(dictionary, "application.failed"),
+        description: error instanceof Error ? error.message : t(dictionary, "application.failedDesc"),
       })
     } finally {
       setIsSubmitting(false)
@@ -120,21 +127,38 @@ export function JobApplicationForm({ job, onApplicationSubmitted }: JobApplicati
     return "destructive"
   }
 
+  const getJobTypeLabel = (type: string) => {
+    switch (type) {
+      case "FULL_TIME":
+        return t(dictionary, "jobType.fullTime")
+      case "PART_TIME":
+        return t(dictionary, "jobType.partTime")
+      case "CONTRACT":
+        return t(dictionary, "jobType.contract")
+      case "REMOTE":
+        return t(dictionary, "jobType.remote")
+      case "INTERNSHIP":
+        return t(dictionary, "jobType.internship")
+      default:
+        return type?.replace("_", " ") || t(dictionary, "common.unknown")
+    }
+  }
+
   const generateCoverLetterSuggestion = () => {
     if (!matchScore || !user) return ""
 
     const suggestions = [
-      `Dear Hiring Manager,
+      `${t(dictionary, "application.coverLetterGreeting")},
 
-I am excited to apply for the ${job.title} position at ${job.company.name}. Based on my background and experience, I believe I would be an excellent fit for this role.
+${t(dictionary, "application.coverLetterIntro")} ${job.title} ${t(dictionary, "application.coverLetterAt")} ${job.company.name}. ${t(dictionary, "application.coverLetterFit")}.
 
 ${matchScore.recommendations.length > 0 ? matchScore.recommendations[0] : ""}
 
-I am particularly drawn to this opportunity because of ${job.company.name}'s reputation in the industry and the chance to contribute to your team's success.
+${t(dictionary, "application.coverLetterDrawn")} ${job.company.name} ${t(dictionary, "application.coverLetterReason")}.
 
-Thank you for considering my application. I look forward to discussing how my skills and experience can benefit your organization.
+${t(dictionary, "application.coverLetterThank")}.
 
-Best regards,
+${t(dictionary, "application.coverLetterClosing")},
 ${user.fullName}`,
     ]
 
@@ -145,15 +169,15 @@ ${user.fullName}`,
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Apply for {job.title}</CardTitle>
+          <CardTitle>{t(dictionary, "application.applyFor")} {job.title}</CardTitle>
         </CardHeader>
         <CardContent>
           <Alert>
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>
-              You need to upload at least one CV before applying for jobs.
+              {t(dictionary, "application.needCV")}
               <Button variant="link" className="p-0 ml-2 h-auto">
-                Upload CV
+                {t(dictionary, "cv.upload")}
               </Button>
             </AlertDescription>
           </Alert>
@@ -168,11 +192,11 @@ ${user.fullName}`,
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
-            <span>Apply for {job.title}</span>
+            <span>{t(dictionary, "application.applyFor")} {job.title}</span>
             <Badge variant="outline">{job.company.name}</Badge>
           </CardTitle>
           <CardDescription>
-            {job.location} • {job.salary?.formattedSalary || "Negotiable"} • {job.jobType?.replace("_", " ") || "Unknown"}
+            {job.location} • {job.salary?.formattedSalary || t(dictionary, "job.negotiable")} • {getJobTypeLabel(job.jobType)}
           </CardDescription>
         </CardHeader>
       </Card>
@@ -183,18 +207,18 @@ ${user.fullName}`,
           <CardHeader>
             <CardTitle className="flex items-center">
               <Brain className="w-5 h-5 mr-2 text-purple-600" />
-              AI Match Analysis
+              {t(dictionary, "application.aiMatchAnalysis")}
               <Badge variant={getScoreBadgeVariant(matchScore.score)} className="ml-2">
-                {matchScore.score}% Match
+                {matchScore.score}% {t(dictionary, "application.match")}
               </Badge>
             </CardTitle>
-            <CardDescription>Analysis of how well your CV matches this job</CardDescription>
+            <CardDescription>{t(dictionary, "application.analysisDesc")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {/* Overall Score */}
             <div className="text-center">
               <div className="text-3xl font-bold text-primary">{matchScore.score}%</div>
-              <div className="text-sm text-muted-foreground">Overall Match Score</div>
+              <div className="text-sm text-muted-foreground">{t(dictionary, "application.overallMatch")}</div>
             </div>
 
             <Separator />
@@ -202,28 +226,28 @@ ${user.fullName}`,
             {/* Breakdown */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <div className="text-sm font-medium mb-1">Skills Match</div>
+                <div className="text-sm font-medium mb-1">{t(dictionary, "application.skillsMatch")}</div>
                 <div className="flex items-center space-x-2">
                   <Progress value={matchScore.breakdown.skillsMatch} className="h-2 flex-1" />
                   <span className="text-sm text-muted-foreground">{matchScore.breakdown.skillsMatch}%</span>
                 </div>
               </div>
               <div>
-                <div className="text-sm font-medium mb-1">Experience Match</div>
+                <div className="text-sm font-medium mb-1">{t(dictionary, "application.experienceMatch")}</div>
                 <div className="flex items-center space-x-2">
                   <Progress value={matchScore.breakdown.experienceMatch} className="h-2 flex-1" />
                   <span className="text-sm text-muted-foreground">{matchScore.breakdown.experienceMatch}%</span>
                 </div>
               </div>
               <div>
-                <div className="text-sm font-medium mb-1">Education Match</div>
+                <div className="text-sm font-medium mb-1">{t(dictionary, "application.educationMatch")}</div>
                 <div className="flex items-center space-x-2">
                   <Progress value={matchScore.breakdown.educationMatch} className="h-2 flex-1" />
                   <span className="text-sm text-muted-foreground">{matchScore.breakdown.educationMatch}%</span>
                 </div>
               </div>
               <div>
-                <div className="text-sm font-medium mb-1">Location Match</div>
+                <div className="text-sm font-medium mb-1">{t(dictionary, "application.locationMatch")}</div>
                 <div className="flex items-center space-x-2">
                   <Progress value={matchScore.breakdown.locationMatch} className="h-2 flex-1" />
                   <span className="text-sm text-muted-foreground">{matchScore.breakdown.locationMatch}%</span>
@@ -234,7 +258,7 @@ ${user.fullName}`,
             {/* Recommendations */}
             {matchScore.recommendations.length > 0 && (
               <div>
-                <div className="text-sm font-medium mb-2">AI Recommendations:</div>
+                <div className="text-sm font-medium mb-2">{t(dictionary, "application.aiRecommendations")}:</div>
                 <div className="space-y-2">
                   {matchScore.recommendations.slice(0, 2).map((rec, index) => (
                     <div key={index} className="bg-muted rounded-lg p-3">
@@ -251,27 +275,27 @@ ${user.fullName}`,
       {/* Application Form */}
       <Card>
         <CardHeader>
-          <CardTitle>Application Details</CardTitle>
-          <CardDescription>Complete your application for this position</CardDescription>
+          <CardTitle>{t(dictionary, "application.details")}</CardTitle>
+          <CardDescription>{t(dictionary, "application.complete")}</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* CV Selection */}
             <div className="space-y-2">
-              <Label htmlFor="cv-select">Select CV *</Label>
+              <Label htmlFor="cv-select">{t(dictionary, "application.selectCV")} *</Label>
               <Select value={selectedCvId} onValueChange={setSelectedCvId}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Choose a CV to submit" />
+                  <SelectValue placeholder={t(dictionary, "application.chooseCV")} />
                 </SelectTrigger>
                 <SelectContent>
                   {cvs.map((cv) => (
-                    <SelectItem key={cv.id} value={cv.id}>
+                    <SelectItem key={cv.id} value={String(cv.id)}>
                       <div className="flex items-center space-x-2">
                         <FileText className="w-4 h-4" />
                         <span>{cv.fileName}</span>
                         {cv.aiAnalysis && (
                           <Badge variant="outline" className="text-xs">
-                            Score: {cv.aiAnalysis.score}/100
+                            {t(dictionary, "cv.score")}: {cv.aiAnalysis.score}/100
                           </Badge>
                         )}
                       </div>
@@ -282,7 +306,7 @@ ${user.fullName}`,
               {isAnalyzing && (
                 <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                   <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-primary"></div>
-                  <span>Analyzing job match...</span>
+                  <span>{t(dictionary, "application.analyzing")}</span>
                 </div>
               )}
             </div>
@@ -290,7 +314,7 @@ ${user.fullName}`,
             {/* Cover Letter */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="cover-letter">Cover Letter</Label>
+                <Label htmlFor="cover-letter">{t(dictionary, "application.coverLetter")}</Label>
                 <Button
                   type="button"
                   variant="outline"
@@ -299,18 +323,18 @@ ${user.fullName}`,
                   disabled={!matchScore}
                 >
                   <Brain className="w-3 h-3 mr-1" />
-                  AI Suggestion
+                  {t(dictionary, "application.aiSuggestion")}
                 </Button>
               </div>
               <Textarea
                 id="cover-letter"
-                placeholder="Write a compelling cover letter to introduce yourself..."
+                placeholder={t(dictionary, "application.coverLetterPlaceholder")}
                 value={coverLetter}
                 onChange={(e) => setCoverLetter(e.target.value)}
                 rows={8}
                 className="resize-none"
               />
-              <div className="text-xs text-muted-foreground">{coverLetter.length}/2000 characters</div>
+              <div className="text-xs text-muted-foreground">{coverLetter.length}/2000 {t(dictionary, "common.characters")}</div>
             </div>
 
             {/* Application Tips */}
@@ -318,8 +342,7 @@ ${user.fullName}`,
               <Alert>
                 <TrendingUp className="h-4 w-4" />
                 <AlertDescription>
-                  <strong>Tip:</strong> Your match score is {matchScore.score}%. Consider highlighting relevant skills
-                  in your cover letter to improve your chances.
+                  <strong>{t(dictionary, "application.tip")}:</strong> {t(dictionary, "application.lowMatchTip")} {matchScore.score}%. {t(dictionary, "application.improveTip")}.
                 </AlertDescription>
               </Alert>
             )}
@@ -330,17 +353,17 @@ ${user.fullName}`,
                 {isSubmitting ? (
                   <>
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current mr-2"></div>
-                    Submitting Application...
+                    {t(dictionary, "application.submitting")}
                   </>
                 ) : (
                   <>
                     <Send className="w-4 h-4 mr-2" />
-                    Submit Application
+                    {t(dictionary, "application.submit")}
                   </>
                 )}
               </Button>
               <Button type="button" variant="outline">
-                Save Draft
+                {t(dictionary, "application.saveDraft")}
               </Button>
             </div>
           </form>

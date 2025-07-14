@@ -29,7 +29,6 @@ import {
 
 import { useCandidateModal } from "@/hooks/use-candidate-modal"
 import {
-    type ApplicationStatus,
     STATUS_CONFIG,
     getScoreMetrics,
     getInitials,
@@ -37,6 +36,7 @@ import {
     validateEmail,
     validatePhoneNumber,
 } from "@/lib/candidate-utils"
+import type { ApplicationStatus } from "@/lib/types"
 import { CandidateWithApplication } from "@/lib/types"
 import { ApiError } from "@/lib/api"
 import { useState } from "react"
@@ -108,9 +108,9 @@ export function CandidateDetailModal({ isOpen, onClose, candidate, onStatusUpdat
         )
     }
 
-    const statusConfig = STATUS_CONFIG[candidate.status]
+    const statusConfig = STATUS_CONFIG[candidate.status as keyof typeof STATUS_CONFIG]
     const StatusIcon = STATUS_ICONS[statusConfig.icon as keyof typeof STATUS_ICONS]
-    const scoreMetrics = candidate.matchScore ? getScoreMetrics(candidate.matchScore) : null
+    const scoreMetrics = candidate.analysis?.score ? getScoreMetrics(candidate.analysis.score) : null
     const isValidEmail = validateEmail(candidate.candidate.email)
     const isValidPhone = candidate.candidate.phoneNumber ? validatePhoneNumber(candidate.candidate.phoneNumber) : false
 
@@ -167,10 +167,10 @@ export function CandidateDetailModal({ isOpen, onClose, candidate, onStatusUpdat
                                     <span className="text-sm text-muted-foreground">
                                         Applied {formatApplicationDate(candidate.appliedDate)}
                                     </span>
-                                    {candidate.matchScore && scoreMetrics && (
+                                    {candidate.analysis?.score && scoreMetrics && (
                                         <Badge variant="outline" className={`${scoreMetrics.color} border-current`}>
-                                            <Star className="w-3 h-3 mr-1" />
-                                            {Math.round(candidate.matchScore)}% Match
+                                            <Brain className="w-3 h-3 mr-1" />
+                                            {Math.round(candidate.analysis.score)}% Match
                                         </Badge>
                                     )}
                                 </div>
@@ -324,7 +324,7 @@ export function CandidateDetailModal({ isOpen, onClose, candidate, onStatusUpdat
                         {/* Right Column - Sidebar */}
                         <div className="space-y-6">
                             {/* Match Score */}
-                            {candidate.matchScore && scoreMetrics && (
+                            {candidate.analysis?.score && scoreMetrics && (
                                 <Card>
                                     <CardHeader>
                                         <CardTitle className="flex items-center text-lg">
@@ -333,18 +333,21 @@ export function CandidateDetailModal({ isOpen, onClose, candidate, onStatusUpdat
                                         </CardTitle>
                                     </CardHeader>
                                     <CardContent>
-                                        <div className={`text-center p-6 rounded-lg ${scoreMetrics.bgColor}`}>
-                                            <div
-                                                className={`text-5xl font-bold mb-3 bg-gradient-to-r ${scoreMetrics.gradient} bg-clip-text text-transparent`}
-                                            >
-                                                {Math.round(candidate.matchScore)}%
+                                        <div className="flex flex-col space-y-3">
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-sm text-muted-foreground">Overall Match</span>
+                                                <div className="flex items-center gap-2">
+                                                    <Badge variant="outline" className={scoreMetrics.color}>
+                                                        {scoreMetrics.label}
+                                                    </Badge>
+                                                    <span className="text-lg font-semibold text-primary">
+                                                        {Math.round(candidate.analysis.score)}%
+                                                    </span>
+                                                </div>
                                             </div>
-                                            <p className="text-lg font-medium text-gray-700 mb-3">
-                                                {scoreMetrics.emoji} {scoreMetrics.label}
-                                            </p>
-                                            <Progress value={candidate.matchScore} className="h-3 mb-3" />
-                                            <p className="text-sm text-gray-600">
-                                                This candidate matches {Math.round(candidate.matchScore)}% of job requirements
+                                            <Progress value={candidate.analysis.score} className="h-3 mb-3" />
+                                            <p className="text-sm text-muted-foreground">
+                                                This candidate matches {Math.round(candidate.analysis.score)}% of job requirements
                                             </p>
                                         </div>
                                     </CardContent>

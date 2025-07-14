@@ -47,6 +47,35 @@ const logRequest = (method: string, url: string, isRetry?: boolean) => {
   }
 }
 
+// Utility function to get current language for Accept-Language header
+const getCurrentLanguage = (): string => {
+  if (typeof window === "undefined") return 'en'
+
+  const currentPath = window.location.pathname
+  const langFromPath = currentPath.split('/')[1]
+  const supportedLanguages = ['en', 'vi']
+
+  // First priority: language from URL path
+  if (supportedLanguages.includes(langFromPath)) {
+    return langFromPath
+  }
+
+  // Second priority: stored language preference
+  const storedLang = localStorage.getItem('preferred-language')
+  if (storedLang && supportedLanguages.includes(storedLang)) {
+    return storedLang
+  }
+
+  // Third priority: browser language
+  const browserLang = navigator.language.split('-')[0]
+  if (supportedLanguages.includes(browserLang)) {
+    return browserLang
+  }
+
+  // Default fallback
+  return 'en'
+}
+
 // API Client
 class ApiClient {
   private baseURL: string
@@ -149,6 +178,9 @@ class ApiClient {
     if (!(options.body instanceof FormData)) {
       headers["Content-Type"] = "application/json"
     }
+
+    // Add Accept-Language header for internationalization
+    headers["Accept-Language"] = getCurrentLanguage()
 
     if (this.token) {
       headers.Authorization = `Bearer ${this.token}`
@@ -465,9 +497,18 @@ class ApiClient {
   }
 
   async downloadCV(id: string): Promise<Blob> {
+    let headers: Record<string, string> = {}
+
+    if (this.token) {
+      headers.Authorization = `Bearer ${this.token}`
+    }
+
+    // Add Accept-Language header for internationalization
+    headers["Accept-Language"] = getCurrentLanguage()
+
     const response = await fetch(`${this.baseURL}/cvs/${id}/download`, {
       method: "GET",
-      headers: this.token ? { Authorization: `Bearer ${this.token}` } : {},
+      headers,
     })
     if (!response.ok) throw new Error("Failed to download CV")
     return await response.blob()

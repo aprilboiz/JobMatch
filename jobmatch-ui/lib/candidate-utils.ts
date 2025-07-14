@@ -1,4 +1,4 @@
-export type ApplicationStatus = "APPLIED" | "IN_REVIEW" | "INTERVIEW" | "OFFERED" | "REJECTED"
+import type { ApplicationStatus } from "@/lib/types"
 
 export interface StatusConfig {
     label: string

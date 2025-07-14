@@ -17,14 +17,31 @@ interface RouteGuardProps {
 
 export function RouteGuard({
   children,
-  requireAuth = false,
+  requireAuth = true,
   allowedRoles = [],
-  fallbackPath = "/login",
+  fallbackPath,
 }: RouteGuardProps) {
   const { user, isLoading, isAuthenticated } = useAuth()
   const router = useRouter()
   const pathname = usePathname()
   const [isChecking, setIsChecking] = useState(true)
+
+  // Extract locale from pathname
+  const getLocaleFromPathname = (path: string): string => {
+    const segments = path.split('/').filter(Boolean)
+    return segments[0] || 'en' // Default to 'en' if no locale found
+  }
+
+  const locale = getLocaleFromPathname(pathname)
+
+  // Generate locale-aware fallback path
+  const getLocaleFallbackPath = (): string => {
+    if (fallbackPath) {
+      // If custom fallback path is provided, make sure it includes locale
+      return fallbackPath.startsWith('/') ? `/${locale}${fallbackPath}` : `/${locale}/${fallbackPath}`
+    }
+    return `/${locale}/login`
+  }
 
   useEffect(() => {
     // Don't check until auth context is fully loaded
@@ -36,21 +53,21 @@ export function RouteGuard({
     if (requireAuth && !isAuthenticated) {
       // Store current path for redirect after login
       localStorage.setItem("redirect_after_login", pathname)
-      router.replace(fallbackPath)
+      router.replace(getLocaleFallbackPath())
       return
     }
 
     // Check role permissions if authenticated and roles are specified
     if (requireAuth && isAuthenticated && allowedRoles.length > 0) {
       if (!user || !allowedRoles.includes(user.role.roleName)) {
-        router.replace("/unauthorized")
+        router.replace(`/${locale}/unauthorized`)
         return
       }
     }
 
     // All checks passed
     setIsChecking(false)
-  }, [isAuthenticated, isLoading, user?.role?.roleName, requireAuth, allowedRoles.join(','), pathname, fallbackPath, router])
+  }, [isAuthenticated, isLoading, user?.role?.roleName, requireAuth, allowedRoles.join(','), pathname, locale, router])
 
   // Show loading state while checking authentication
   if (isLoading || isChecking) {

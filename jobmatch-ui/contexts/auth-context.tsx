@@ -7,6 +7,8 @@ import { apiClient } from "@/lib/api"
 import { User, RegisterRequest, BaseProfileUpdateRequest } from "@/lib/types"
 import { useToast } from "@/hooks/use-toast"
 import Cookies from "js-cookie"
+import { t } from "@/lib/i18n-client"
+import type { Dictionary } from "@/lib/types"
 
 interface AuthContextType {
   user: User | null
@@ -27,7 +29,7 @@ const PROTECTED_ROUTES = ["/dashboard", "/profile", "/settings", "/applications"
 // Public routes that authenticated users shouldn't access
 const PUBLIC_ONLY_ROUTES = ["/login", "/register"]
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
+export function AuthProvider({ children, dictionary }: { children: React.ReactNode, dictionary: Dictionary }) {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isInitialized, setIsInitialized] = useState(false)
@@ -147,8 +149,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       toast({
-        title: "Welcome back!",
-        description: "You have successfully signed in.",
+        title: t(dictionary, 'auth.welcomeBack'),
+        description: t(dictionary, 'auth.welcomeBackDescription'),
       })
 
       // Determine redirect destination based on user role
@@ -177,8 +179,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setIsLoggingIn(false)
       toast({
         variant: "destructive",
-        title: "Login failed",
-        description: error instanceof Error ? error.message : "Invalid credentials",
+        title: t(dictionary, 'auth.loginFailed'),
+        description: error instanceof Error ? error.message : t(dictionary, 'auth.incorrectCredentials'),
       })
       throw error
     } finally {
@@ -192,8 +194,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const registerResponse = await apiClient.register(userData)
 
       toast({
-        title: "Account created!",
-        description: registerResponse.message || "Welcome to JobMatch. Your account has been created successfully.",
+        title: t(dictionary, 'auth.registerSuccessTitle'),
+        description: registerResponse.message || t(dictionary, 'auth.registerSuccessDescription'),
       })
 
       // Determine redirect destination
@@ -205,8 +207,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.error("Registration error:", error)
       toast({
         variant: "destructive",
-        title: "Registration failed",
-        description: error instanceof Error ? error.message : "Failed to create account",
+        title: t(dictionary, 'auth.registrationFailedTitle'),
+        description: error instanceof Error ? error.message : t(dictionary, 'auth.registrationFailedDescription'),
       })
       throw error
     } finally {
@@ -231,8 +233,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       localStorage.removeItem("redirectTo")
 
       toast({
-        title: "Signed out",
-        description: "You have been successfully signed out.",
+        title: t(dictionary, 'auth.signedOutTitle'),
+        description: t(dictionary, 'auth.signedOutDescription'),
       })
 
       // Redirect to home page
@@ -247,8 +249,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (response.success) {
         setUser(response.data)
         toast({
-          title: "Profile updated",
-          description: response.message || "Your profile has been updated successfully.",
+          title: t(dictionary, 'profile.updateProfile'),
+          description: response.message || t(dictionary, 'profile.updateProfileDescription'),
         })
       } else {
         throw new Error(response.message)

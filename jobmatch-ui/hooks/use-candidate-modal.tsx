@@ -2,8 +2,9 @@
 
 import { useState, useCallback, useMemo } from "react"
 import { useToast } from "@/hooks/use-toast"
-import type { ApplicationStatus } from "@/lib/candidate-utils"
+import type { ApplicationStatus } from "@/lib/types"
 import { apiClient } from "@/lib/api"
+import { downloadCv, downloadCvById } from "@/lib/cv-utils"
 import { CandidateWithApplication } from "@/lib/types"
 
 interface UseCandidateModalProps {
@@ -94,25 +95,16 @@ export function useCandidateModal({ candidate, onStatusUpdate }: UseCandidateMod
             }
 
             try {
-                // Always fetch the file via secured API to ensure proper auth headers
-                const blob = await apiClient.downloadCV(candidate.cvId.toString())
-
                 if (action === "download") {
-                    const url = window.URL.createObjectURL(blob)
-                    const link = document.createElement("a")
-                    link.href = url
-                    link.download = `${candidate.candidate.fullName}_CV`
-                    document.body.appendChild(link)
-                    link.click()
-                    link.remove()
-                    window.URL.revokeObjectURL(url)
+                    await downloadCvById(candidate.cvId.toString(), `${candidate.candidate.fullName}_CV`)
                     return
                 }
 
-                // For viewing, create a blob URL with the correct MIME type
-                const fileExtension = "pdf" // Default to PDF since we don't have filename in new interface
-                let mimeType = "application/pdf"
+                // For viewing, fetch the blob and open as before
+                const blob = await apiClient.downloadCV(candidate.cvId.toString())
 
+                // For viewing, create a blob URL with the correct MIME type
+                const mimeType = blob.type || "application/pdf"
                 const typedBlob = new Blob([blob], { type: mimeType })
                 const url = window.URL.createObjectURL(typedBlob)
                 window.open(url, "_blank")

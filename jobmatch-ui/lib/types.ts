@@ -82,7 +82,7 @@ export interface Application {
     appliedDate: string
     cvId: string
     coverLetter?: string
-    aiScore?: number
+    analysis?: AnalysisResponse
     job: Job
     candidate: User
 }
@@ -235,6 +235,13 @@ export interface JobCategory {
 
 export type ApplicationStatus = "APPLIED" | "IN_REVIEW" | "INTERVIEW" | "OFFERED" | "REJECTED"
 
+// Analysis response interface matching backend structure
+export interface AnalysisResponse {
+    score?: number
+    matchSkills?: string
+    missingSkills?: string
+}
+
 export interface CandidateWithApplication {
     id: number
     cvId: number
@@ -268,5 +275,9 @@ export interface CandidateWithApplication {
     status: ApplicationStatus
     appliedDate: string
     coverLetter?: string | null
-    matchScore?: number
+    analysis?: AnalysisResponse
 }
+
+export type Dictionary = {
+    [key: string]: string;
+};

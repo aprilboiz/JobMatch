@@ -1,7 +1,12 @@
 import Link from "next/link"
 import { Briefcase } from "lucide-react"
 
-export function Footer() {
+interface FooterProps {
+    locale: string;
+    t: (key: string) => string;
+}
+
+export function Footer({ locale, t }: FooterProps) {
     return (
         <footer className="bg-background border-t py-12">
             <div className="container">
@@ -14,72 +19,57 @@ export function Footer() {
                             <span className="text-xl font-bold">JobMatch</span>
                         </div>
                         <p className="text-muted-foreground">
-                            Connecting talent with opportunity. Your career journey starts here.
+                            {t('message.welcome')}
                         </p>
                     </div>
                     <div>
-                        <h3 className="font-semibold mb-4">For Job Seekers</h3>
+                        <h3 className="font-semibold mb-4">{t('nav.jobs')}</h3>
                         <ul className="space-y-2 text-muted-foreground">
                             <li>
-                                <Link href="/jobs" className="hover:text-foreground transition-colors">
-                                    Browse Jobs
+                                <Link href={`/${locale}/jobs`} className="hover:text-foreground transition-colors">
+                                    {t('nav.jobs')}
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/companies" className="hover:text-foreground transition-colors">
-                                    Companies
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/career-advice" className="hover:text-foreground transition-colors">
-                                    Career Advice
+                                <Link href={`/${locale}/dashboard`} className="hover:text-foreground transition-colors">
+                                    {t('nav.dashboard')}
                                 </Link>
                             </li>
                         </ul>
                     </div>
                     <div>
-                        <h3 className="font-semibold mb-4">For Employers</h3>
+                        <h3 className="font-semibold mb-4">{t('nav.company')}</h3>
                         <ul className="space-y-2 text-muted-foreground">
                             <li>
-                                <Link href="/post-job" className="hover:text-foreground transition-colors">
-                                    Post a Job
+                                <Link href={`/${locale}/about-us`} className="hover:text-foreground transition-colors">
+                                    {t('nav.aboutUs')}
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/pricing" className="hover:text-foreground transition-colors">
-                                    Pricing
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/resources" className="hover:text-foreground transition-colors">
-                                    Resources
+                                <Link href={`/${locale}/contact`} className="hover:text-foreground transition-colors">
+                                    {t('nav.contact')}
                                 </Link>
                             </li>
                         </ul>
                     </div>
                     <div>
-                        <h3 className="font-semibold mb-4">Support</h3>
+                        <h3 className="font-semibold mb-4">{t('nav.legal')}</h3>
                         <ul className="space-y-2 text-muted-foreground">
                             <li>
-                                <Link href="/help" className="hover:text-foreground transition-colors">
-                                    Help Center
+                                <Link href={`/${locale}/terms`} className="hover:text-foreground transition-colors">
+                                    {t('nav.terms')}
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/contact" className="hover:text-foreground transition-colors">
-                                    Contact Us
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/privacy" className="hover:text-foreground transition-colors">
-                                    Privacy Policy
+                                <Link href={`/${locale}/privacy`} className="hover:text-foreground transition-colors">
+                                    {t('nav.privacy')}
                                 </Link>
                             </li>
                         </ul>
                     </div>
                 </div>
                 <div className="border-t mt-8 pt-8 text-center text-muted-foreground">
-                    <p>&copy; 2024 JobMatch. All rights reserved.</p>
+                    <p>&copy; {new Date().getFullYear()} JobMatch. {t('copyright.text')}</p>
                 </div>
             </div>
         </footer>

@@ -5,7 +5,8 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Calendar, Clock, CheckCircle, X, FileText, AlertCircle } from "lucide-react"
-import { type ApplicationStatus, STATUS_CONFIG, formatApplicationDate } from "@/lib/candidate-utils"
+import { STATUS_CONFIG, formatApplicationDate } from "@/lib/candidate-utils"
+import type { ApplicationStatus } from "@/lib/types"
 
 interface CandidateStatusCardProps {
     status: ApplicationStatus
