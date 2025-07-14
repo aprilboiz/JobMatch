@@ -42,6 +42,8 @@ import { CandidateDetailModal } from "@/components/ui/candidate-detail-modal"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"
 import { downloadCvById } from "@/lib/cv-utils"
 import { Skeleton } from "@/components/ui/skeleton"
+import { t } from "@/lib/i18n-client"
+import { Dictionary } from "@/lib/types"
 
 async function fetchCandidates(jobId: string) {
     const response = await apiClient.getApplicationsForJob(jobId, { page: 0, size: 100 })
@@ -54,7 +56,13 @@ async function fetchCandidates(jobId: string) {
     return [] as CandidateWithApplication[]
 }
 
-export function CandidateList({ jobId }: { jobId: string }) {
+interface CandidateListProps {
+    jobId: string
+    locale: string
+    dictionary: Dictionary
+}
+
+export function CandidateList({ jobId, locale, dictionary }: CandidateListProps) {
     const { data: candidates } = useSWR(["candidates", jobId], () => fetchCandidates(jobId), {
         suspense: true,
     })
@@ -138,8 +146,8 @@ export function CandidateList({ jobId }: { jobId: string }) {
                 ),
             )
             toast({
-                title: "Success",
-                description: "Application status updated",
+                title: t(dictionary, "success.title"),
+                description: t(dictionary, "candidate.statusUpdated"),
             })
 
             // Update the selected candidate if it matches
@@ -153,8 +161,8 @@ export function CandidateList({ jobId }: { jobId: string }) {
             console.log(error)
             toast({
                 variant: "destructive",
-                title: "Status Update Error",
-                description: error?.message || "Failed to update status",
+                title: t(dictionary, "candidate.statusUpdateError"),
+                description: error?.message || t(dictionary, "candidate.statusUpdateFailed"),
             })
         }
     }
@@ -185,14 +193,14 @@ export function CandidateList({ jobId }: { jobId: string }) {
 
             setSelectedCandidates([])
             toast({
-                title: "Success",
-                description: `Updated ${selectedCandidates.length} candidates`,
+                title: t(dictionary, "success.title"),
+                description: t(dictionary, "candidate.bulkUpdateSuccess").replace("{count}", selectedCandidates.length.toString()),
             })
         } catch (error) {
             toast({
                 variant: "destructive",
-                title: "Error",
-                description: "Failed to update candidates",
+                title: t(dictionary, "error.title"),
+                description: t(dictionary, "candidate.bulkUpdateError"),
             })
         }
     }
@@ -220,6 +228,34 @@ export function CandidateList({ jobId }: { jobId: string }) {
         return "text-red-600"
     }
 
+    const getStatusTranslation = (status: ApplicationStatus) => {
+        const statusMap: Record<ApplicationStatus, string> = {
+            APPLIED: "status.applied",
+            IN_REVIEW: "status.inReview",
+            INTERVIEW: "status.interview",
+            OFFERED: "status.offered",
+            REJECTED: "status.rejected"
+        }
+        return t(dictionary, statusMap[status] || "status.applied")
+    }
+
+    const formatDate = (dateString: string) => {
+        try {
+            const date = new Date(dateString)
+            if (isNaN(date.getTime())) {
+                return dateString // Return original if invalid date
+            }
+            const localeCode = locale === 'vi' ? 'vi-VN' : 'en-US'
+            return date.toLocaleDateString(localeCode, {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            })
+        } catch (error) {
+            return dateString // Return original if error
+        }
+    }
+
     return (
         <div>
             {/* Toolbar */}
@@ -227,7 +263,7 @@ export function CandidateList({ jobId }: { jobId: string }) {
                 <div className="relative w-full md:w-64">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
-                        placeholder="Search by name or email"
+                        placeholder={t(dictionary, "candidate.searchPlaceholder")}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="pl-10"
@@ -236,26 +272,26 @@ export function CandidateList({ jobId }: { jobId: string }) {
                 <div className="grid grid-cols-2 md:flex md:items-center gap-4">
                     <Select value={statusFilter} onValueChange={(value) => setStatusFilter(value as any)}>
                         <SelectTrigger>
-                            <SelectValue placeholder="Filter by status" />
+                            <SelectValue placeholder={t(dictionary, "candidate.filterByStatus")} />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="all">All Statuses</SelectItem>
-                            <SelectItem value="APPLIED">Applied</SelectItem>
-                            <SelectItem value="IN_REVIEW">In Review</SelectItem>
-                            <SelectItem value="INTERVIEW">Interview</SelectItem>
-                            <SelectItem value="OFFERED">Offered</SelectItem>
-                            <SelectItem value="REJECTED">Rejected</SelectItem>
+                            <SelectItem value="all">{t(dictionary, "candidate.allStatuses")}</SelectItem>
+                            <SelectItem value="APPLIED">{t(dictionary, "status.applied")}</SelectItem>
+                            <SelectItem value="IN_REVIEW">{t(dictionary, "status.inReview")}</SelectItem>
+                            <SelectItem value="INTERVIEW">{t(dictionary, "status.interview")}</SelectItem>
+                            <SelectItem value="OFFERED">{t(dictionary, "status.offered")}</SelectItem>
+                            <SelectItem value="REJECTED">{t(dictionary, "status.rejected")}</SelectItem>
                         </SelectContent>
                     </Select>
                     <Select value={scoreFilter} onValueChange={setScoreFilter}>
                         <SelectTrigger>
-                            <SelectValue placeholder="Filter by score" />
+                            <SelectValue placeholder={t(dictionary, "candidate.filterByScore")} />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="all">All Scores</SelectItem>
-                            <SelectItem value="high">High (80+)</SelectItem>
-                            <SelectItem value="medium">Medium (60-79)</SelectItem>
-                            <SelectItem value="low">Low (&lt;60)</SelectItem>
+                            <SelectItem value="all">{t(dictionary, "candidate.allScores")}</SelectItem>
+                            <SelectItem value="high">{t(dictionary, "candidate.scoreHigh")}</SelectItem>
+                            <SelectItem value="medium">{t(dictionary, "candidate.scoreMedium")}</SelectItem>
+                            <SelectItem value="low">{t(dictionary, "candidate.scoreLow")}</SelectItem>
                         </SelectContent>
                     </Select>
                     <div className="flex items-center space-x-2">
@@ -268,11 +304,11 @@ export function CandidateList({ jobId }: { jobId: string }) {
                         </Button>
                         <Select value={sortBy} onValueChange={setSortBy}>
                             <SelectTrigger>
-                                <SelectValue placeholder="Sort by" />
+                                <SelectValue placeholder={t(dictionary, "candidate.sortBy")} />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="appliedDate">Applied Date</SelectItem>
-                                <SelectItem value="matchScore">Match Score</SelectItem>
+                                <SelectItem value="appliedDate">{t(dictionary, "candidate.appliedDate")}</SelectItem>
+                                <SelectItem value="matchScore">{t(dictionary, "candidate.matchScore")}</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
@@ -282,21 +318,21 @@ export function CandidateList({ jobId }: { jobId: string }) {
             {/* Bulk Actions */}
             {selectedCandidates.length > 0 && (
                 <div className="mb-4 flex items-center gap-4 p-2 bg-muted rounded-lg">
-                    <p className="text-sm font-medium">{selectedCandidates.length} selected</p>
+                    <p className="text-sm font-medium">{selectedCandidates.length} {t(dictionary, "candidate.selected")}</p>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="outline" size="sm">
-                                Bulk Actions <MoreHorizontal className="ml-2 h-4 w-4" />
+                                {t(dictionary, "candidate.bulkActions")} <MoreHorizontal className="ml-2 h-4 w-4" />
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
                             <DropdownMenuItem onClick={() => handleBulkAction("IN_REVIEW")}>
                                 <UserCheck className="mr-2 h-4 w-4" />
-                                Mark as In Review
+                                {t(dictionary, "candidate.markAsInReview")}
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => handleBulkAction("REJECTED")}>
                                 <UserX className="mr-2 h-4 w-4" />
-                                Mark as Rejected
+                                {t(dictionary, "candidate.markAsRejected")}
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
@@ -304,74 +340,85 @@ export function CandidateList({ jobId }: { jobId: string }) {
             )}
 
             {/* Candidate Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {filteredCandidates.map((candidate) => (
-                    <Card
-                        key={candidate.id}
-                        className="hover:shadow-lg transition-shadow cursor-pointer"
-                        onClick={() => handleCandidateClick(candidate)}
-                    >
-                        <CardHeader className="flex flex-row items-center space-x-4 pb-2">
-                            <Checkbox
-                                checked={selectedCandidates.includes(candidate.id.toString())}
-                                onCheckedChange={(checked) => {
-                                    setSelectedCandidates((prev) =>
-                                        checked
-                                            ? [...prev, candidate.id.toString()]
-                                            : prev.filter((id) => id !== candidate.id.toString()),
-                                    )
-                                }}
-                                onClick={(e) => e.stopPropagation()}
-                                className="mr-2"
-                            />
-                            <Avatar>
-                                <AvatarImage src={candidate.candidate.avatarUrl} />
-                                <AvatarFallback>{candidate.candidate.fullName.charAt(0)}</AvatarFallback>
-                            </Avatar>
-                            <div>
-                                <CardTitle className="text-base">{candidate.candidate.fullName}</CardTitle>
-                                <p className="text-sm text-muted-foreground">{candidate.candidate.email}</p>
-                            </div>
-                        </CardHeader>
-                        <CardContent className="space-y-3">
-                            <div className="flex items-center justify-between">
-                                <Badge variant={getStatusBadgeVariant(candidate.status)}>{candidate.status}</Badge>
-                                <div className={`flex items-center font-bold ${getScoreColor(candidate.analysis?.score || 0)}`}>
-                                    <TrendingUp className="w-4 h-4 mr-1" />
-                                    {Math.round(candidate.analysis?.score || 0)}%
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
+                {filteredCandidates.map((candidate) => {
+                    // Safety checks for required data
+                    if (!candidate?.candidate?.fullName || !candidate?.candidate?.email) {
+                        return null
+                    }
+
+                    return (
+                        <Card
+                            key={candidate.id}
+                            className="hover:shadow-lg transition-shadow cursor-pointer"
+                            onClick={() => handleCandidateClick(candidate)}
+                        >
+                            <CardHeader className="pb-2">
+                                <div className="flex items-center space-x-3">
+                                    <Checkbox
+                                        checked={selectedCandidates.includes(candidate.id.toString())}
+                                        onCheckedChange={(checked) => {
+                                            setSelectedCandidates((prev) =>
+                                                checked
+                                                    ? [...prev, candidate.id.toString()]
+                                                    : prev.filter((id) => id !== candidate.id.toString()),
+                                            )
+                                        }}
+                                        onClick={(e) => e.stopPropagation()}
+                                        className="flex-shrink-0"
+                                    />
+                                    <Avatar className="flex-shrink-0">
+                                        <AvatarImage src={candidate.candidate.avatarUrl || "/placeholder.svg?height=64&width=64"} />
+                                        <AvatarFallback>{candidate.candidate.fullName.charAt(0)}</AvatarFallback>
+                                    </Avatar>
+                                    <div className="min-w-0 flex-1">
+                                        <CardTitle className="text-base truncate">{candidate.candidate.fullName}</CardTitle>
+                                        <p className="text-sm text-muted-foreground truncate">{candidate.candidate.email}</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <Progress value={candidate.analysis?.score} className="h-2" />
-                            <div className="text-xs text-muted-foreground flex items-center justify-between">
-                                <span className="flex items-center">
-                                    <Calendar className="mr-1 h-3 w-3" />
-                                    Applied on {new Date(candidate.appliedDate).toLocaleDateString()}
-                                </span>
-                            </div>
-                            <div className="flex justify-end space-x-2 pt-2">
-                                <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={(e) => {
-                                        e.stopPropagation()
-                                        handleCandidateClick(candidate)
-                                    }}
-                                >
-                                    <Eye className="mr-1 h-4 w-4" /> View
-                                </Button>
-                            </div>
-                        </CardContent>
-                    </Card>
-                ))}
+                            </CardHeader>
+                            <CardContent className="space-y-3">
+                                <div className="flex items-center justify-between">
+                                    <Badge variant={getStatusBadgeVariant(candidate.status)}>
+                                        {getStatusTranslation(candidate.status)}
+                                    </Badge>
+                                    <div className={`flex items-center font-bold ${getScoreColor(candidate.analysis?.score || 0)}`}>
+                                        <TrendingUp className="w-4 h-4 mr-1" />
+                                        {Math.round(candidate.analysis?.score || 0)}%
+                                    </div>
+                                </div>
+                                <Progress value={candidate.analysis?.score} className="h-2" />
+                                <div className="text-xs text-muted-foreground flex items-center justify-between">
+                                    <span className="flex items-center">
+                                        <Calendar className="mr-1 h-3 w-3" />
+                                        {t(dictionary, "candidate.appliedOn")} {formatDate(candidate.appliedDate)}
+                                    </span>
+                                </div>
+                                <div className="flex justify-end space-x-2 pt-2">
+                                    <Button
+                                        size="sm"
+                                        variant="outline"
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            handleCandidateClick(candidate)
+                                        }}
+                                    >
+                                        <Eye className="mr-1 h-4 w-4" /> {t(dictionary, "button.view")}
+                                    </Button>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    )
+                }).filter(Boolean)}
             </div>
 
             {/* Empty State */}
             {filteredCandidates.length === 0 && (
                 <div className="text-center py-16">
                     <Users className="mx-auto h-12 w-12 text-muted-foreground" />
-                    <h3 className="mt-4 text-lg font-medium">No candidates found</h3>
+                    <h3 className="mt-4 text-lg font-medium">{t(dictionary, "candidate.noCandidatesFound")}</h3>
                     <p className="mt-2 text-sm text-muted-foreground">
-                        Try adjusting your search or filters.
+                        {t(dictionary, "candidate.tryAdjustingFilters")}
                     </p>
                 </div>
             )}
@@ -382,31 +429,30 @@ export function CandidateList({ jobId }: { jobId: string }) {
                     isOpen={isDetailModalOpen}
                     onClose={() => setIsDetailModalOpen(false)}
                     candidate={selectedCandidate}
-                    onStatusChange={(newStatus) => {
-                        setPendingStatusChange({ applicationId: selectedCandidate.id.toString(), newStatus })
+                    onStatusUpdate={async (applicationId: string, newStatus: ApplicationStatus) => {
+                        setPendingStatusChange({ applicationId, newStatus })
                         setIsStatusDialogOpen(true)
                     }}
-                    onDownloadCv={() => downloadCvById(selectedCandidate.cvId.toString())}
                 />
             )}
             <Dialog open={isStatusDialogOpen} onOpenChange={setIsStatusDialogOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Confirm Status Change</DialogTitle>
+                        <DialogTitle>{t(dictionary, "candidate.confirmStatusChange")}</DialogTitle>
                         <DialogDescription>
-                            Are you sure you want to change the status to {pendingStatusChange?.newStatus}?
+                            {t(dictionary, "candidate.statusChangeQuestion")} {pendingStatusChange?.newStatus ? getStatusTranslation(pendingStatusChange.newStatus) : ''}?
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
                         <Button variant="ghost" onClick={() => setIsStatusDialogOpen(false)}>
-                            Cancel
+                            {t(dictionary, "button.cancel")}
                         </Button>
                         <Button
                             onClick={() =>
                                 handleStatusUpdate(pendingStatusChange!.applicationId, pendingStatusChange!.newStatus)
                             }
                         >
-                            Confirm
+                            {t(dictionary, "button.confirm")}
                         </Button>
                     </DialogFooter>
                 </DialogContent>

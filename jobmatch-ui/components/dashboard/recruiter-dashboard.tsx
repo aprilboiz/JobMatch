@@ -290,7 +290,7 @@ export function RecruiterDashboard({ locale, dictionary }: RecruiterDashboardPro
 
             {/* Candidate Manager */}
             {selectedJobId ? (
-              <CandidateManager jobId={selectedJobId} />
+              <CandidateManager jobId={selectedJobId} locale={locale} dictionary={dictionary} />
             ) : (
               <Card>
                 <CardContent className="p-6 text-center">

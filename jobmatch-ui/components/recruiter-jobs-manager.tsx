@@ -17,7 +17,12 @@ interface JobWithApplicationCount extends Job {
     applicationCount: number
 }
 
-export function RecruiterJobsManager() {
+interface RecruiterJobsManagerProps {
+    locale?: string
+    dictionary?: { [key: string]: string }
+}
+
+export function RecruiterJobsManager({ locale = "en", dictionary = {} }: RecruiterJobsManagerProps) {
     const [jobs, setJobs] = useState<JobWithApplicationCount[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [selectedJobId, setSelectedJobId] = useState<string | null>(null)
@@ -161,7 +166,7 @@ export function RecruiterJobsManager() {
                         {jobs.find(job => job.id.toString() === selectedJobId)?.title} - Candidates
                     </h2>
                 </div>
-                <CandidateManager jobId={selectedJobId} />
+                <CandidateManager jobId={selectedJobId} locale={locale} dictionary={dictionary} />
             </div>
         )
     }

@@ -221,7 +221,7 @@ export default function DashboardContent({ locale, dictionary }: DashboardConten
                     {user.role.roleName === "RECRUITER" && (
                         <>
                             <TabsContent value="jobs">
-                                <RecruiterJobsManager />
+                                <RecruiterJobsManager locale={locale} dictionary={dictionary} />
                             </TabsContent>
                             <TabsContent value="analytics">
                                 <Card>
