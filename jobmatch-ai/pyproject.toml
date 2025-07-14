@@ -1,0 +1,22 @@
+[project]
+name = "jobmatch-ai"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.116.1",
+    "gensim>=4.3.3",
+    "joblib>=1.5.1",
+    "nltk>=3.9.1",
+    "numpy>=1.26.4",
+    "pymupdf>=1.26.3",
+    "pypdf2>=3.0.1",
+    "python-docx>=1.2.0",
+    "python-multipart>=0.0.20",
+    "scikit-learn>=1.7.0",
+    "sentence-transformers>=5.0.0",
+    "torch>=2.7.1",
+    "transformers>=4.53.2",
+    "uvicorn[standard]>=0.35.0",
+]
